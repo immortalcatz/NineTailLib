@@ -75,9 +75,9 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                     GlStateManager.pushAttrib();
                     GlStateManager.pushMatrix();
                     GlStateManager.translate(0.5D, 0.5D, 0.5D);
-                    RenderHelper.enableStandardItemLighting();
+                    if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.enableStandardItemLighting(); }
                     renderItem.renderItem(stack, model);
-                    RenderHelper.disableStandardItemLighting();
+                    if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.disableStandardItemLighting(); }
                     GlStateManager.popAttrib();
                     GlStateManager.popMatrix();
                 }
@@ -85,7 +85,7 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
             else{
                 GlStateManager.pushMatrix();
                 GlStateManager.pushAttrib();
-                RenderHelper.enableStandardItemLighting();
+                if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.enableStandardItemLighting(); }
                 VertexBuffer buffer = Tessellator.getInstance().getBuffer();
                 buffer.begin(GL11.GL_QUADS, VertexUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
                 CCRenderState renderState = CCRenderState.instance();
@@ -93,7 +93,7 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                 renderState.bind(buffer);
                 this.itemRenderer.renderItem(renderState, IconRegistrar.INSTANCE, stack, this.random.nextLong());
                 Tessellator.getInstance().draw();
-                RenderHelper.disableStandardItemLighting();
+                if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.disableStandardItemLighting(); }
                 GlStateManager.popAttrib();
                 GlStateManager.popMatrix();
             }

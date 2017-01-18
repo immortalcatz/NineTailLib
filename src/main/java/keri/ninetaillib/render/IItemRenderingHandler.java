@@ -17,4 +17,6 @@ public interface IItemRenderingHandler {
 
     boolean useRenderCache();
 
+    boolean useStandardItemLighting();
+
 }

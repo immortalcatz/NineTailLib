@@ -58,4 +58,9 @@ public class DefaultItemRenderer implements IItemRenderingHandler, IItemQuadProv
         return true;
     }
 
+    @Override
+    public boolean useStandardItemLighting() {
+        return false;
+    }
+
 }
