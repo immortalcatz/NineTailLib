@@ -1,0 +1,16 @@
+[
+{
+  "modid": "ninetaillib",
+  "name": "NineTailLib",
+  "description": "Library mod for all KitsuneAlex mods",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://github.com/TeamMD5/",
+  "updateUrl": "",
+  "authorList": ["KitsuneAlex"],
+  "credits": "Nothing to see here :D",
+  "logoFile": "assets/ninetaillib/textures/logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
