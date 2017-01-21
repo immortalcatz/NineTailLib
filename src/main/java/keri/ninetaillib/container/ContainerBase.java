@@ -17,127 +17,73 @@ public abstract class ContainerBase extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int index) {
         ItemStack itemStack = null;
+        SlotBase clickSlot = (SlotBase)this.inventorySlots.get(index);
 
-        if(this.inventorySlots.get(index) instanceof SlotBase){
-            SlotBase clickSlot = (SlotBase)this.inventorySlots.get(index);
+        if (clickSlot instanceof SlotDisabled) {
+            return null;
+        }
 
-            if (clickSlot instanceof SlotDisabled) {
+        if ((clickSlot != null) && (clickSlot.getHasStack())) {
+            itemStack = clickSlot.getStack();
+            if (itemStack == null) {
                 return null;
             }
 
-            if ((clickSlot != null) && (clickSlot.getHasStack())) {
-                itemStack = clickSlot.getStack();
-                if (itemStack == null) {
-                    return null;
-                }
-
-                List<Slot> selectedSlots = new ArrayList<Slot>();
-                if (clickSlot.isPlayerSide()) {
-                    for (int x = 0; x < this.inventorySlots.size(); x++) {
-                        SlotBase advSlot = (SlotBase) this.inventorySlots.get(x);
-                        if ((!advSlot.isPlayerSide()) && (!(advSlot instanceof SlotFake))) {
-                            if (advSlot.isItemValid(itemStack)) {
-                                selectedSlots.add(advSlot);
-                            }
-                        }
-                    }
-                } else {
-                    for (int x = 0; x < this.inventorySlots.size(); x++) {
-                        SlotBase advSlot = (SlotBase) this.inventorySlots.get(x);
-                        if ((advSlot.isPlayerSide()) && (!(advSlot instanceof SlotFake))) {
-                            if (advSlot.isItemValid(itemStack)) {
-                                selectedSlots.add(advSlot);
-                            }
+            List<Slot> selectedSlots = new ArrayList<Slot>();
+            if (clickSlot.isPlayerSide()) {
+                for (int x = 0; x < this.inventorySlots.size(); x++) {
+                    SlotBase advSlot = (SlotBase) this.inventorySlots.get(x);
+                    if ((!advSlot.isPlayerSide()) && (!(advSlot instanceof SlotFake))) {
+                        if (advSlot.isItemValid(itemStack)) {
+                            selectedSlots.add(advSlot);
                         }
                     }
                 }
-
-                if ((selectedSlots.isEmpty()) && (clickSlot.isPlayerSide())) {
-                    if (itemStack != null) {
-                        for (int x = 0; x < this.inventorySlots.size(); x++) {
-                            SlotBase advSlot = (SlotBase) this.inventorySlots.get(x);
-                            ItemStack dest = advSlot.getStack();
-                            if ((!advSlot.isPlayerSide()) && (advSlot instanceof SlotFake)) {
-                                if (dest == null) {
-                                    advSlot.putStack(itemStack != null ? itemStack.copy() : null);
-                                    advSlot.onSlotChanged();
-                                    updateSlot(advSlot);
-                                    return null;
-                                }
-                            }
+            } else {
+                for (int x = 0; x < this.inventorySlots.size(); x++) {
+                    SlotBase advSlot = (SlotBase) this.inventorySlots.get(x);
+                    if ((advSlot.isPlayerSide()) && (!(advSlot instanceof SlotFake))) {
+                        if (advSlot.isItemValid(itemStack)) {
+                            selectedSlots.add(advSlot);
                         }
                     }
                 }
+            }
 
+            if ((selectedSlots.isEmpty()) && (clickSlot.isPlayerSide())) {
                 if (itemStack != null) {
-                    for (Slot d : selectedSlots) {
-                        if ((!(d instanceof SlotDisabled))) {
-                            if ((d.isItemValid(itemStack)) && (itemStack != null)) {
-                                if (d.getHasStack()) {
-                                    ItemStack t = d.getStack();
-                                    if ((itemStack != null) && (itemStack.isItemEqual(t))) {
-                                        int maxSize = t.getMaxStackSize();
-                                        if (maxSize > d.getSlotStackLimit()) {
-                                            maxSize = d.getSlotStackLimit();
-                                        }
-                                        int placeAble = maxSize - t.stackSize;
-                                        if (itemStack.stackSize < placeAble) {
-                                            placeAble = itemStack.stackSize;
-                                        }
-                                        t.stackSize += placeAble;
-                                        itemStack.stackSize -= placeAble;
-                                        if (itemStack.stackSize <= 0) {
-                                            clickSlot.putStack(null);
-                                            d.onSlotChanged();
-
-                                            updateSlot(clickSlot);
-                                            updateSlot(d);
-                                            return null;
-                                        }
-                                        updateSlot(d);
-                                    }
-                                }
+                    for (int x = 0; x < this.inventorySlots.size(); x++) {
+                        SlotBase advSlot = (SlotBase) this.inventorySlots.get(x);
+                        ItemStack dest = advSlot.getStack();
+                        if ((!advSlot.isPlayerSide()) && (advSlot instanceof SlotFake)) {
+                            if (dest == null) {
+                                advSlot.putStack(itemStack != null ? itemStack.copy() : null);
+                                advSlot.onSlotChanged();
+                                updateSlot(advSlot);
+                                return null;
                             }
                         }
                     }
+                }
+            }
 
-                    for (Slot d : selectedSlots) {
-                        if ((!(d instanceof SlotDisabled))) {
-                            if ((d.isItemValid(itemStack)) && (itemStack != null)) {
-                                if (d.getHasStack()) {
-                                    ItemStack t = d.getStack();
-                                    if ((itemStack != null) && (itemStack.isItemEqual(t))) {
-                                        int maxSize = t.getMaxStackSize();
-                                        if (maxSize > d.getSlotStackLimit()) {
-                                            maxSize = d.getSlotStackLimit();
-                                        }
-                                        int placeAble = maxSize - t.stackSize;
-                                        if (itemStack.stackSize < placeAble) {
-                                            placeAble = itemStack.stackSize;
-                                        }
-                                        t.stackSize += placeAble;
-                                        itemStack.stackSize -= placeAble;
-                                        if (itemStack.stackSize <= 0) {
-                                            clickSlot.putStack(null);
-                                            d.onSlotChanged();
-
-                                            updateSlot(clickSlot);
-                                            updateSlot(d);
-                                            return null;
-                                        }
-                                        updateSlot(d);
-                                    }
-                                } else {
-                                    int maxSize = itemStack.getMaxStackSize();
+            if (itemStack != null) {
+                for (Slot d : selectedSlots) {
+                    if ((!(d instanceof SlotDisabled))) {
+                        if ((d.isItemValid(itemStack)) && (itemStack != null)) {
+                            if (d.getHasStack()) {
+                                ItemStack t = d.getStack();
+                                if ((itemStack != null) && (itemStack.isItemEqual(t))) {
+                                    int maxSize = t.getMaxStackSize();
                                     if (maxSize > d.getSlotStackLimit()) {
                                         maxSize = d.getSlotStackLimit();
                                     }
-                                    ItemStack tmp = itemStack.copy();
-                                    if (tmp.stackSize > maxSize) {
-                                        tmp.stackSize = maxSize;
+                                    int placeAble = maxSize - t.stackSize;
+                                    if (itemStack.stackSize < placeAble) {
+                                        placeAble = itemStack.stackSize;
                                     }
-                                    itemStack.stackSize -= tmp.stackSize;
-                                    d.putStack(tmp);
+                                    t.stackSize += placeAble;
+                                    itemStack.stackSize -= placeAble;
                                     if (itemStack.stackSize <= 0) {
                                         clickSlot.putStack(null);
                                         d.onSlotChanged();
@@ -153,132 +99,22 @@ public abstract class ContainerBase extends Container {
                     }
                 }
 
-                clickSlot.putStack(itemStack != null ? itemStack.copy() : null);
-            }
-
-            updateSlot(clickSlot);
-            return null;
-        }
-        else{
-            SlotBaseIInventory clickSlot = (SlotBaseIInventory)this.inventorySlots.get(index);
-
-            if (clickSlot instanceof SlotDisabledIInventory) {
-                return null;
-            }
-
-            if ((clickSlot != null) && (clickSlot.getHasStack())) {
-                itemStack = clickSlot.getStack();
-                if (itemStack == null) {
-                    return null;
-                }
-
-                List<Slot> selectedSlots = new ArrayList<Slot>();
-                if (clickSlot.isPlayerSide()) {
-                    for (int x = 0; x < this.inventorySlots.size(); x++) {
-                        SlotBaseIInventory advSlot = (SlotBaseIInventory) this.inventorySlots.get(x);
-                        if ((!advSlot.isPlayerSide()) && (!(advSlot instanceof SlotFakeIInventory))) {
-                            if (advSlot.isItemValid(itemStack)) {
-                                selectedSlots.add(advSlot);
-                            }
-                        }
-                    }
-                } else {
-                    for (int x = 0; x < this.inventorySlots.size(); x++) {
-                        SlotBaseIInventory advSlot = (SlotBaseIInventory) this.inventorySlots.get(x);
-                        if ((advSlot.isPlayerSide()) && (!(advSlot instanceof SlotFakeIInventory))) {
-                            if (advSlot.isItemValid(itemStack)) {
-                                selectedSlots.add(advSlot);
-                            }
-                        }
-                    }
-                }
-
-                if ((selectedSlots.isEmpty()) && (clickSlot.isPlayerSide())) {
-                    if (itemStack != null) {
-                        for (int x = 0; x < this.inventorySlots.size(); x++) {
-                            SlotBaseIInventory advSlot = (SlotBaseIInventory) this.inventorySlots.get(x);
-                            ItemStack dest = advSlot.getStack();
-                            if ((!advSlot.isPlayerSide()) && (advSlot instanceof SlotFakeIInventory)) {
-                                if (dest == null) {
-                                    advSlot.putStack(itemStack != null ? itemStack.copy() : null);
-                                    advSlot.onSlotChanged();
-                                    updateSlot(advSlot);
-                                    return null;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (itemStack != null) {
-                    for (Slot d : selectedSlots) {
-                        if ((!(d instanceof SlotDisabledIInventory))) {
-                            if ((d.isItemValid(itemStack)) && (itemStack != null)) {
-                                if (d.getHasStack()) {
-                                    ItemStack t = d.getStack();
-                                    if ((itemStack != null) && (itemStack.isItemEqual(t))) {
-                                        int maxSize = t.getMaxStackSize();
-                                        if (maxSize > d.getSlotStackLimit()) {
-                                            maxSize = d.getSlotStackLimit();
-                                        }
-                                        int placeAble = maxSize - t.stackSize;
-                                        if (itemStack.stackSize < placeAble) {
-                                            placeAble = itemStack.stackSize;
-                                        }
-                                        t.stackSize += placeAble;
-                                        itemStack.stackSize -= placeAble;
-                                        if (itemStack.stackSize <= 0) {
-                                            clickSlot.putStack(null);
-                                            d.onSlotChanged();
-
-                                            updateSlot(clickSlot);
-                                            updateSlot(d);
-                                            return null;
-                                        }
-                                        updateSlot(d);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    for (Slot d : selectedSlots) {
-                        if ((!(d instanceof SlotDisabledIInventory))) {
-                            if ((d.isItemValid(itemStack)) && (itemStack != null)) {
-                                if (d.getHasStack()) {
-                                    ItemStack t = d.getStack();
-                                    if ((itemStack != null) && (itemStack.isItemEqual(t))) {
-                                        int maxSize = t.getMaxStackSize();
-                                        if (maxSize > d.getSlotStackLimit()) {
-                                            maxSize = d.getSlotStackLimit();
-                                        }
-                                        int placeAble = maxSize - t.stackSize;
-                                        if (itemStack.stackSize < placeAble) {
-                                            placeAble = itemStack.stackSize;
-                                        }
-                                        t.stackSize += placeAble;
-                                        itemStack.stackSize -= placeAble;
-                                        if (itemStack.stackSize <= 0) {
-                                            clickSlot.putStack(null);
-                                            d.onSlotChanged();
-
-                                            updateSlot(clickSlot);
-                                            updateSlot(d);
-                                            return null;
-                                        }
-                                        updateSlot(d);
-                                    }
-                                } else {
-                                    int maxSize = itemStack.getMaxStackSize();
+                for (Slot d : selectedSlots) {
+                    if ((!(d instanceof SlotDisabled))) {
+                        if ((d.isItemValid(itemStack)) && (itemStack != null)) {
+                            if (d.getHasStack()) {
+                                ItemStack t = d.getStack();
+                                if ((itemStack != null) && (itemStack.isItemEqual(t))) {
+                                    int maxSize = t.getMaxStackSize();
                                     if (maxSize > d.getSlotStackLimit()) {
                                         maxSize = d.getSlotStackLimit();
                                     }
-                                    ItemStack tmp = itemStack.copy();
-                                    if (tmp.stackSize > maxSize) {
-                                        tmp.stackSize = maxSize;
+                                    int placeAble = maxSize - t.stackSize;
+                                    if (itemStack.stackSize < placeAble) {
+                                        placeAble = itemStack.stackSize;
                                     }
-                                    itemStack.stackSize -= tmp.stackSize;
-                                    d.putStack(tmp);
+                                    t.stackSize += placeAble;
+                                    itemStack.stackSize -= placeAble;
                                     if (itemStack.stackSize <= 0) {
                                         clickSlot.putStack(null);
                                         d.onSlotChanged();
@@ -289,17 +125,37 @@ public abstract class ContainerBase extends Container {
                                     }
                                     updateSlot(d);
                                 }
+                            } else {
+                                int maxSize = itemStack.getMaxStackSize();
+                                if (maxSize > d.getSlotStackLimit()) {
+                                    maxSize = d.getSlotStackLimit();
+                                }
+                                ItemStack tmp = itemStack.copy();
+                                if (tmp.stackSize > maxSize) {
+                                    tmp.stackSize = maxSize;
+                                }
+                                itemStack.stackSize -= tmp.stackSize;
+                                d.putStack(tmp);
+                                if (itemStack.stackSize <= 0) {
+                                    clickSlot.putStack(null);
+                                    d.onSlotChanged();
+
+                                    updateSlot(clickSlot);
+                                    updateSlot(d);
+                                    return null;
+                                }
+                                updateSlot(d);
                             }
                         }
                     }
                 }
-
-                clickSlot.putStack(itemStack != null ? itemStack.copy() : null);
             }
 
-            updateSlot(clickSlot);
-            return null;
+            clickSlot.putStack(itemStack != null ? itemStack.copy() : null);
         }
+
+        updateSlot(clickSlot);
+        return null;
     }
 
     private void updateSlot(final Slot slot) {

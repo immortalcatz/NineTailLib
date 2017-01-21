@@ -1,11 +1,11 @@
 package keri.ninetaillib.slot;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
-public class SlotBase extends SlotItemHandler {
+public class SlotBase extends Slot {
 
     protected ItemStack overlayIcon = null;
     protected boolean isPlayerSide = false;
@@ -14,8 +14,8 @@ public class SlotBase extends SlotItemHandler {
     private int defX;
     private int defY;
 
-    public SlotBase(IItemHandler handler, int idx, int x, int y) {
-        super(handler, idx, x, y);
+    public SlotBase(IInventory inventory, int idx, int x, int y) {
+        super(inventory, idx, x, y);
         this.defX = x;
         this.defY = y;
     }
@@ -67,12 +67,12 @@ public class SlotBase extends SlotItemHandler {
         super.putStack(stack);
     }
 
-    public void clearStack() {
+    public void clearStack(){
         super.putStack(null);
     }
 
     @Override
-    public boolean canTakeStack(EntityPlayer player) {
+    public boolean canTakeStack(EntityPlayer player){
         if (!isEnabled) {
             return false;
         }
@@ -81,7 +81,7 @@ public class SlotBase extends SlotItemHandler {
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack) {
+    public boolean isItemValid(ItemStack stack){
         if (!isEnabled) {
             return false;
         }
@@ -89,11 +89,11 @@ public class SlotBase extends SlotItemHandler {
         return super.isItemValid(stack);
     }
 
-    public ItemStack getDisplayStack() {
+    public ItemStack getDisplayStack(){
         return super.getStack();
     }
 
-    public boolean renderIconWithItem() {
+    public boolean renderIconWithItem(){
         return overlayIcon != null;
     }
 

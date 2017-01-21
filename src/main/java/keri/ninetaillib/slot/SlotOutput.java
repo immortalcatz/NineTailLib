@@ -1,12 +1,12 @@
 package keri.ninetaillib.slot;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
 
 public class SlotOutput extends SlotBase {
 
-    public SlotOutput(IItemHandler handler, int idx, int x, int y) {
-        super(handler, idx, x, y);
+    public SlotOutput(IInventory inventory, int idx, int x, int y) {
+        super(inventory, idx, x, y);
     }
 
     @Override

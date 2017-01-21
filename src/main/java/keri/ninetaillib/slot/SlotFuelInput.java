@@ -1,13 +1,13 @@
 package keri.ninetaillib.slot;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.items.IItemHandler;
 
 public class SlotFuelInput extends SlotBase {
 
-    public SlotFuelInput(IItemHandler handler, int idx, int x, int y) {
-        super(handler, idx, x, y);
+    public SlotFuelInput(IInventory inventory, int idx, int x, int y) {
+        super(inventory, idx, x, y);
     }
 
     @Override
