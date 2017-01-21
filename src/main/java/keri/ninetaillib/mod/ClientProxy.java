@@ -5,7 +5,10 @@ import com.google.common.collect.Lists;
 import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.block.IMetaBlock;
 import keri.ninetaillib.item.ItemBase;
-import keri.ninetaillib.render.*;
+import keri.ninetaillib.render.CustomBlockRenderer;
+import keri.ninetaillib.render.CustomItemRenderer;
+import keri.ninetaillib.render.IBlockRenderingHandler;
+import keri.ninetaillib.render.IItemRenderingHandler;
 import keri.ninetaillib.texture.IconRegistrar;
 import keri.ninetaillib.util.ClientUtils;
 import net.minecraft.block.Block;
@@ -28,19 +31,15 @@ public class ClientProxy implements INineTailProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(IconRegistrar.INSTANCE);
-        RendererRegistry.INSTANCE.registerBlockRenderingHandler(new DefaultBlockRenderer());
-        RendererRegistry.INSTANCE.registerItemRenderingHandler(new DefaultItemRenderer());
 
         for(BlockBase block : this.blocksToHandle){
             IconRegistrar.INSTANCE.registerBlock(block);
-            IBlockRenderingHandler handler = RendererRegistry.INSTANCE.getBlockRenderingHandlerById(block.getRenderType());
-            this.registerRenderingHandler(block, handler);
+            this.registerRenderingHandler(block, block.getRenderingHandler());
         }
 
         for(ItemBase item : this.itemsToHandle){
             IconRegistrar.INSTANCE.registerItem(item);
-            IItemRenderingHandler handler = RendererRegistry.INSTANCE.getItemRenderingHandlerById(item.getRenderType());
-            this.registerRenderingHandler(item, handler);
+            this.registerRenderingHandler(item, item.getRenderingHandler());
         }
     }
 

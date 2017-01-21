@@ -1,6 +1,8 @@
 package keri.ninetaillib.item;
 
 import keri.ninetaillib.mod.NineTailLib;
+import keri.ninetaillib.render.DefaultItemRenderer;
+import keri.ninetaillib.render.IItemRenderingHandler;
 import keri.ninetaillib.texture.IIconItem;
 import keri.ninetaillib.texture.IIconRegistrar;
 import keri.ninetaillib.util.*;
@@ -167,5 +169,7 @@ public class ItemBase extends Item implements IIconItem {
 
     @Override
     public CreativeTabs getCreativeTab(){ return CreativeTabs.SEARCH; }
+
+    public IItemRenderingHandler getRenderingHandler(){ return new DefaultItemRenderer(); }
 
 }

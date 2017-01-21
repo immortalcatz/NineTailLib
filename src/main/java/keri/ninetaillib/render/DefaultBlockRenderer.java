@@ -50,9 +50,4 @@ public class DefaultBlockRenderer implements IBlockRenderingHandler {
         return block.getIcon(meta, 0);
     }
 
-    @Override
-    public int getRenderId(){
-        return 0;
-    }
-
 }

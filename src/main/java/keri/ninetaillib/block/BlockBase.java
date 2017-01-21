@@ -2,6 +2,8 @@ package keri.ninetaillib.block;
 
 import keri.ninetaillib.item.ItemBlockBase;
 import keri.ninetaillib.mod.NineTailLib;
+import keri.ninetaillib.render.DefaultBlockRenderer;
+import keri.ninetaillib.render.IBlockRenderingHandler;
 import keri.ninetaillib.texture.IIconBlock;
 import keri.ninetaillib.texture.IIconRegistrar;
 import keri.ninetaillib.tile.TileEntityBase;
@@ -20,7 +22,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
@@ -179,19 +180,6 @@ public class BlockBase<T extends TileEntityBase> extends Block implements ITileE
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("deprecation")
-    public boolean isOpaqueCube(IBlockState state) {
-        return this.getRenderType() > -1 ? this.isFullBlock : false;
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public boolean isFullBlock(IBlockState state) {
-        return this.getRenderType() > -1 ? this.isFullBlock : false;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    @SuppressWarnings("deprecation")
     public MapColor getMapColor(IBlockState state) {
         if(this instanceof IMetaBlock && this.mapColor != null){
             return this.mapColor[this.getMetaFromState(state)];
@@ -218,13 +206,6 @@ public class BlockBase<T extends TileEntityBase> extends Block implements ITileE
         return this.texture;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    @SuppressWarnings("deprecation")
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return this.getRenderType() > -1 ? EnumBlockRenderType.MODEL : EnumBlockRenderType.INVISIBLE;
-    }
-
     public void setTextureName(String textureName){ this.textureName = textureName; }
 
     public void setHardness(float[] hardness){ this.hardness = hardness; }
@@ -245,6 +226,6 @@ public class BlockBase<T extends TileEntityBase> extends Block implements ITileE
 
     public CreativeTabs getCreativeTab(){ return CreativeTabs.SEARCH; }
 
-    public int getRenderType(){ return 0; }
+    public IBlockRenderingHandler getRenderingHandler(){ return new DefaultBlockRenderer(); }
 
 }

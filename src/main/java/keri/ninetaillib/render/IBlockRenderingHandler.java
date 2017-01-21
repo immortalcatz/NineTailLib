@@ -16,6 +16,4 @@ public interface IBlockRenderingHandler {
 
     TextureAtlasSprite getParticleTexture(IIconBlock block, int meta);
 
-    int getRenderId();
-
 }

@@ -19,7 +19,7 @@ public class ClientUtils {
 
     public static void registerItemModel(Item item){
         if(!(item instanceof ItemBase)){
-            throw new IllegalArgumentException("Item must be an instace of ItemFlames !");
+            throw new IllegalArgumentException("Item must be an instace of ItemBase !");
         }
 
         ItemBase itemBase = (ItemBase)item;
@@ -48,7 +48,7 @@ public class ClientUtils {
 
     public static void registerItemModel(Block block){
         if(!(block instanceof BlockBase)){
-            throw new IllegalArgumentException("Block must be an instace of BlockFlames !");
+            throw new IllegalArgumentException("Block must be an instace of BlockBase !");
         }
 
         BlockBase blockBase = (BlockBase)block;
