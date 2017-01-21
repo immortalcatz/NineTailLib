@@ -54,7 +54,44 @@ public class CustomBlockRenderer implements IBakedModel {
                         quads.addAll(provider.getQuads(state, side, rand));
                     }
 
-                    map.put(layer, quads);
+                    if(this.blockRenderer instanceof IQuadRotator){
+                        IQuadRotator rotator = (IQuadRotator)this.blockRenderer;
+                        QuadRotator quadRotator = new QuadRotator();
+                        EnumFacing newForward = EnumFacing.NORTH;
+                        EnumFacing newUp = EnumFacing.UP;
+
+                        switch(rotator.getRotation(state)){
+                            case DOWN:
+                                newForward = EnumFacing.NORTH;
+                                newUp = EnumFacing.DOWN;
+                                break;
+                            case UP:
+                                newForward = EnumFacing.NORTH;
+                                newUp = EnumFacing.UP;
+                                break;
+                            case NORTH:
+                                newForward = EnumFacing.NORTH;
+                                newUp = EnumFacing.UP;
+                                break;
+                            case EAST:
+                                newForward = EnumFacing.EAST;
+                                newUp = EnumFacing.UP;
+                                break;
+                            case SOUTH:
+                                newForward = EnumFacing.SOUTH;
+                                newUp = EnumFacing.UP;
+                                break;
+                            case WEST:
+                                newForward = EnumFacing.WEST;
+                                newUp = EnumFacing.UP;
+                                break;
+                        }
+
+                        map.put(layer, quadRotator.rotateQuads(quads, newForward, newUp));
+                    }
+                    else{
+                        map.put(layer, quads);
+                    }
                 }
 
                 this.quadCache.put(this.getCacheKey(state), map);
