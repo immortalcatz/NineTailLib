@@ -128,18 +128,6 @@ public abstract class ContainerInventoryItem extends Container {
         player.inventory.markDirty();
     }
 
-    protected void bindPlayerInventory(InventoryPlayer inventoryPlayer, int xOff, int yOff){
-        for (int i = 0; i < 3; i++){
-            for (int j = 0; j < 9; j++){
-                this.addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, xOff + 8 + j * 18, yOff + i * 18));
-            }
-        }
-
-        for (int i = 0; i < 9; i++){
-            this.addSlotToContainer(new Slot(inventoryPlayer, i, xOff + 8 + i * 18, yOff + 58));
-        }
-    }
-
     abstract void addSlots(InventoryPlayer inventoryPlayer);
 
 }

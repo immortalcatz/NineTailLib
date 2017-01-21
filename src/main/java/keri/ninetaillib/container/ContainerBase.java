@@ -1,8 +1,9 @@
 package keri.ninetaillib.container;
 
-import keri.ninetaillib.slot.*;
+import keri.ninetaillib.slot.SlotBase;
+import keri.ninetaillib.slot.SlotDisabled;
+import keri.ninetaillib.slot.SlotFake;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -160,18 +161,6 @@ public abstract class ContainerBase extends Container {
 
     private void updateSlot(final Slot slot) {
         this.detectAndSendChanges();
-    }
-
-    protected void bindPlayerInventory(InventoryPlayer inventoryPlayer, int xOff, int yOff){
-        for (int k = 0; k < 3; ++k){
-            for (int i1 = 0; i1 < 9; ++i1){
-                this.addSlotToContainer(new SlotPlayerInventory(inventoryPlayer, i1 + k * 9 + 9, 8 + i1 * 18, yOff + k * 18));
-            }
-        }
-
-        for (int l = 0; l < 9; ++l){
-            this.addSlotToContainer(new SlotPlayerHotbar(inventoryPlayer, l, 8 + l * 18, 58 + yOff));
-        }
     }
 
 }
