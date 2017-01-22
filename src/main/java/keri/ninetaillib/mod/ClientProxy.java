@@ -1,12 +1,10 @@
 package keri.ninetaillib.mod;
 
 import codechicken.lib.model.ModelRegistryHelper;
-import codechicken.lib.packet.PacketCustom;
 import com.google.common.collect.Lists;
 import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.block.IMetaBlock;
 import keri.ninetaillib.item.ItemBase;
-import keri.ninetaillib.network.NineTailLibCPH;
 import keri.ninetaillib.render.CustomBlockRenderer;
 import keri.ninetaillib.render.CustomItemRenderer;
 import keri.ninetaillib.render.IBlockRenderingHandler;
@@ -47,7 +45,7 @@ public class ClientProxy implements INineTailProxy {
 
     @Override
     public void init(FMLInitializationEvent event) {
-        PacketCustom.assignHandler(NineTailLib.INSTANCE, new NineTailLibCPH());
+
     }
 
     @Override

@@ -74,10 +74,12 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                     SimpleBakedModel model = this.modelCache.get(this.getCacheKey(stack));
                     GlStateManager.pushAttrib();
                     GlStateManager.pushMatrix();
+                    GlStateManager.enableBlend();
                     GlStateManager.translate(0.5D, 0.5D, 0.5D);
                     if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.enableStandardItemLighting(); }
                     renderItem.renderItem(stack, model);
                     if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.disableStandardItemLighting(); }
+                    GlStateManager.disableBlend();
                     GlStateManager.popAttrib();
                     GlStateManager.popMatrix();
                 }
@@ -85,6 +87,7 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
             else{
                 GlStateManager.pushMatrix();
                 GlStateManager.pushAttrib();
+                GlStateManager.enableBlend();
                 if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.enableStandardItemLighting(); }
                 VertexBuffer buffer = Tessellator.getInstance().getBuffer();
                 buffer.begin(GL11.GL_QUADS, VertexUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
@@ -94,6 +97,7 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                 this.itemRenderer.renderItem(renderState, IconRegistrar.INSTANCE, stack, this.random.nextLong());
                 Tessellator.getInstance().draw();
                 if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.disableStandardItemLighting(); }
+                GlStateManager.disableBlend();
                 GlStateManager.popAttrib();
                 GlStateManager.popMatrix();
             }
@@ -123,10 +127,12 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                 SimpleBakedModel model = this.modelCache.get(this.getCacheKey(stack));
                 GlStateManager.pushAttrib();
                 GlStateManager.pushMatrix();
+                GlStateManager.enableBlend();
                 GlStateManager.translate(0.5D, 0.5D, 0.5D);
                 RenderHelper.enableStandardItemLighting();
                 renderItem.renderItem(stack, model);
                 RenderHelper.disableStandardItemLighting();
+                GlStateManager.disableBlend();
                 GlStateManager.popAttrib();
                 GlStateManager.popMatrix();
             }
