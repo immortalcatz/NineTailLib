@@ -16,4 +16,6 @@ public interface IBlockRenderingHandler {
 
     TextureAtlasSprite getParticleTexture(IIconBlock block, int meta);
 
+    boolean hasDynamicItemRendering();
+
 }

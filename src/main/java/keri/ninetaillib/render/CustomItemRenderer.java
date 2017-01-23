@@ -6,7 +6,6 @@ import codechicken.lib.render.item.IItemRenderer;
 import codechicken.lib.util.TransformUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import keri.ninetaillib.texture.IconRegistrar;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
@@ -56,7 +55,7 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                     CCRenderState renderState = CCRenderState.instance();
                     renderState.reset();
                     renderState.bind(buffer);
-                    this.itemRenderer.renderItem(renderState, IconRegistrar.INSTANCE, stack, this.random.nextLong());
+                    this.itemRenderer.renderItem(renderState, stack, this.random.nextLong());
                     buffer.finishDrawing();
                     List<BakedQuad> quads = Lists.newArrayList();
                     quads.addAll(buffer.bake());
@@ -90,11 +89,11 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                 GlStateManager.enableBlend();
                 if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.enableStandardItemLighting(); }
                 VertexBuffer buffer = Tessellator.getInstance().getBuffer();
-                buffer.begin(GL11.GL_QUADS, VertexUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
+                buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
                 CCRenderState renderState = CCRenderState.instance();
                 renderState.reset();
                 renderState.bind(buffer);
-                this.itemRenderer.renderItem(renderState, IconRegistrar.INSTANCE, stack, this.random.nextLong());
+                this.itemRenderer.renderItem(renderState, stack, this.random.nextLong());
                 Tessellator.getInstance().draw();
                 if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.disableStandardItemLighting(); }
                 GlStateManager.disableBlend();
@@ -103,38 +102,57 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
             }
         }
         else{
-            if(!(this.modelCache.containsKey(this.getCacheKey(stack)))){
-                BakingVertexBuffer buffer = BakingVertexBuffer.create();
+            if(this.blockRenderer.hasDynamicItemRendering()){
+                GlStateManager.pushMatrix();
+                GlStateManager.pushAttrib();
+                GlStateManager.enableBlend();
+                RenderHelper.enableStandardItemLighting();
+                VertexBuffer buffer = Tessellator.getInstance().getBuffer();
                 buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
                 CCRenderState renderState = CCRenderState.instance();
                 renderState.reset();
                 renderState.bind(buffer);
                 this.blockRenderer.renderItem(renderState, stack, this.random.nextLong());
-                buffer.finishDrawing();
-                List<BakedQuad> quads = Lists.newArrayList();
-                quads.addAll(buffer.bake());
-
-                if(this.itemRenderer instanceof IItemQuadProvider){
-                    IItemQuadProvider provider = (IItemQuadProvider)this.itemRenderer;
-                    quads.addAll(provider.getQuads(stack, this.random.nextLong()));
-                }
-
-                SimpleBakedModel model = new SimpleBakedModel(quads);
-                this.modelCache.put(this.getCacheKey(stack), model);
-            }
-            else{
-                RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-                SimpleBakedModel model = this.modelCache.get(this.getCacheKey(stack));
-                GlStateManager.pushAttrib();
-                GlStateManager.pushMatrix();
-                GlStateManager.enableBlend();
-                GlStateManager.translate(0.5D, 0.5D, 0.5D);
-                RenderHelper.enableStandardItemLighting();
-                renderItem.renderItem(stack, model);
+                Tessellator.getInstance().draw();
                 RenderHelper.disableStandardItemLighting();
                 GlStateManager.disableBlend();
                 GlStateManager.popAttrib();
                 GlStateManager.popMatrix();
+            }
+            else{
+                if(!(this.modelCache.containsKey(this.getCacheKey(stack)))){
+                    BakingVertexBuffer buffer = BakingVertexBuffer.create();
+                    buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+                    CCRenderState renderState = CCRenderState.instance();
+                    renderState.reset();
+                    renderState.bind(buffer);
+                    this.blockRenderer.renderItem(renderState, stack, this.random.nextLong());
+                    buffer.finishDrawing();
+                    List<BakedQuad> quads = Lists.newArrayList();
+                    quads.addAll(buffer.bake());
+
+                    if(this.itemRenderer instanceof IItemQuadProvider){
+                        IItemQuadProvider provider = (IItemQuadProvider)this.itemRenderer;
+                        quads.addAll(provider.getQuads(stack, this.random.nextLong()));
+                    }
+
+                    SimpleBakedModel model = new SimpleBakedModel(quads);
+                    this.modelCache.put(this.getCacheKey(stack), model);
+                }
+                else{
+                    RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+                    SimpleBakedModel model = this.modelCache.get(this.getCacheKey(stack));
+                    GlStateManager.pushAttrib();
+                    GlStateManager.pushMatrix();
+                    GlStateManager.enableBlend();
+                    GlStateManager.translate(0.5D, 0.5D, 0.5D);
+                    RenderHelper.enableStandardItemLighting();
+                    renderItem.renderItem(stack, model);
+                    RenderHelper.disableStandardItemLighting();
+                    GlStateManager.disableBlend();
+                    GlStateManager.popAttrib();
+                    GlStateManager.popMatrix();
+                }
             }
         }
     }
@@ -162,7 +180,7 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
             builder.append(':');
             provider.getExtendedItemKey(stack);
         }
-        else if(this.itemRenderer != null && this.itemRenderer instanceof IItemKeyProvider){
+        if(this.itemRenderer != null && this.itemRenderer instanceof IItemKeyProvider){
             IItemKeyProvider provider = (IItemKeyProvider)this.itemRenderer;
             builder.append(':');
             provider.getExtendedItemKey(stack);
