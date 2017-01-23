@@ -29,7 +29,7 @@ import java.util.List;
 public class DefaultItemRenderer implements IItemRenderingHandler, IItemQuadProvider {
 
     @Override
-    public void renderItem(CCRenderState renderState, IIconRegistrar registrar, ItemStack stack, long rand) {
+    public void renderItem(CCRenderState renderState, ItemStack stack, long rand) {
 
     }
 
