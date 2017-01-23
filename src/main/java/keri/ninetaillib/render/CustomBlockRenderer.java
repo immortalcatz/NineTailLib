@@ -119,10 +119,10 @@ public class CustomBlockRenderer implements IBakedModel {
         builder.append(':');
         builder.append(state.getBlock().getMetaFromState(state));
 
-        if(this.blockRenderer instanceof ICacheKeyProvider && state instanceof IExtendedBlockState){
-            ICacheKeyProvider provider = (ICacheKeyProvider)this.blockRenderer;
+        if(this.blockRenderer instanceof IBlockKeyProvider && state instanceof IExtendedBlockState){
+            IBlockKeyProvider provider = (IBlockKeyProvider)this.blockRenderer;
             builder.append(':');
-            builder.append(provider.getExtendedKey((IExtendedBlockState)state));
+            builder.append(provider.getExtendedBlockKey((IExtendedBlockState)state));
         }
 
         return builder.toString();

@@ -2,8 +2,8 @@ package keri.ninetaillib.render;
 
 import net.minecraftforge.common.property.IExtendedBlockState;
 
-public interface ICacheKeyProvider {
+public interface IBlockKeyProvider {
 
-    String getExtendedKey(IExtendedBlockState state);
+    String getExtendedBlockKey(IExtendedBlockState state);
 
 }

@@ -156,6 +156,18 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
         builder.append(stack.getItem().getRegistryName().getResourcePath());
         builder.append(':');
         builder.append(stack.getMetadata());
+
+        if(this.blockRenderer != null && this.blockRenderer instanceof IItemKeyProvider){
+            IItemKeyProvider provider = (IItemKeyProvider)this.blockRenderer;
+            builder.append(':');
+            provider.getExtendedItemKey(stack);
+        }
+        else if(this.itemRenderer != null && this.itemRenderer instanceof IItemKeyProvider){
+            IItemKeyProvider provider = (IItemKeyProvider)this.itemRenderer;
+            builder.append(':');
+            provider.getExtendedItemKey(stack);
+        }
+
         return builder.toString();
     }
 
