@@ -9,9 +9,12 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public abstract class ContainerBase extends Container {
+
+    protected HashSet<Integer> locked = new HashSet<>();
 
     @Nullable
     @Override
@@ -163,18 +166,24 @@ public abstract class ContainerBase extends Container {
     }
 
     protected void bindPlayerInventory(InventoryPlayer inventoryPlayer, int xOff, int yOff){
-        int i;
-        for(i = 0; i < 3; ++i) {
-            for(int j = 0; j < 9; ++j) {
-                int slot = j + i * 9 + 9;
-                int x = xOff + j * 18;
-                int y = yOff + i * 18;
-                this.addSlotToContainer(new SlotPlayerInventory(inventoryPlayer, slot, x, y));
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (this.locked.contains(j + i * 9 + 9)) {
+                    addSlotToContainer(new SlotDisabled(inventoryPlayer, j + i * 9 + 9, 8 + j * 18 + xOff, yOff + i * 18));
+                }
+                else {
+                    addSlotToContainer(new SlotPlayerInventory(inventoryPlayer, j + i * 9 + 9, 8 + j * 18 + xOff, yOff + i * 18));
+                }
             }
         }
 
-        for(i = 0; i < 9; ++i) {
-            this.addSlotToContainer(new SlotPlayerHotbar(inventoryPlayer, i, xOff + i * 18, yOff + 58));
+        for (int i = 0; i < 9; i++) {
+            if (this.locked.contains(i)) {
+                addSlotToContainer(new SlotDisabled(inventoryPlayer, i, 8 + i * 18 + xOff, 58 + yOff));
+            }
+            else {
+                addSlotToContainer(new SlotPlayerHotbar(inventoryPlayer, i, 8 + i * 18 + xOff, 58 + yOff));
+            }
         }
     }
 
