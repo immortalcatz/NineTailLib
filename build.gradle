@@ -16,6 +16,7 @@ repositories {
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven'
 
 version = "0.0.15"
 group= "keri.ninetaillib" 
@@ -68,4 +69,48 @@ task srcJar(type: Jar) {
 artifacts {
     archives deobfJar
     archives srcJar
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            if (project.hasProperty("local_maven")) {
+                repository(url: "file://${local_maven}")
+                pom {
+                    groupId = project.group
+                    version = project.version
+                    artifactId = project.archivesBaseName
+                    project {
+                        name project.archivesBaseName
+                        packaging 'jar'
+                        description 'NineTailLib'
+                        url 'http://github.com/TeamMD5/NineTailLib'
+                        scm {
+                            url 'http://github.com/TeamMD5/NineTailLib'
+                            connection 'scm:git:git@github.com:TeamMD5/NineTailLib.git'
+                            developerConnection 'scm:git:git@github.com:TeamMD5/NineTailLib.git'
+                        }
+                        issueManagement {
+                            system 'github'
+                            url 'https://github.com/TeamMD5/NineTailLib/issues'
+                        }
+                        licenses {
+                            license {
+                                name 'License'
+                                url 'https://raw.githubusercontent.com/TeamMD5/NineTailLib/master/LICENSE.txt'
+                                distribution 'repo'
+                            }
+                        }
+                        developers {
+                            developer {
+                                id 'KitsuneAlex'
+                                name 'KitsuneAlex'
+                                roles { role 'developer' }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
