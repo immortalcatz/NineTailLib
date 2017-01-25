@@ -5,7 +5,6 @@ import codechicken.lib.util.TransformUtils;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import keri.ninetaillib.texture.IIconItem;
-import keri.ninetaillib.texture.IIconRegistrar;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
