@@ -71,41 +71,45 @@ artifacts {
     archives srcJar
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            if (project.hasProperty("local_maven")) {
-                repository(url: "file://${local_maven}")
-                pom {
-                    groupId = project.group
-                    version = project.version
-                    artifactId = project.archivesBaseName
-                    project {
-                        name project.archivesBaseName
-                        packaging 'jar'
-                        description 'NineTailLib'
-                        url 'http://github.com/TeamMD5/NineTailLib'
-                        scm {
+task("uploadJars", dependsOn: "reobf") {
+    description = "uploads JARs"
+    if (System.getenv("local_maven") != null) {
+        apply plugin: 'maven'
+        uploadArchives {
+            repositories {
+                mavenDeployer {
+                    repository(url: "file://" + System.getenv("local_maven"))
+                    pom {
+                        groupId = project.group
+                        version = project.version
+                        artifactId = project.archivesBaseName
+                        project {
+                            name project.archivesBaseName
+                            packaging 'jar'
+                            description 'NineTailLib'
                             url 'http://github.com/TeamMD5/NineTailLib'
-                            connection 'scm:git:git@github.com:TeamMD5/NineTailLib.git'
-                            developerConnection 'scm:git:git@github.com:TeamMD5/NineTailLib.git'
-                        }
-                        issueManagement {
-                            system 'github'
-                            url 'https://github.com/TeamMD5/NineTailLib/issues'
-                        }
-                        licenses {
-                            license {
-                                name 'License'
-                                url 'https://raw.githubusercontent.com/TeamMD5/NineTailLib/master/LICENSE.txt'
-                                distribution 'repo'
+                            scm {
+                                url 'http://github.com/TeamMD5/NineTailLib'
+                                connection 'scm:git:git@github.com:TeamMD5/NineTailLib/NineTailLib.git'
+                                developerConnection 'scm:git:git@github.com:TeamMD5/NineTailLib/NineTailLib.git'
                             }
-                        }
-                        developers {
-                            developer {
-                                id 'KitsuneAlex'
-                                name 'KitsuneAlex'
-                                roles { role 'developer' }
+                            issueManagement {
+                                system 'github'
+                                url 'http://github.com/TeamMD5/NineTailLib/issues'
+                            }
+                            licenses {
+                                license {
+                                    name 'GNUv3'
+                                    url 'http://github.com/TeamMD5/NineTailLib/blob/master/LICENSE'
+                                    distribution 'repo'
+                                }
+                            }
+                            developers {
+                                developer {
+                                    id 'KitsuneAlex'
+                                    name 'KitsuneAlex'
+                                    roles { role 'developer' }
+                                }
                             }
                         }
                     }
