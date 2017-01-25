@@ -8,15 +8,22 @@ buildscript {
     }
 }
 
+repositories {
+        maven {
+        name "CB's Maven"
+        url "http://chickenbones.net/maven"
+    }
+}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "0.0.14"
+version = "0.0.15"
 group= "keri.ninetaillib" 
 archivesBaseName = "NineTailLib-[1.10.2]"
 
-sourceCompatibility = targetCompatibility = "1.6" 
+sourceCompatibility = targetCompatibility = "1.8" 
 compileJava {
-    sourceCompatibility = targetCompatibility = "1.6"
+    sourceCompatibility = targetCompatibility = "1.8"
 }
 
 minecraft {
@@ -26,7 +33,7 @@ minecraft {
 }
 
 dependencies {
-
+    deobfCompile "codechicken:CodeChickenLib:1.10.2-2.5.2.207:deobf"
 }
 
 processResources
