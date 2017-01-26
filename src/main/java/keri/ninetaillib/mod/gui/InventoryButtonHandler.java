@@ -10,9 +10,11 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,6 +27,10 @@ public class InventoryButtonHandler {
     private final ResourceLocation textureFriendslistClicked = new ResourceLocation(ModPrefs.MODID, "textures/gui/button_friendslist_clicked.png");
     private final ResourceLocation textureClear = new ResourceLocation(ModPrefs.MODID, "textures/gui/button_clear.png");
     private final ResourceLocation textureClearClicked = new ResourceLocation(ModPrefs.MODID, "textures/gui/button_clear_clicked.png");
+    private final ResourceLocation textureDay = new ResourceLocation(ModPrefs.MODID, "textures/gui/button_day.png");
+    private final ResourceLocation textureDayClicked = new ResourceLocation(ModPrefs.MODID, "textures/gui/button_day_clicked.png");
+    private final ResourceLocation textureNight = new ResourceLocation(ModPrefs.MODID, "textures/gui/button_night.png");
+    private final ResourceLocation textureNightClicked = new ResourceLocation(ModPrefs.MODID, "textures/gui/button_night_clicked.png");
 
     @SubscribeEvent
     public void onGuiScreen(GuiScreenEvent.InitGuiEvent event){
@@ -57,17 +63,44 @@ public class InventoryButtonHandler {
             IButtonAction actionClearInventory = new IButtonAction() {
                 @Override
                 public void performAction() {
-                    EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-
-                    if(player != null){
-                        player.inventory.clear();
-                    }
+                    /* todo */
+                    //Implement proper inventory clearing
                 }
             };
 
             ButtonWithIcon buttonClearInventory = new ButtonWithIcon(295831, startX, startY + 18, this.textureClear, this.textureClearClicked);
             buttonClearInventory.setAction(actionClearInventory);
             event.getButtonList().add(buttonClearInventory);
+
+            IButtonAction actionDay = new IButtonAction() {
+                @Override
+                public void performAction() {
+                    World[] worlds = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
+
+                    for(int i = 0; i < worlds.length; i++){
+                        worlds[i].setWorldTime(1000);
+                    }
+                }
+            };
+
+            ButtonWithIcon buttonDay = new ButtonWithIcon(295832, startX, startY + 36, this.textureDay, this.textureDayClicked);
+            buttonDay.setAction(actionDay);
+            event.getButtonList().add(buttonDay);
+
+            IButtonAction actionNight = new IButtonAction() {
+                @Override
+                public void performAction() {
+                    World[] worlds = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
+
+                    for(int i = 0; i < worlds.length; i++){
+                        worlds[i].setWorldTime(13000);
+                    }
+                }
+            };
+
+            ButtonWithIcon buttonNight = new ButtonWithIcon(295833, startX, startY + 54, this.textureNight, this.textureNightClicked);
+            buttonNight.setAction(actionNight);
+            event.getButtonList().add(buttonNight);
         }
     }
 
