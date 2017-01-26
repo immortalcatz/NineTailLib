@@ -6,8 +6,8 @@ import com.google.common.collect.Lists;
 import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.block.IMetaBlock;
 import keri.ninetaillib.item.ItemBase;
-import keri.ninetaillib.mod.ClientEventHandler;
 import keri.ninetaillib.mod.NineTailLib;
+import keri.ninetaillib.mod.gui.InventoryButtonHandler;
 import keri.ninetaillib.mod.network.NineTailLibCPH;
 import keri.ninetaillib.mod.util.ModPrefs;
 import keri.ninetaillib.render.CustomBlockRenderer;
@@ -38,7 +38,7 @@ public class ClientProxy implements INineTailProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(IconRegistrar.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+        MinecraftForge.EVENT_BUS.register(new InventoryButtonHandler());
 
         for(BlockBase block : this.blocksToHandle){
             IconRegistrar.INSTANCE.registerBlock(block);
