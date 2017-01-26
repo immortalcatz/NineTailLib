@@ -1,9 +1,10 @@
-package keri.ninetaillib.mod;
+package keri.ninetaillib.mod.proxy;
 
 import codechicken.lib.packet.PacketCustom;
 import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.item.ItemBase;
-import keri.ninetaillib.network.NineTailLibSPH;
+import keri.ninetaillib.mod.NineTailLib;
+import keri.ninetaillib.mod.network.NineTailLibSPH;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;

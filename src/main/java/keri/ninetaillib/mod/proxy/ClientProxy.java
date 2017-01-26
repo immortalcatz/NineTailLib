@@ -1,4 +1,4 @@
-package keri.ninetaillib.mod;
+package keri.ninetaillib.mod.proxy;
 
 import codechicken.lib.model.ModelRegistryHelper;
 import codechicken.lib.packet.PacketCustom;
@@ -6,7 +6,9 @@ import com.google.common.collect.Lists;
 import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.block.IMetaBlock;
 import keri.ninetaillib.item.ItemBase;
-import keri.ninetaillib.network.NineTailLibCPH;
+import keri.ninetaillib.mod.NineTailLib;
+import keri.ninetaillib.mod.friendslist.FriendsListRenderingHandler;
+import keri.ninetaillib.mod.network.NineTailLibCPH;
 import keri.ninetaillib.render.CustomBlockRenderer;
 import keri.ninetaillib.render.CustomItemRenderer;
 import keri.ninetaillib.render.IBlockRenderingHandler;
@@ -33,6 +35,7 @@ public class ClientProxy implements INineTailProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(IconRegistrar.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new FriendsListRenderingHandler());
 
         for(BlockBase block : this.blocksToHandle){
             IconRegistrar.INSTANCE.registerBlock(block);

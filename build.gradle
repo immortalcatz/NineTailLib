@@ -9,7 +9,7 @@ buildscript {
 }
 
 repositories {
-        maven {
+    maven {
         name "CB's Maven"
         url "http://chickenbones.net/maven"
     }
@@ -17,7 +17,7 @@ repositories {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "0.0.15"
+version = "0.0.16"
 group= "keri.ninetaillib" 
 archivesBaseName = "NineTailLib-[1.10.2]"
 

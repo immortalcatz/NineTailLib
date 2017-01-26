@@ -1,4 +1,4 @@
-package keri.ninetaillib.mod;
+package keri.ninetaillib.mod.proxy;
 
 import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.item.ItemBase;

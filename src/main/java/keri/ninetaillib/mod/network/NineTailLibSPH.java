@@ -1,4 +1,4 @@
-package keri.ninetaillib.network;
+package keri.ninetaillib.mod.network;
 
 import codechicken.lib.packet.PacketCustom;
 import net.minecraft.entity.player.EntityPlayerMP;

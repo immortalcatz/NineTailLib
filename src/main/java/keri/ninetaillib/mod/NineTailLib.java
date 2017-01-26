@@ -1,6 +1,7 @@
 package keri.ninetaillib.mod;
 
 import keri.ninetaillib.config.ConfigManagerBase;
+import keri.ninetaillib.mod.proxy.INineTailProxy;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -13,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
-import static keri.ninetaillib.mod.ModPrefs.*;
+import static keri.ninetaillib.mod.util.ModPrefs.*;
 
 @Mod(modid = MODID, name = NAME, version = VERSION, dependencies = DEPS, acceptedMinecraftVersions = ACC_MC)
 public class NineTailLib {
