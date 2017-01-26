@@ -34,7 +34,7 @@ public class ShaderUtils {
 
         if(shader != 0){
             int time = ARBShaderObjects.glGetUniformLocationARB(shader, "time");
-            ARBShaderObjects.glUniform1iARB(time, (int)codechicken.lib.util.ClientUtils.getRenderTime());
+            ARBShaderObjects.glUniform1fARB(time, (float)(codechicken.lib.util.ClientUtils.getRenderTime() / 16));
             if(callback != null){ callback.call(shader); }
         }
     }

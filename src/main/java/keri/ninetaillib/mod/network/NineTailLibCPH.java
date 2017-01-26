@@ -41,7 +41,8 @@ public class NineTailLibCPH implements PacketCustom.IClientPacketHandler {
     private void handleRequestPackage(PacketCustom packet){
         UUID uuid = packet.readUuid();
         String playerName = packet.readString();
-        FriendsListHandler.INSTANCE.addPending(new GameProfile(uuid, playerName));
+        String message = packet.readString();
+        FriendsListHandler.INSTANCE.addPending(new GameProfile(uuid, playerName), message);
     }
 
     private void handleRemovalPackage(PacketCustom packet){
