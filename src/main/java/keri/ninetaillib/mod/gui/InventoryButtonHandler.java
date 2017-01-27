@@ -9,6 +9,7 @@ import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -19,6 +20,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+
+import java.util.UUID;
 
 @SideOnly(Side.CLIENT)
 public class InventoryButtonHandler {
@@ -34,7 +37,7 @@ public class InventoryButtonHandler {
 
     @SubscribeEvent
     public void onGuiScreen(GuiScreenEvent.InitGuiEvent event){
-        final EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
         if(event.getGui() instanceof InventoryEffectRenderer){
             int startX = (event.getGui().width - 176) / 2;
@@ -63,8 +66,12 @@ public class InventoryButtonHandler {
             IButtonAction actionClearInventory = new IButtonAction() {
                 @Override
                 public void performAction() {
-                    /* todo */
-                    //Implement proper inventory clearing
+                    UUID playerId = FMLClientHandler.instance().getClientPlayerEntity().getGameProfile().getId();
+                    EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(playerId);
+
+                    if(player != null){
+                        player.inventory.clear();
+                    }
                 }
             };
 
@@ -160,8 +167,8 @@ public class InventoryButtonHandler {
         }
 
         private boolean isMouseOver(int mouseX, int mouseY, int x, int y){
-            if(mouseX >= x && mouseX <= x + 16){
-                if(mouseY >= y && mouseY <= y + 16){
+            if(mouseX >= x && mouseX <= (x + 16)){
+                if(mouseY >= y && mouseY <= (y + 16)){
                     return true;
                 }
             }
@@ -178,10 +185,11 @@ public class InventoryButtonHandler {
             if(this.isMouseOver(mouseX, mouseY, this.xPosition, this.yPosition)){
                 if(this.action != null){
                     this.action.performAction();
+                    return super.mousePressed(minecraft, mouseX, mouseY);
                 }
             }
 
-            return super.mousePressed(minecraft, mouseX, mouseY);
+            return false;
         }
 
     }
