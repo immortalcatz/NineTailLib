@@ -2,7 +2,7 @@ package keri.ninetaillib.mod.network;
 
 import codechicken.lib.packet.PacketCustom;
 import com.mojang.authlib.GameProfile;
-import keri.ninetaillib.mod.friendslist.FriendsListHandler;
+import keri.ninetaillib.mod.gui.FriendsListHandler;
 import keri.ninetaillib.tile.TileEntityBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.INetHandlerPlayClient;

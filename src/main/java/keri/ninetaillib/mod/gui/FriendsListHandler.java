@@ -1,4 +1,4 @@
-package keri.ninetaillib.mod.friendslist;
+package keri.ninetaillib.mod.gui;
 
 import codechicken.lib.packet.PacketCustom;
 import com.google.common.collect.ImmutableList;

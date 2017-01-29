@@ -1,4 +1,4 @@
-package keri.ninetaillib.mod.friendslist;
+package keri.ninetaillib.mod.gui;
 
 import codechicken.lib.colour.ColourRGBA;
 import keri.ninetaillib.mod.proxy.ClientProxy;
@@ -31,7 +31,7 @@ public class GuiFriendslist extends GuiScreen {
         UUID playerUUID = player.getGameProfile().getId();
 
         if(playerUUID.equals(UUID.fromString("b2ac8c03-d994-4805-9e0f-57fede63c04d"))){
-            backgroundColor = new ColourRGBA(0D, 0.4D, 0D, 1D);
+            backgroundColor = new ColourRGBA(0D, 0D, 0.3D, 1D);
         }
         else if(playerUUID.equals(UUID.fromString("e3ec1c24-817a-4879-880a-edce0d980699"))){
             backgroundColor = new ColourRGBA(0.4D, 0.4D, 0D, 1D);

@@ -1,6 +1,5 @@
 package keri.ninetaillib.mod.gui;
 
-import keri.ninetaillib.mod.friendslist.GuiFriendslist;
 import keri.ninetaillib.mod.util.ModPrefs;
 import keri.ninetaillib.util.ResourceAction;
 import net.minecraft.client.Minecraft;
@@ -10,6 +9,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -109,6 +109,16 @@ public class InventoryButtonHandler {
             buttonNight.setAction(actionNight);
             event.getButtonList().add(buttonNight);
         }
+    }
+
+    private boolean isPlayerOp(UUID playerId){
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+
+        if(server.getPlayerList().getPlayerByUUID(playerId) != null){
+            EntityPlayerMP player = server.getPlayerList().getPlayerByUUID(playerId);
+        }
+
+        return false;
     }
 
     private static class ButtonWithIcon extends GuiButton {
