@@ -1,10 +1,8 @@
 package keri.ninetaillib.mod.gui;
 
-import codechicken.lib.packet.PacketCustom;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
-import keri.ninetaillib.mod.NineTailLib;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import org.apache.commons.lang3.tuple.Pair;
@@ -15,7 +13,7 @@ import java.util.UUID;
 public class FriendsListHandler {
 
     public static final FriendsListHandler INSTANCE = new FriendsListHandler();
-    private final GameProfile defaultProfile = new GameProfile(UUID.fromString("8667ba71b85a4004af54457a9734eed7"), "Steve");
+    private final GameProfile defaultProfile = new GameProfile(UUID.fromString("8667ba71-b85a-4004-af54-457a9734eed7"), "Steve");
     private ArrayList<GameProfile> friends = Lists.newArrayList();
     private ArrayList<Pair<GameProfile, String>> pending = Lists.newArrayList();
 
@@ -50,11 +48,6 @@ public class FriendsListHandler {
         return this.defaultProfile;
     }
 
-    public boolean isOfflineUser(){
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        return player.getGameProfile() == this.defaultProfile ? true : false;
-    }
-
     public ImmutableList<GameProfile> getFriends(){
         return ImmutableList.copyOf(this.friends);
     }
@@ -64,6 +57,7 @@ public class FriendsListHandler {
     }
 
     public void sendRequest(GameProfile target, String message){
+        /**
         if(target != null && message != null){
             UUID uuid = target.getId();
             String playerName = target.getName();
@@ -73,9 +67,11 @@ public class FriendsListHandler {
             packet.writeString(message);
             packet.sendToClients();
         }
+         */
     }
 
     public void sendRemoval(GameProfile toRemove){
+        /**
         if(toRemove != null){
             UUID uuid = toRemove.getId();
             String playerName = toRemove.getName();
@@ -84,6 +80,7 @@ public class FriendsListHandler {
             packet.writeString(playerName);
             packet.sendToClients();
         }
+         */
     }
 
 }

@@ -1,25 +1,21 @@
 package keri.ninetaillib.mod.gui;
 
+import keri.ninetaillib.gui.ButtonWithIcon;
+import keri.ninetaillib.gui.IButtonAction;
 import keri.ninetaillib.mod.util.ModPrefs;
-import keri.ninetaillib.util.ResourceAction;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 import java.util.UUID;
 
@@ -70,7 +66,13 @@ public class InventoryButtonHandler {
                     EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(playerId);
 
                     if(player != null){
-                        player.inventory.clear();
+                        for(int i = 0; i < player.inventory.getSizeInventory(); i++){
+                            if(player.inventory.getStackInSlot(i) != null){
+                                player.inventory.setInventorySlotContents(i, null);
+                            }
+                        }
+
+                        player.inventory.markDirty();
                     }
                 }
             };
@@ -82,10 +84,15 @@ public class InventoryButtonHandler {
             IButtonAction actionDay = new IButtonAction() {
                 @Override
                 public void performAction() {
-                    World[] worlds = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
+                    UUID playerId = FMLClientHandler.instance().getClientPlayerEntity().getGameProfile().getId();
+                    EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(playerId);
 
-                    for(int i = 0; i < worlds.length; i++){
-                        worlds[i].setWorldTime(1000);
+                    if(player.canCommandSenderUseCommand(2, "time set day")){
+                        World[] worlds = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
+
+                        for(int i = 0; i < worlds.length; i++){
+                            worlds[i].setWorldTime(1000);
+                        }
                     }
                 }
             };
@@ -97,10 +104,15 @@ public class InventoryButtonHandler {
             IButtonAction actionNight = new IButtonAction() {
                 @Override
                 public void performAction() {
-                    World[] worlds = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
+                    UUID playerId = FMLClientHandler.instance().getClientPlayerEntity().getGameProfile().getId();
+                    EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(playerId);
 
-                    for(int i = 0; i < worlds.length; i++){
-                        worlds[i].setWorldTime(13000);
+                    if(player.canCommandSenderUseCommand(2, "time set night")){
+                        World[] worlds = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
+
+                        for(int i = 0; i < worlds.length; i++){
+                            worlds[i].setWorldTime(13000);
+                        }
                     }
                 }
             };
@@ -109,105 +121,6 @@ public class InventoryButtonHandler {
             buttonNight.setAction(actionNight);
             event.getButtonList().add(buttonNight);
         }
-    }
-
-    private boolean isPlayerOp(UUID playerId){
-        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-
-        if(server.getPlayerList().getPlayerByUUID(playerId) != null){
-            EntityPlayerMP player = server.getPlayerList().getPlayerByUUID(playerId);
-        }
-
-        return false;
-    }
-
-    private static class ButtonWithIcon extends GuiButton {
-
-        private ResourceAction texture;
-        private ResourceAction textureClicked;
-        private IButtonAction action = null;
-        private int renderTicks = 0;
-
-        public ButtonWithIcon(int id, int x, int y, ResourceLocation texture) {
-            super(id, x, y, "");
-            this.texture = new ResourceAction(texture);
-            this.textureClicked = new ResourceAction(texture);
-        }
-
-        public ButtonWithIcon(int id, int x, int y, ResourceLocation texture, ResourceLocation textureClicked) {
-            super(id, x, y, "");
-            this.texture = new ResourceAction(texture);
-            this.textureClicked = new ResourceAction(textureClicked);
-        }
-
-        @Override
-        public void drawButton(Minecraft minecraft, int mouseX, int mouseY) {
-            int x = this.xPosition;
-            int y = this.yPosition;
-            float zLevel = 0F;
-            GlStateManager.pushMatrix();
-            GlStateManager.pushAttrib();
-            GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            GlStateManager.color(1F, 1F, 1F, 1F);
-            GlStateManager.translate(x, y, 0D);
-            GlStateManager.scale(0.0625D, 0.0625D, 0.0625D);
-
-            if(this.isMouseOver(mouseX, mouseY, x, y)){
-                if(renderTicks < 64){
-                    this.renderTicks += 8;
-                }
-
-                GlStateManager.pushMatrix();
-                float scale = (float)(this.renderTicks / 64D);
-                GlStateManager.scale(scale, scale, 0D);
-                this.textureClicked.bind(true);
-                GuiUtils.drawTexturedModalRect(0, 0, 0, 0, 256, 256, zLevel);
-                GlStateManager.popMatrix();
-            }
-            else{
-                this.renderTicks = 0;
-                this.texture.bind(true);
-                GuiUtils.drawTexturedModalRect(0, 0, 0, 0, 256, 256, zLevel);
-            }
-
-            GlStateManager.disableBlend();
-            GlStateManager.popAttrib();
-            GlStateManager.popMatrix();
-        }
-
-        private boolean isMouseOver(int mouseX, int mouseY, int x, int y){
-            if(mouseX >= x && mouseX <= (x + 16)){
-                if(mouseY >= y && mouseY <= (y + 16)){
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public void setAction(IButtonAction action){
-            this.action = action;
-        }
-
-        @Override
-        public boolean mousePressed(Minecraft minecraft, int mouseX, int mouseY){
-            if(this.isMouseOver(mouseX, mouseY, this.xPosition, this.yPosition)){
-                if(this.action != null){
-                    this.action.performAction();
-                    return super.mousePressed(minecraft, mouseX, mouseY);
-                }
-            }
-
-            return false;
-        }
-
-    }
-
-    private static interface IButtonAction {
-
-        void performAction();
-
     }
 
 }
