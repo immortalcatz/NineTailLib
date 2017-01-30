@@ -15,6 +15,7 @@ public class NineTailLibCPH implements PacketCustom.IClientPacketHandler {
         switch(packet.getType()){
             case 1:
                 this.handleTilePacket(packet, minecraft.theWorld, packet.readPos());
+                break;
             case 2:
                 this.handleRequestPackage(packet);
                 break;

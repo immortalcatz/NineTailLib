@@ -40,6 +40,7 @@ public abstract class TileEntityBase extends TileEntity implements ICustomPacket
     public void writeToPacket(MCDataOutput packet){
         NBTTagCompound tag = new NBTTagCompound();
         this.writeCustomNBT(tag);
+        packet.writePos(this.getPos());
         packet.writeNBTTagCompound(tag);
     }
 
