@@ -36,11 +36,14 @@ public abstract class TileEntityBase extends TileEntity implements ICustomPacket
         return packet;
     }
 
+    protected void sendUpdatePacket() {
+        this.writeToPacketCustom().sendToChunk(worldObj, getPos().getX() >> 4, getPos().getZ() >> 4);
+    }
+
     @Override
     public void writeToPacket(MCDataOutput packet){
         NBTTagCompound tag = new NBTTagCompound();
         this.writeCustomNBT(tag);
-        packet.writePos(this.getPos());
         packet.writeNBTTagCompound(tag);
     }
 
