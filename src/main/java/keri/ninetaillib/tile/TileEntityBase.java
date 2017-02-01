@@ -1,8 +1,5 @@
 package keri.ninetaillib.tile;
 
-import codechicken.lib.data.MCDataInput;
-import codechicken.lib.data.MCDataOutput;
-import codechicken.lib.packet.ICustomPacketTile;
 import codechicken.lib.packet.PacketCustom;
 import keri.ninetaillib.mod.NineTailLib;
 import net.minecraft.block.state.IBlockState;
@@ -15,7 +12,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public abstract class TileEntityBase extends TileEntity implements ICustomPacketTile {
+public abstract class TileEntityBase extends TileEntity {
 
     @Override
     public void readFromNBT(NBTTagCompound tag){
@@ -30,60 +27,58 @@ public abstract class TileEntityBase extends TileEntity implements ICustomPacket
         return tag;
     }
 
-    public PacketCustom writeToPacketCustom(){
-        PacketCustom packet = new PacketCustom(NineTailLib.INSTANCE, 1);
-        this.writeToPacket(packet);
-        return packet;
-    }
-
-    protected void sendUpdatePacket() {
-        this.writeToPacketCustom().sendToChunk(this.worldObj, getPos().getX() >> 4, getPos().getZ() >> 4);
-    }
-
     @Override
-    public void writeToPacket(MCDataOutput packet){
+    public NBTTagCompound getUpdateTag() {
         NBTTagCompound tag = new NBTTagCompound();
         this.writeCustomNBT(tag);
-        packet.writeNBTTagCompound(tag);
+        return tag;
     }
 
     @Override
-    public void readFromPacket(MCDataInput packet) {
-        this.readCustomNBT(packet.readNBTTagCompound());
-        this.notifyUpdate();
+    public void handleUpdateTag(NBTTagCompound tag) {
+        super.handleUpdateTag(tag);
+        this.readCustomNBT(tag);
+        this.notifyUpdate(false);
     }
 
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        return this.writeToPacketCustom().toTilePacket(this.getPos());
-    }
-
-    @Override
-    public NBTTagCompound getUpdateTag() {
-        return this.writeToPacketCustom().toNBTTag(super.getUpdateTag());
+        NBTTagCompound tag = new NBTTagCompound();
+        this.writeCustomNBT(tag);
+        return new SPacketUpdateTileEntity(this.getPos(), 0, tag);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        this.readFromPacket(PacketCustom.fromTilePacket(packet));
+        super.onDataPacket(net, packet);
+        this.readCustomNBT(packet.getNbtCompound());
+        this.notifyUpdate(false);
     }
 
-    @Override
-    public void handleUpdateTag(NBTTagCompound tag) {
-        this.readFromPacket(PacketCustom.fromNBTTag(tag));
+    public void notifyUpdate(boolean renderUpdate){
+        IBlockState state = this.worldObj.getBlockState(this.getPos());
+        this.worldObj.notifyBlockUpdate(this.getPos(), state, state, 3);
+        this.worldObj.notifyNeighborsOfStateChange(this.getPos(), this.worldObj.getBlockState(this.getPos()).getBlock());
+
+        if(renderUpdate){
+            this.worldObj.markBlockRangeForRenderUpdate(this.getPos(), this.getPos());
+        }
+    }
+
+    protected void sendUpdatePacket(boolean renderUpdate){
+        PacketCustom packet = new PacketCustom(NineTailLib.INSTANCE, 1);
+        packet.writePos(this.getPos());
+        NBTTagCompound tag = new NBTTagCompound();
+        this.writeCustomNBT(tag);
+        packet.writeNBTTagCompound(tag);
+        packet.writeBoolean(renderUpdate);
+        packet.sendToClients();
     }
 
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
         return oldState.getBlock() != newSate.getBlock();
-    }
-
-    private void notifyUpdate(){
-        IBlockState state = this.worldObj.getBlockState(this.getPos());
-        this.worldObj.notifyBlockUpdate(this.getPos(), state, state, 3);
-        this.worldObj.notifyNeighborsOfStateChange(this.getPos(), this.worldObj.getBlockState(this.getPos()).getBlock());
-        this.worldObj.markBlockRangeForRenderUpdate(this.getPos(), this.getPos());
     }
 
     public abstract void readCustomNBT(NBTTagCompound tag);
