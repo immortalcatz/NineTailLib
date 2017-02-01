@@ -17,7 +17,7 @@ repositories {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "0.0.27"
+version = "0.0.28"
 group= "keri.ninetaillib" 
 archivesBaseName = "NineTailLib-[1.10.2]"
 

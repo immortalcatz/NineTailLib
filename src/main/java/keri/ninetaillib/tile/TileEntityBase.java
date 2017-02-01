@@ -29,30 +29,25 @@ public abstract class TileEntityBase extends TileEntity {
 
     @Override
     public NBTTagCompound getUpdateTag() {
-        NBTTagCompound tag = new NBTTagCompound();
-        this.writeCustomNBT(tag);
-        return tag;
+        return this.writeToNBT(new NBTTagCompound());
     }
 
     @Override
     public void handleUpdateTag(NBTTagCompound tag) {
-        super.handleUpdateTag(tag);
-        this.readCustomNBT(tag);
+        this.readFromNBT(tag);
         this.notifyUpdate(false);
     }
 
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound tag = new NBTTagCompound();
-        this.writeCustomNBT(tag);
-        return new SPacketUpdateTileEntity(this.getPos(), 3, tag);
+        return new SPacketUpdateTileEntity(this.getPos(), 3, this.writeToNBT(new NBTTagCompound()));
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
         super.onDataPacket(net, packet);
-        this.readCustomNBT(packet.getNbtCompound());
+        this.readFromNBT(packet.getNbtCompound());
         this.notifyUpdate(false);
     }
 
@@ -69,9 +64,7 @@ public abstract class TileEntityBase extends TileEntity {
     protected void sendUpdatePacket(boolean renderUpdate){
         PacketCustom packet = new PacketCustom(NineTailLib.INSTANCE, 1);
         packet.writePos(this.getPos());
-        NBTTagCompound tag = new NBTTagCompound();
-        this.writeCustomNBT(tag);
-        packet.writeNBTTagCompound(tag);
+        packet.writeNBTTagCompound(this.writeToNBT(new NBTTagCompound()));
         packet.writeBoolean(renderUpdate);
         packet.sendToClients();
     }
