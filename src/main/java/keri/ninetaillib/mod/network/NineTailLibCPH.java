@@ -3,10 +3,10 @@ package keri.ninetaillib.mod.network;
 import codechicken.lib.packet.PacketCustom;
 import keri.ninetaillib.tile.TileEntityBase;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class NineTailLibCPH implements PacketCustom.IClientPacketHandler {
 
@@ -25,7 +25,7 @@ public class NineTailLibCPH implements PacketCustom.IClientPacketHandler {
         }
     }
 
-    private void handleTilePacket(PacketCustom packet, World world, BlockPos pos){
+    private void handleTilePacket(PacketCustom packet, WorldClient world, BlockPos pos){
         TileEntity tile = (TileEntity)world.getTileEntity(pos);
 
         if(tile instanceof TileEntityBase){

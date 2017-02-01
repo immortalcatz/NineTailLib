@@ -37,7 +37,7 @@ public abstract class TileEntityBase extends TileEntity implements ICustomPacket
     }
 
     protected void sendUpdatePacket() {
-        this.writeToPacketCustom().sendToChunk(worldObj, getPos().getX() >> 4, getPos().getZ() >> 4);
+        this.writeToPacketCustom().sendToChunk(this.worldObj, getPos().getX() >> 4, getPos().getZ() >> 4);
     }
 
     @Override
