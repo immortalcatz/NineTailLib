@@ -29,24 +29,21 @@ public abstract class TileEntityBase extends TileEntity {
 
     @Override
     public NBTTagCompound getUpdateTag() {
-        return this.writeToNBT(new NBTTagCompound());
-    }
-
-    @Override
-    public void handleUpdateTag(NBTTagCompound tag) {
-        this.readFromNBT(tag);
-        this.notifyUpdate(false);
+        NBTTagCompound tag = super.writeToNBT(new NBTTagCompound());
+        this.writeCustomNBT(tag);
+        return tag;
     }
 
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        return new SPacketUpdateTileEntity(this.getPos(), 3, this.writeToNBT(new NBTTagCompound()));
+        NBTTagCompound tag = new NBTTagCompound();
+        this.writeCustomNBT(tag);
+        return new SPacketUpdateTileEntity(this.getPos(), 3, tag);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        super.onDataPacket(net, packet);
         this.readFromNBT(packet.getNbtCompound());
         this.notifyUpdate(false);
     }
