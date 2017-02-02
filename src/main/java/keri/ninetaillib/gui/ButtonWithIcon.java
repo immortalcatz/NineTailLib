@@ -29,9 +29,7 @@ public class ButtonWithIcon extends GuiButton {
 
     @Override
     public void drawButton(Minecraft minecraft, int mouseX, int mouseY) {
-        float zLevel = 100F;
         GlStateManager.pushMatrix();
-        GlStateManager.pushAttrib();
         GlStateManager.enableBlend();
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.translate(this.xPosition, this.yPosition, 0D);
@@ -42,21 +40,20 @@ public class ButtonWithIcon extends GuiButton {
                 this.renderTicks += 8;
             }
 
-            GlStateManager.pushMatrix();
             float scale = (float)(this.renderTicks / 64D);
+            GlStateManager.pushMatrix();
             GlStateManager.scale(scale, scale, 0D);
             this.textureClicked.bind(true);
-            GuiUtils.drawTexturedModalRect(0, 0, 0, 0, 256, 256, zLevel);
+            GuiUtils.drawTexturedModalRect(0, 0, 0, 0, 256, 256, 10F);
             GlStateManager.popMatrix();
         }
         else{
             this.renderTicks = 0;
             this.texture.bind(true);
-            GuiUtils.drawTexturedModalRect(0, 0, 0, 0, 256, 256, zLevel);
+            GuiUtils.drawTexturedModalRect(0, 0, 0, 0, 256, 256, 10F);
         }
 
         GlStateManager.disableBlend();
-        GlStateManager.popAttrib();
         GlStateManager.popMatrix();
     }
 

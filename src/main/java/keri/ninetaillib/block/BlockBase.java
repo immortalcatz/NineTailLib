@@ -6,7 +6,6 @@ import keri.ninetaillib.render.DefaultBlockRenderer;
 import keri.ninetaillib.render.IBlockRenderingHandler;
 import keri.ninetaillib.texture.IIconBlock;
 import keri.ninetaillib.texture.IIconRegistrar;
-import keri.ninetaillib.tile.TileEntityBase;
 import keri.ninetaillib.util.CommonUtils;
 import keri.ninetaillib.util.HideInventory;
 import net.minecraft.block.Block;
@@ -22,6 +21,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
@@ -33,7 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlockBase<T extends TileEntityBase> extends Block implements ITileEntityProvider, IIconBlock {
+public class BlockBase<T extends TileEntity> extends Block implements ITileEntityProvider, IIconBlock {
 
     private String internalName;
     private String modid;

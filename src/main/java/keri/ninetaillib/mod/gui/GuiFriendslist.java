@@ -1,25 +1,24 @@
 package keri.ninetaillib.mod.gui;
 
 import codechicken.lib.colour.ColourRGBA;
-import keri.ninetaillib.gui.ButtonWithIcon;
-import keri.ninetaillib.gui.IButtonAction;
+import com.mojang.authlib.GameProfile;
 import keri.ninetaillib.mod.proxy.ClientProxy;
 import keri.ninetaillib.mod.util.ModPrefs;
 import keri.ninetaillib.util.ShaderUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiContainerCreative;
-import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.ARBShaderObjects;
 
 import javax.vecmath.Vector2f;
+import java.io.IOException;
 import java.util.UUID;
 
 @SideOnly(Side.CLIENT)
@@ -30,14 +29,13 @@ public class GuiFriendslist extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        super.drawScreen(mouseX, mouseY, partialTicks);
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         this.drawBackground(player);
-        this.drawWIPMessage();
+        this.drawMenuBackground();
     }
 
     private void drawBackground(EntityPlayer player){
-        GlStateManager.pushMatrix();
-        GlStateManager.pushAttrib();
         ColourRGBA backgroundColor = new ColourRGBA(0, 0, 0, 255);
         UUID playerUUID = player.getGameProfile().getId();
 
@@ -55,41 +53,52 @@ public class GuiFriendslist extends GuiScreen {
         }
 
         Vector2f resolution = new Vector2f(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0D, 0D, -10D);
         ShaderUtils.useShader(ClientProxy.backgroundShader, new BGShaderCallback(resolution, backgroundColor));
         GuiUtils.drawGradientRect(-1, 0, 0, 1920, 1080, 0xFFFFFFFF, 0xFFFFFFFF);
         ShaderUtils.releaseShader();
-        GlStateManager.popAttrib();
         GlStateManager.popMatrix();
     }
 
-    private void drawWIPMessage(){
+    private void drawMenuBackground(){
+        int left = 12;
+        int top = 12;
+        int right = this.width - 12;
+        int bottom = this.height - 12;
         GlStateManager.pushMatrix();
-        GlStateManager.pushAttrib();
-        GlStateManager.scale(2D, 2D, 2D);
-        this.fontRendererObj.drawString("This is work in progress =)", 10, 10, 0xFFFFFFFF);
-        GlStateManager.popAttrib();
+        GlStateManager.translate(0D, 0D, -10D);
+        this.drawGradientRect(left, top, right, bottom, 0x44FFFFFF,0x06FFFFFF);
+        this.drawHorizontalLine(left, right, top, 0x66FFFFFF);
+        this.drawHorizontalLine(left, right, bottom, 0x66FFFFFF);
+        this.drawVerticalLine(left, top, bottom, 0x66FFFFFF);
+        this.drawVerticalLine(right, top, bottom, 0x66FFFFFF);
         GlStateManager.popMatrix();
+    }
+
+    private void drawPlayerPreview(GameProfile profile){
+
     }
 
     @Override
     public void initGui() {
-        IButtonAction actionClose = new IButtonAction() {
-            @Override
-            public void performAction() {
-                EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        int left = 12;
+        int top = 12;
+        int right = this.width - 12;
+        int bottom = this.height - 12;
+        int buttonWidth = 20;
+        int buttonHeight = 20;
+        GuiButton buttonClose = new GuiButton(0, left + 2, top + 2, buttonWidth, buttonHeight, "X");
+        this.addButton(buttonClose);
+    }
 
-                if(player.capabilities.isCreativeMode){
-                    FMLClientHandler.instance().displayGuiScreen(player, new GuiContainerCreative(player));
-                }
-                else{
-                    FMLClientHandler.instance().displayGuiScreen(player, new GuiInventory(player));
-                }
-            }
-        };
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException {
+        super.actionPerformed(button);
 
-        ButtonWithIcon buttonClose = new ButtonWithIcon(0, 100, 100, this.textureButtonClose, this.textureButtonCloseClicked);
-        buttonClose.setAction(actionClose);
-        //this.addButton(buttonClose);
+        if(button.id == 0){
+            FMLLog.info("HELLO WORLD");
+        }
     }
 
     private static class BGShaderCallback implements ShaderUtils.IShaderCallback {
