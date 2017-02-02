@@ -35,6 +35,7 @@ public class GuiFriendslist extends GuiScreen {
     private final ResourceLocation textureButtonCloseClicked = new ResourceLocation(ModPrefs.MODID, "textures/gui/button_close_clicked.png");
     private final ColourRGBA defaultColor = new ColourRGBA(0, 0, 80, 255);
     private static Map<UUID, ColourRGBA> colorMap = Maps.newHashMap();
+    private boolean animatedPreview = true;
 
     static{
         colorMap.put(UUID.fromString("b2ac8c03-d994-4805-9e0f-57fede63c04d"), new ColourRGBA(80, 40, 0, 255));
@@ -53,7 +54,8 @@ public class GuiFriendslist extends GuiScreen {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         this.drawBackground(player);
         this.drawMenuBackground();
-        this.drawPlayerPreview(player, new Vector2f(mouseX, mouseY));
+        this.drawPlayerPreview(player);
+        this.drawWIPText();
     }
 
     private void drawBackground(EntityPlayer player){
@@ -87,7 +89,7 @@ public class GuiFriendslist extends GuiScreen {
         GlStateManager.popMatrix();
     }
 
-    private void drawPlayerPreview(EntityPlayer player, Vector2f mouse){
+    private void drawPlayerPreview(EntityPlayer player){
         int top = 24;
         int right = (this.width - 12) - 120;
         int bottom = this.height - 24;
@@ -102,8 +104,8 @@ public class GuiFriendslist extends GuiScreen {
         GlStateManager.pushMatrix();
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float)right + 55, (float)top + 170, 50.0F);
-        GlStateManager.scale((float)(-60), (float)60, (float)60);
+        GlStateManager.translate((float)right + 55, (float)top + 190, 50.0F);
+        GlStateManager.scale((float)(-80), (float)80, (float)80);
         GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
         float f = player.renderYawOffset;
         float f1 = player.rotationYaw;
@@ -123,7 +125,11 @@ public class GuiFriendslist extends GuiScreen {
         RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
         rendermanager.setPlayerViewY(180.0F);
         rendermanager.setRenderShadow(false);
-        GlStateManager.rotate((float)ClientUtils.getRenderTime(), 0F, 1F, 0F);
+
+        if(this.animatedPreview){
+            GlStateManager.rotate((float)ClientUtils.getRenderTime(), 0F, 1F, 0F);
+        }
+
         rendermanager.doRenderEntity(player, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
         rendermanager.setRenderShadow(true);
         player.renderYawOffset = f;
@@ -139,8 +145,22 @@ public class GuiFriendslist extends GuiScreen {
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
-        GlStateManager.translate(0D, 0D, -10D);
-        this.fontRendererObj.drawString(player.getGameProfile().getName(), 0, 0, 0xFFFFFFFF);
+        GlStateManager.translate(0D, 0D, -8D);
+        this.fontRendererObj.drawStringWithShadow(player.getGameProfile().getName(), right + 4, top + 4, 0xFFFFFFFF);
+        GlStateManager.popMatrix();
+    }
+
+    private void drawWIPText(){
+        int left = 12;
+        int top = 12;
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0D, 0D, -8D);
+        GlStateManager.scale(2D, 2D, 2D);
+
+        for(int i = 0; i < 4; i++){
+            this.fontRendererObj.drawStringWithShadow("This GUI is work in progress !", left, top + 20 + (18 * i), 0xFFFFFFFF);
+        }
+
         GlStateManager.popMatrix();
     }
 
@@ -154,6 +174,8 @@ public class GuiFriendslist extends GuiScreen {
         int buttonHeight = 20;
         GuiButton buttonClose = new GuiButton(0, left + 2, top + 2, buttonWidth, buttonHeight, "X");
         this.addButton(buttonClose);
+        GuiButton buttonAnimation = new GuiButton(1, left + 24, top + 2, buttonWidth, buttonHeight, "A");
+        this.addButton(buttonAnimation);
     }
 
     @Override
@@ -168,6 +190,14 @@ public class GuiFriendslist extends GuiScreen {
             }
             else{
                 FMLClientHandler.instance().displayGuiScreen(player, new GuiInventory(player));
+            }
+        }
+        else if(button.id == 1){
+            if(this.animatedPreview){
+                this.animatedPreview = false;
+            }
+            else if(!this.animatedPreview){
+                this.animatedPreview = true;
             }
         }
     }
