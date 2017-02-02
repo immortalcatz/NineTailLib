@@ -1,18 +1,23 @@
 package keri.ninetaillib.mod.gui;
 
 import codechicken.lib.colour.ColourRGBA;
-import com.mojang.authlib.GameProfile;
+import codechicken.lib.util.ClientUtils;
 import keri.ninetaillib.mod.proxy.ClientProxy;
 import keri.ninetaillib.mod.util.ModPrefs;
 import keri.ninetaillib.util.ShaderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainerCreative;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.config.GuiUtils;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.ARBShaderObjects;
@@ -33,6 +38,7 @@ public class GuiFriendslist extends GuiScreen {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         this.drawBackground(player);
         this.drawMenuBackground();
+        this.drawPlayerPreview(player, new Vector2f(mouseX, mouseY));
     }
 
     private void drawBackground(EntityPlayer player){
@@ -76,8 +82,57 @@ public class GuiFriendslist extends GuiScreen {
         GlStateManager.popMatrix();
     }
 
-    private void drawPlayerPreview(GameProfile profile){
-
+    private void drawPlayerPreview(EntityPlayer player, Vector2f mouse){
+        int top = 24;
+        int right = (this.width - 12) - 120;
+        int bottom = this.height - 24;
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0D, 0D, -9D);
+        this.drawGradientRect(right, top, right + 108, bottom, 0xFF000000, 0xFF000000);
+        this.drawHorizontalLine(right, right + 108, top, 0xCCCCCCCC);
+        this.drawHorizontalLine(right, right + 108, bottom, 0xCCCCCCCC);
+        this.drawVerticalLine(right, top, bottom, 0xCCCCCCCC);
+        this.drawVerticalLine(right + 108, top, bottom, 0xCCCCCCCC);
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
+        GlStateManager.enableColorMaterial();
+        GlStateManager.pushMatrix();
+        GlStateManager.translate((float)right + 55, (float)top + 170, 50.0F);
+        GlStateManager.scale((float)(-60), (float)60, (float)60);
+        GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
+        float f = player.renderYawOffset;
+        float f1 = player.rotationYaw;
+        float f2 = player.rotationPitch;
+        float f3 = player.prevRotationYawHead;
+        float f4 = player.rotationYawHead;
+        GlStateManager.rotate(135.0F, 0.0F, 1.0F, 0.0F);
+        RenderHelper.enableStandardItemLighting();
+        GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(-((float)Math.atan((double)(0F / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
+        player.renderYawOffset = (float)Math.atan((double)(0F / 40.0F)) * 20.0F;
+        player.rotationYaw = (float)Math.atan((double)(0F / 40.0F)) * 40.0F;
+        player.rotationPitch = -((float)Math.atan((double)(0F / 40.0F))) * 20.0F;
+        player.rotationYawHead = player.rotationYaw;
+        player.prevRotationYawHead = player.rotationYaw;
+        GlStateManager.translate(0.0F, 0.0F, 0.0F);
+        RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
+        rendermanager.setPlayerViewY(180.0F);
+        rendermanager.setRenderShadow(false);
+        GlStateManager.rotate((float)ClientUtils.getRenderTime(), 0F, 1F, 0F);
+        rendermanager.doRenderEntity(player, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
+        rendermanager.setRenderShadow(true);
+        player.renderYawOffset = f;
+        player.rotationYaw = f1;
+        player.rotationPitch = f2;
+        player.prevRotationYawHead = f3;
+        player.rotationYawHead = f4;
+        GlStateManager.popMatrix();
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+        GlStateManager.disableTexture2D();
+        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+        GlStateManager.popMatrix();
     }
 
     @Override
@@ -97,7 +152,14 @@ public class GuiFriendslist extends GuiScreen {
         super.actionPerformed(button);
 
         if(button.id == 0){
-            FMLLog.info("HELLO WORLD");
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+
+            if(player.capabilities.isCreativeMode){
+                FMLClientHandler.instance().displayGuiScreen(player, new GuiContainerCreative(player));
+            }
+            else{
+                FMLClientHandler.instance().displayGuiScreen(player, new GuiInventory(player));
+            }
         }
     }
 
