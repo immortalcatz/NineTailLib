@@ -2,6 +2,7 @@ package keri.ninetaillib.mod.gui;
 
 import codechicken.lib.colour.ColourRGBA;
 import codechicken.lib.util.ClientUtils;
+import com.google.common.collect.Maps;
 import keri.ninetaillib.mod.proxy.ClientProxy;
 import keri.ninetaillib.mod.util.ModPrefs;
 import keri.ninetaillib.util.ShaderUtils;
@@ -24,6 +25,7 @@ import org.lwjgl.opengl.ARBShaderObjects;
 
 import javax.vecmath.Vector2f;
 import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 
 @SideOnly(Side.CLIENT)
@@ -31,6 +33,19 @@ public class GuiFriendslist extends GuiScreen {
 
     private final ResourceLocation textureButtonClose = new ResourceLocation(ModPrefs.MODID, "textures/gui/button_close.png");
     private final ResourceLocation textureButtonCloseClicked = new ResourceLocation(ModPrefs.MODID, "textures/gui/button_close_clicked.png");
+    private final ColourRGBA defaultColor = new ColourRGBA(0, 0, 80, 255);
+    private static Map<UUID, ColourRGBA> colorMap = Maps.newHashMap();
+
+    static{
+        colorMap.put(UUID.fromString("b2ac8c03-d994-4805-9e0f-57fede63c04d"), new ColourRGBA(80, 40, 0, 255));
+        colorMap.put(UUID.fromString("e3ec1c24-817a-4879-880a-edce0d980699"), new ColourRGBA(80, 80, 0, 255));
+        colorMap.put(UUID.fromString("cb7afd42-6488-4bb9-9dd3-151aa66d7049"), new ColourRGBA(18, 0, 60, 255));
+        colorMap.put(UUID.fromString("3cd280bb-eeda-4ff1-88d9-eabea529124e"), new ColourRGBA(0, 60, 0, 255));
+        colorMap.put(UUID.fromString("3f9f4a94-95e3-40fe-8895-e8e3e84d1468"), new ColourRGBA(0, 80, 0, 255));
+        colorMap.put(UUID.fromString("3bf32666-f9ba-4060-af02-53bdb0df38fc"), new ColourRGBA(60, 0, 80, 255));
+        colorMap.put(UUID.fromString("8c36e7a2-faba-4bbe-89b5-6bc6564ec0d5"), new ColourRGBA(70, 40, 40, 255));
+        colorMap.put(UUID.fromString("b344687b-ec74-479a-9540-1aa8ccb13e92"), new ColourRGBA(80, 50, 50, 255));
+    }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -42,20 +57,10 @@ public class GuiFriendslist extends GuiScreen {
     }
 
     private void drawBackground(EntityPlayer player){
-        ColourRGBA backgroundColor = new ColourRGBA(0, 0, 0, 255);
-        UUID playerUUID = player.getGameProfile().getId();
+        ColourRGBA backgroundColor = defaultColor;
 
-        if(playerUUID.equals(UUID.fromString("b2ac8c03-d994-4805-9e0f-57fede63c04d"))){
-            backgroundColor = new ColourRGBA(0D, 0.3D, 0D, 1D);
-        }
-        else if(playerUUID.equals(UUID.fromString("e3ec1c24-817a-4879-880a-edce0d980699"))){
-            backgroundColor = new ColourRGBA(0.3D, 0.3D, 0D, 1D);
-        }
-        else if(playerUUID.equals(UUID.fromString("1e25868f-6372-492d-8319-3a4627f0cc18"))){
-            backgroundColor = new ColourRGBA(0.12D, 0D, 0.3D, 1D);
-        }
-        else{
-            backgroundColor = new ColourRGBA(0D, 0D, 0.3D, 1D);
+        if(colorMap.containsKey(player.getGameProfile().getId())){
+            backgroundColor = colorMap.get(player.getGameProfile().getId());
         }
 
         Vector2f resolution = new Vector2f(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
@@ -132,6 +137,10 @@ public class GuiFriendslist extends GuiScreen {
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
         GlStateManager.disableTexture2D();
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0D, 0D, -10D);
+        this.fontRendererObj.drawString(player.getGameProfile().getName(), 0, 0, 0xFFFFFFFF);
         GlStateManager.popMatrix();
     }
 
