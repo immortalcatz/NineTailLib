@@ -1,5 +1,6 @@
 package keri.ninetaillib.gui;
 
+import codechicken.lib.colour.ColourRGBA;
 import keri.ninetaillib.mod.util.ModPrefs;
 import keri.ninetaillib.util.ResourceAction;
 import net.minecraft.client.gui.GuiScreen;
@@ -8,7 +9,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Taken from the TESLA API - All rights go to Darkhax !
+ * Taken from the TESLA API and modified for NineTailLib - All rights go to Darkhax !
  */
 @SideOnly(Side.CLIENT)
 public class PowerBar {
@@ -20,12 +21,21 @@ public class PowerBar {
     private final int y;
     private final GuiScreen screen;
     private final BackgroundType backgroundType;
-    private final PowerType powerType;
+    private PowerType powerType;
+    private ColourRGBA barColor;
 
     public PowerBar(GuiScreen screen, int x, int y, BackgroundType backgroundType, PowerType powerType) {
         this.backgroundType = backgroundType;
         this.powerType = powerType;
         this.screen = screen;
+        this.x = x;
+        this.y = y;
+    }
+
+    public PowerBar(GuiScreen screen, int x, int y, BackgroundType backgroundType, ColourRGBA barColor) {
+        this.backgroundType = backgroundType;
+        this.screen = screen;
+        this.barColor = barColor;
         this.x = x;
         this.y = y;
     }
@@ -57,15 +67,22 @@ public class PowerBar {
         float g = 0F;
         float b = 0F;
 
-        if(this.powerType == PowerType.RF){
-            r = 255F / 255F;
-            g = 42F / 255F;
-            b = 0F / 255F;
+        if(this.powerType != null){
+            if(this.powerType == PowerType.RF){
+                r = 255F / 255F;
+                g = 42F / 255F;
+                b = 0F / 255F;
+            }
+            else if(this.powerType == PowerType.TESLA){
+                r = 0F / 255F;
+                g = 194F / 255F;
+                b = 219 / 255F;
+            }
         }
-        else if(this.powerType == PowerType.TESLA){
-            r = 0F / 255F;
-            g = 194F / 255F;
-            b = 219 / 255F;
+        else{
+            r = this.barColor.r / 255F;
+            g = this.barColor.g / 255F;
+            b = this.barColor.b / 255F;
         }
 
         GlStateManager.color(r, g, b, 1F);

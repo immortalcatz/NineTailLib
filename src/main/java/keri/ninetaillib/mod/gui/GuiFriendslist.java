@@ -104,7 +104,7 @@ public class GuiFriendslist extends GuiScreen {
         GlStateManager.pushMatrix();
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float)right + 55, (float)top + 190, 50.0F);
+        GlStateManager.translate((float)right + 51, (float)top + 190, 50.0F);
         GlStateManager.scale((float)(-80), (float)80, (float)80);
         GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
         float f = player.renderYawOffset;
