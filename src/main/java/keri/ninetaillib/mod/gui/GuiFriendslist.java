@@ -3,8 +3,6 @@ package keri.ninetaillib.mod.gui;
 import codechicken.lib.colour.ColourRGBA;
 import codechicken.lib.util.ClientUtils;
 import com.google.common.collect.Maps;
-import keri.ninetaillib.mod.proxy.ClientProxy;
-import keri.ninetaillib.mod.util.ModPrefs;
 import keri.ninetaillib.util.ShaderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -16,14 +14,13 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.ARBShaderObjects;
 
 import javax.vecmath.Vector2f;
+import java.awt.*;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
@@ -31,61 +28,46 @@ import java.util.UUID;
 @SideOnly(Side.CLIENT)
 public class GuiFriendslist extends GuiScreen {
 
-    private final ResourceLocation textureButtonClose = new ResourceLocation(ModPrefs.MODID, "textures/gui/button_close.png");
-    private final ResourceLocation textureButtonCloseClicked = new ResourceLocation(ModPrefs.MODID, "textures/gui/button_close_clicked.png");
-    private final ColourRGBA defaultColor = new ColourRGBA(0, 0, 80, 255);
+    private final ColourRGBA defaultColor = new ColourRGBA(200, 200, 200, 255);
     private static Map<UUID, ColourRGBA> colorMap = Maps.newHashMap();
     private boolean animatedPreview = true;
 
     static{
-        colorMap.put(UUID.fromString("b2ac8c03-d994-4805-9e0f-57fede63c04d"), new ColourRGBA(80, 40, 0, 255));
-        colorMap.put(UUID.fromString("e3ec1c24-817a-4879-880a-edce0d980699"), new ColourRGBA(80, 80, 0, 255));
-        colorMap.put(UUID.fromString("cb7afd42-6488-4bb9-9dd3-151aa66d7049"), new ColourRGBA(18, 0, 60, 255));
-        colorMap.put(UUID.fromString("3cd280bb-eeda-4ff1-88d9-eabea529124e"), new ColourRGBA(0, 60, 0, 255));
-        colorMap.put(UUID.fromString("3f9f4a94-95e3-40fe-8895-e8e3e84d1468"), new ColourRGBA(0, 80, 0, 255));
-        colorMap.put(UUID.fromString("3bf32666-f9ba-4060-af02-53bdb0df38fc"), new ColourRGBA(60, 0, 80, 255));
-        colorMap.put(UUID.fromString("8c36e7a2-faba-4bbe-89b5-6bc6564ec0d5"), new ColourRGBA(70, 40, 40, 255));
-        colorMap.put(UUID.fromString("b344687b-ec74-479a-9540-1aa8ccb13e92"), new ColourRGBA(80, 50, 50, 255));
+        Color spectrum = Color.getHSBColor((float)ClientUtils.getRenderTime() / 100F, 1F, 1F);
+        ColourRGBA rainbow = new ColourRGBA(spectrum.getRed(), spectrum.getGreen(), spectrum.getBlue(), 255);
+        colorMap.put(UUID.fromString("b2ac8c03-d994-4805-9e0f-57fede63c04d"), rainbow);
+        colorMap.put(UUID.fromString("e3ec1c24-817a-4879-880a-edce0d980699"), rainbow);
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        this.drawBackground(player);
-        this.drawMenuBackground();
-        this.drawPlayerPreview(player);
-        this.drawWIPText();
-    }
+        ColourRGBA color = this.defaultColor;
 
-    private void drawBackground(EntityPlayer player){
-        ColourRGBA backgroundColor = defaultColor;
-
-        if(colorMap.containsKey(player.getGameProfile().getId())){
-            backgroundColor = colorMap.get(player.getGameProfile().getId());
+        if(player != null && player.getGameProfile().getId() != null){
+            color = colorMap.get(player.getGameProfile().getId());
         }
 
-        Vector2f resolution = new Vector2f(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(0D, 0D, -10D);
-        ShaderUtils.useShader(ClientProxy.backgroundShader, new BGShaderCallback(resolution, backgroundColor));
-        GuiUtils.drawGradientRect(-1, 0, 0, 1920, 1080, 0xFFFFFFFF, 0xFFFFFFFF);
-        ShaderUtils.releaseShader();
-        GlStateManager.popMatrix();
+        this.drawMenuBackground(color);
+        this.drawPlayerPreview(player);
     }
 
-    private void drawMenuBackground(){
+    private void drawMenuBackground(ColourRGBA color){
         int left = 12;
         int top = 12;
         int right = this.width - 12;
         int bottom = this.height - 12;
         GlStateManager.pushMatrix();
         GlStateManager.translate(0D, 0D, -10D);
-        this.drawGradientRect(left, top, right, bottom, 0x44FFFFFF,0x06FFFFFF);
-        this.drawHorizontalLine(left, right, top, 0x66FFFFFF);
-        this.drawHorizontalLine(left, right, bottom, 0x66FFFFFF);
-        this.drawVerticalLine(left, top, bottom, 0x66FFFFFF);
-        this.drawVerticalLine(right, top, bottom, 0x66FFFFFF);
+        int colorD = color.argb();
+        int colorN = new ColourRGBA(color.r, color.g, color.b, color.a - 40).argb();
+        int colorL = new ColourRGBA(color.r, color.g, color.b, color.a - 120).argb();
+        this.drawGradientRect(left, top, right, bottom, colorN,colorL);
+        this.drawHorizontalLine(left, right, top, colorD);
+        this.drawHorizontalLine(left, right, bottom, colorD);
+        this.drawVerticalLine(left, top, bottom, colorD);
+        this.drawVerticalLine(right, top, bottom, colorD);
         GlStateManager.popMatrix();
     }
 
@@ -104,7 +86,7 @@ public class GuiFriendslist extends GuiScreen {
         GlStateManager.pushMatrix();
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float)right + 51, (float)top + 190, 50.0F);
+        GlStateManager.translate((float)right + 54, (float)top + 190, 50.0F);
         GlStateManager.scale((float)(-80), (float)80, (float)80);
         GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
         float f = player.renderYawOffset;
@@ -147,20 +129,6 @@ public class GuiFriendslist extends GuiScreen {
         GlStateManager.pushMatrix();
         GlStateManager.translate(0D, 0D, -8D);
         this.fontRendererObj.drawStringWithShadow(player.getGameProfile().getName(), right + 4, top + 4, 0xFFFFFFFF);
-        GlStateManager.popMatrix();
-    }
-
-    private void drawWIPText(){
-        int left = 12;
-        int top = 12;
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(0D, 0D, -8D);
-        GlStateManager.scale(2D, 2D, 2D);
-
-        for(int i = 0; i < 4; i++){
-            this.fontRendererObj.drawStringWithShadow("This GUI is work in progress !", left, top + 20 + (18 * i), 0xFFFFFFFF);
-        }
-
         GlStateManager.popMatrix();
     }
 
