@@ -1,9 +1,12 @@
 package keri.ninetaillib.mod.network;
 
 import codechicken.lib.packet.PacketCustom;
+import keri.ninetaillib.tile.TileEntityBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.network.play.INetHandlerPlayClient;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 public class NineTailLibCPH implements PacketCustom.IClientPacketHandler {
 
@@ -26,28 +29,29 @@ public class NineTailLibCPH implements PacketCustom.IClientPacketHandler {
     }
 
     private void handleTileUpdate(PacketCustom packet, WorldClient world){
-        //I need to do this
+        final BlockPos pos = packet.readPos();
+        TileEntity tile = (TileEntity)world.getTileEntity(pos);
+
+        if(tile instanceof TileEntityBase){
+            ((TileEntityBase)tile).notifyUpdate();
+        }
     }
 
     private void handleTileRenderUpdate(PacketCustom packet, WorldClient world){
-        //But i dont want to XD
+        final BlockPos pos = packet.readPos();
+        TileEntity tile = (TileEntity)world.getTileEntity(pos);
+
+        if(tile instanceof TileEntityBase){
+            ((TileEntityBase)tile).notifyRenderUpdate();
+        }
     }
 
     private void handleFriendRequest(PacketCustom packet){
-        /**
-        UUID uuid = packet.readUuid();
-        String playerName = packet.readString();
-        String message = packet.readString();
-        FriendsListHandler.INSTANCE.addPending(new GameProfile(uuid, playerName), message);
-         */
+        //more to do...
     }
 
     private void handleFriendRemoval(PacketCustom packet){
-        /**
-        UUID uuid = packet.readUuid();
-        String playerName = packet.readString();
-        FriendsListHandler.INSTANCE.removeFriend(new GameProfile(uuid, playerName));
-         */
+        //at least SoundCloud works again
     }
 
 }

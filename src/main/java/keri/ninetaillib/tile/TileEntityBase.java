@@ -1,5 +1,7 @@
 package keri.ninetaillib.tile;
 
+import codechicken.lib.packet.PacketCustom;
+import keri.ninetaillib.mod.NineTailLib;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -60,6 +62,18 @@ public class TileEntityBase extends TileEntity {
 
     public void notifyRenderUpdate(){
         this.worldObj.markBlockRangeForRenderUpdate(this.getPos(), this.getPos());
+    }
+
+    public void sendUpdateToClients(){
+        PacketCustom packet = new PacketCustom(NineTailLib.INSTANCE, 1);
+        packet.writePos(this.getPos());
+        packet.sendToClients();
+    }
+
+    public void sendRenderUpdateToClients(){
+        PacketCustom packet = new PacketCustom(NineTailLib.INSTANCE, 2);
+        packet.writePos(this.getPos());
+        packet.sendToClients();
     }
 
 }
