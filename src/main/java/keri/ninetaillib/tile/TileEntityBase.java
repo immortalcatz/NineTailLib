@@ -73,4 +73,12 @@ public class TileEntityBase extends TileEntity {
         packet.sendToClients();
     }
 
+    public void setOrientation(EnumFacing orientation){
+        this.orientation = orientation;
+    }
+
+    public EnumFacing getOrientation(){
+        return this.orientation;
+    }
+
 }

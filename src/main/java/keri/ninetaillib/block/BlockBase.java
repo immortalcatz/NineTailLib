@@ -6,6 +6,7 @@ import keri.ninetaillib.render.DefaultBlockRenderer;
 import keri.ninetaillib.render.IBlockRenderingHandler;
 import keri.ninetaillib.texture.IIconBlock;
 import keri.ninetaillib.texture.IIconRegistrar;
+import keri.ninetaillib.tile.TileEntityBase;
 import keri.ninetaillib.util.CommonUtils;
 import keri.ninetaillib.util.HideInventory;
 import net.minecraft.block.Block;
@@ -17,12 +18,15 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -174,6 +178,22 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
         }
         else{
             return super.getPickBlock(state, target, world, pos, player);
+        }
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        if(this instanceof IOrientableBlock){
+            IOrientableBlock iface = (IOrientableBlock)this;
+
+            if(iface.isOrientable(world, pos, placer)){
+                TileEntity tile = (TileEntity)world.getTileEntity(pos);
+                int orientation = MathHelper.floor_double(placer.rotationYaw * 4D / 360D + 0.5D) & 3;
+
+                if(tile != null && tile instanceof TileEntityBase){
+                    ((TileEntityBase)tile).setOrientation(EnumFacing.getHorizontal(orientation));
+                }
+            }
         }
     }
 
