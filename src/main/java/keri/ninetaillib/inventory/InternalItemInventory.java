@@ -13,7 +13,7 @@ public class InternalItemInventory implements IInventory {
 
     private ItemStack itemStack;
     private Container container;
-    public ItemStack[] stackList;
+    public ItemStack[] inventory;
     private String name;
 
     public InternalItemInventory(Container container, ItemStack stack){
@@ -22,14 +22,14 @@ public class InternalItemInventory implements IInventory {
         if(stack != null && stack.getItem() instanceof IInventoryItem){
             this.itemStack = stack;
             int slots = ((IInventoryItem)stack.getItem()).getInventorySlots(stack);
-            this.stackList = new ItemStack[slots];
+            this.inventory = new ItemStack[slots];
             this.name = stack.getDisplayName();
         }
     }
 
     @Override
     public int getSizeInventory(){
-        return this.stackList.length;
+        return this.inventory.length;
     }
 
     @Override
@@ -38,14 +38,14 @@ public class InternalItemInventory implements IInventory {
             return null;
         }
 
-        return this.stackList[index];
+        return this.inventory[index];
     }
 
     @Override
     public ItemStack removeStackFromSlot(int index){
-        if (this.stackList[index] != null){
-            ItemStack itemstack = this.stackList[index];
-            this.stackList[index] = null;
+        if (this.inventory[index] != null){
+            ItemStack itemstack = this.inventory[index];
+            this.inventory[index] = null;
             return itemstack;
         }
 
@@ -54,21 +54,21 @@ public class InternalItemInventory implements IInventory {
 
     @Override
     public ItemStack decrStackSize(int index, int count){
-        if (this.stackList[index] != null){
+        if (this.inventory[index] != null){
             ItemStack itemstack;
 
-            if (this.stackList[index].stackSize <= count){
-                itemstack = this.stackList[index];
-                this.stackList[index] = null;
+            if (this.inventory[index].stackSize <= count){
+                itemstack = this.inventory[index];
+                this.inventory[index] = null;
                 this.markDirty();
                 this.container.onCraftMatrixChanged(this);
                 return itemstack;
             }
 
-            itemstack = this.stackList[index].splitStack(count);
+            itemstack = this.inventory[index].splitStack(count);
 
-            if (this.stackList[index].stackSize == 0){
-                this.stackList[index] = null;
+            if (this.inventory[index].stackSize == 0){
+                this.inventory[index] = null;
             }
 
             this.container.onCraftMatrixChanged(this);
@@ -81,7 +81,7 @@ public class InternalItemInventory implements IInventory {
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack){
-        this.stackList[index] = stack;
+        this.inventory[index] = stack;
 
         if (stack != null && stack.stackSize > this.getInventoryStackLimit()){
             stack.stackSize = this.getInventoryStackLimit();
@@ -113,7 +113,7 @@ public class InternalItemInventory implements IInventory {
     @Override
     public void markDirty(){
         if(itemStack != null){
-            ((IInventoryItem)this.itemStack.getItem()).setInventoryItems(itemStack, stackList);
+            ((IInventoryItem)this.itemStack.getItem()).setInventoryItems(itemStack, inventory);
         }
     }
 
@@ -151,6 +151,30 @@ public class InternalItemInventory implements IInventory {
     @Override
     public void clear(){
 
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[InternalInventory Content Dump]");
+        builder.append('|');
+        int counter = 0;
+
+        for(int i = 0; i < this.inventory.length; i++){
+            ItemStack stack = this.getStackInSlot(i);
+
+            if(stack != null){
+                if(counter < i){
+                    builder.append('|');
+                }
+
+                builder.append(stack.toString());
+            }
+
+            counter++;
+        }
+
+        return builder.toString();
     }
 
 }

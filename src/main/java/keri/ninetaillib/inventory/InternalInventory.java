@@ -147,4 +147,28 @@ public class InternalInventory implements IInventory {
         tag.setTag("internal_inventory", InventoryUtils.writeItemStacksToTag(this.inventory));
     }
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[InternalInventory Content Dump]");
+        builder.append('|');
+        int counter = 0;
+
+        for(int i = 0; i < this.inventory.length; i++){
+            ItemStack stack = this.getStackInSlot(i);
+
+            if(stack != null){
+                if(counter < i){
+                    builder.append('|');
+                }
+
+                builder.append(stack.toString());
+            }
+
+            counter++;
+        }
+
+        return builder.toString();
+    }
+
 }
