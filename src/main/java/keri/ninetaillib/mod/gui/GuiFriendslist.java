@@ -20,7 +20,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.ARBShaderObjects;
 
 import javax.vecmath.Vector2f;
-import java.awt.*;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
@@ -33,10 +32,8 @@ public class GuiFriendslist extends GuiScreen {
     private boolean animatedPreview = true;
 
     static{
-        Color spectrum = Color.getHSBColor((float)ClientUtils.getRenderTime() / 100F, 1F, 1F);
-        ColourRGBA rainbow = new ColourRGBA(spectrum.getRed(), spectrum.getGreen(), spectrum.getBlue(), 255);
-        colorMap.put(UUID.fromString("b2ac8c03-d994-4805-9e0f-57fede63c04d"), rainbow);
-        colorMap.put(UUID.fromString("e3ec1c24-817a-4879-880a-edce0d980699"), rainbow);
+        colorMap.put(UUID.fromString("b2ac8c03-d994-4805-9e0f-57fede63c04d"), new ColourRGBA(250, 150, 0, 255));
+        colorMap.put(UUID.fromString("e3ec1c24-817a-4879-880a-edce0d980699"), new ColourRGBA(250, 250, 0, 255));
     }
 
     @Override

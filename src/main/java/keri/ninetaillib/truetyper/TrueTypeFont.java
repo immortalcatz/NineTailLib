@@ -171,7 +171,7 @@ public class TrueTypeFont {
         }
     }
 
-    private void drawQuad(float drawX, float drawY, float drawX2, float drawY2, float srcX, float srcY, float srcX2, float srcY2) {
+    private void drawQuad(float drawX, float drawY, float drawX2, float drawY2, float srcX, float srcY, float srcX2, float srcY2, float[] rgba) {
         float DrawWidth = drawX2 - drawX;
         float DrawHeight = drawY2 - drawY;
         float TextureSrcX= srcX / textureWidth;
@@ -180,13 +180,17 @@ public class TrueTypeFont {
         float SrcHeight = srcY2 - srcY;
         float RenderWidth = (SrcWidth / textureWidth);
         float RenderHeight = (SrcHeight / textureHeight);
+        int colorR = (int)(rgba[0] * 255);
+        int colorG = (int)(rgba[1] * 255);
+        int colorB = (int)(rgba[2] * 255);
+        int colorA = (int)(rgba[3] * 255);
         Tessellator tess = Tessellator.getInstance();
         VertexBuffer buffer = tess.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        buffer.pos(drawX, drawY, 0).tex(TextureSrcX, TextureSrcY).color(255, 255, 255, 255).endVertex();
-        buffer.pos(drawX, drawY + DrawHeight, 0).tex(TextureSrcX, TextureSrcY + RenderHeight).color(255, 255, 255, 255).endVertex();
-        buffer.pos(drawX + DrawWidth, drawY + DrawHeight, 0).tex(TextureSrcX + RenderWidth, TextureSrcY + RenderHeight).color(255, 255, 255, 255).endVertex();
-        buffer.pos(drawX + DrawWidth, drawY, 0).tex(TextureSrcX + RenderWidth, TextureSrcY).color(255, 255, 255, 255).endVertex();
+        buffer.pos(drawX, drawY, 0).tex(TextureSrcX, TextureSrcY).color(colorR, colorG, colorB, colorA).endVertex();
+        buffer.pos(drawX, drawY + DrawHeight, 0).tex(TextureSrcX, TextureSrcY + RenderHeight).color(colorR, colorG, colorB, colorA).endVertex();
+        buffer.pos(drawX + DrawWidth, drawY + DrawHeight, 0).tex(TextureSrcX + RenderWidth, TextureSrcY + RenderHeight).color(colorR, colorG, colorB, colorA).endVertex();
+        buffer.pos(drawX + DrawWidth, drawY, 0).tex(TextureSrcX + RenderWidth, TextureSrcY).color(colorR, colorG, colorB, colorA).endVertex();
         Tessellator.getInstance().draw();
     }
 
@@ -289,10 +293,6 @@ public class TrueTypeFont {
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, fontTextureID);
 
-        if(rgba.length == 4){
-            GL11.glColor4f(rgba[0], rgba[1], rgba[2], rgba[3]);
-        }
-
         while (i >= startIndex && i <= endIndex) {
             charCurrent = whatchars.charAt(i);
 
@@ -341,7 +341,8 @@ public class TrueTypeFont {
                             intObject.storedX + intObject.width,
                             intObject.storedY + intObject.height,
                             intObject.storedX,
-                            intObject.storedY
+                            intObject.storedY,
+                            rgba
                     );
 
                     if (d > 0){
