@@ -1,5 +1,6 @@
 package keri.ninetaillib.container;
 
+import keri.ninetaillib.inventory.InternalItemInventory;
 import keri.ninetaillib.item.IInventoryItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
