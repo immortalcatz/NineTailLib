@@ -52,7 +52,7 @@ public class InternalInventory implements IInventory {
         if(this.tile instanceof IInventoryAction){
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             IInventoryAction listener = (IInventoryAction)this.tile;
-            listener.actionPerformed(this.tile, player, EnumInventoryAction.SET_SLOT_CONTENTS);
+            listener.actionPerformed(player, EnumInventoryAction.SET_SLOT_CONTENTS);
         }
     }
 
@@ -66,7 +66,7 @@ public class InternalInventory implements IInventory {
         if(this.tile instanceof IInventoryAction){
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             IInventoryAction listener = (IInventoryAction)this.tile;
-            listener.actionPerformed(this.tile, player, EnumInventoryAction.MARK_DIRTY);
+            listener.actionPerformed(player, EnumInventoryAction.MARK_DIRTY);
         }
     }
 
@@ -79,7 +79,7 @@ public class InternalInventory implements IInventory {
     public void openInventory(EntityPlayer player) {
         if(this.tile instanceof IInventoryAction){
             IInventoryAction listener = (IInventoryAction)this.tile;
-            listener.actionPerformed(this.tile, player, EnumInventoryAction.OPEN);
+            listener.actionPerformed(player, EnumInventoryAction.OPEN);
         }
     }
 
@@ -87,7 +87,7 @@ public class InternalInventory implements IInventory {
     public void closeInventory(EntityPlayer player) {
         if(this.tile instanceof IInventoryAction){
             IInventoryAction listener = (IInventoryAction)this.tile;
-            listener.actionPerformed(this.tile, player, EnumInventoryAction.CLOSE);
+            listener.actionPerformed(player, EnumInventoryAction.CLOSE);
         }
     }
 
@@ -120,7 +120,7 @@ public class InternalInventory implements IInventory {
         if(this.tile instanceof IInventoryAction){
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             IInventoryAction listener = (IInventoryAction)this.tile;
-            listener.actionPerformed(this.tile, player, EnumInventoryAction.CLEAR);
+            listener.actionPerformed(player, EnumInventoryAction.CLEAR);
         }
     }
 

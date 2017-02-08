@@ -14,20 +14,17 @@ import javax.annotation.Nullable;
 public class TileEntityBase extends TileEntity {
 
     private EnumFacing orientation = EnumFacing.NORTH;
-    private boolean isActive = false;
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         this.orientation = EnumFacing.getFront(tag.getInteger("orientation"));
-        this.isActive = tag.getBoolean("is_active");
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setInteger("orientation", this.orientation.getIndex());
-        tag.setBoolean("is_active", this.isActive);
         return tag;
     }
 
