@@ -31,7 +31,7 @@ public abstract class ContainerInventoryItem extends Container {
 
         if (!world.isRemote){
             try{
-                ((InternalItemInventory)this.input).stackList = ((IInventoryItem)this.heldItem.getItem()).getInventoryItems(this.heldItem);
+                ((InternalItemInventory)this.input).inventory = ((IInventoryItem)this.heldItem.getItem()).getInventoryItems(this.heldItem);
             }
             catch (Exception e){
                 e.printStackTrace();
@@ -119,7 +119,7 @@ public abstract class ContainerInventoryItem extends Container {
     }
 
     protected void updatePlayerItem(){
-        ((IInventoryItem)this.heldItem.getItem()).setInventoryItems(this.heldItem, ((InternalItemInventory)this.input).stackList);
+        ((IInventoryItem)this.heldItem.getItem()).setInventoryItems(this.heldItem, ((InternalItemInventory)this.input).inventory);
         ItemStack hand = player.getItemStackFromSlot(this.equipmentSlot);
 
         if(hand != null && !hand.equals(heldItem)){
