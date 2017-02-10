@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiUtils;
 
-public class ButtonWithIcon extends GuiButton {
+public class ButtonAnimated extends GuiButton {
 
     private ResourceAction texture;
     private ResourceAction textureClicked;
@@ -15,13 +15,13 @@ public class ButtonWithIcon extends GuiButton {
     private boolean isAnimated = false;
     private int renderTicks = 0;
 
-    public ButtonWithIcon(int id, int x, int y, ResourceLocation texture) {
+    public ButtonAnimated(int id, int x, int y, ResourceLocation texture) {
         super(id, x, y, "");
         this.texture = new ResourceAction(texture);
         this.textureClicked = new ResourceAction(texture);
     }
 
-    public ButtonWithIcon(int id, int x, int y, ResourceLocation texture, ResourceLocation textureClicked) {
+    public ButtonAnimated(int id, int x, int y, ResourceLocation texture, ResourceLocation textureClicked) {
         super(id, x, y, "");
         this.texture = new ResourceAction(texture);
         this.textureClicked = new ResourceAction(textureClicked);
@@ -76,8 +76,9 @@ public class ButtonWithIcon extends GuiButton {
         if(this.isMouseOver(mouseX, mouseY, this.xPosition, this.yPosition)){
             if(this.action != null){
                 this.action.performAction();
-                return super.mousePressed(minecraft, mouseX, mouseY);
             }
+
+            return super.mousePressed(minecraft, mouseX, mouseY);
         }
 
         return false;

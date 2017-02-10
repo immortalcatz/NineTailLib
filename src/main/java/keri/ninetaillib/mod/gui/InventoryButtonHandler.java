@@ -1,6 +1,6 @@
 package keri.ninetaillib.mod.gui;
 
-import keri.ninetaillib.gui.ButtonWithIcon;
+import keri.ninetaillib.gui.ButtonAnimated;
 import keri.ninetaillib.gui.IButtonAction;
 import keri.ninetaillib.mod.util.ModPrefs;
 import net.minecraft.client.Minecraft;
@@ -44,7 +44,7 @@ public class InventoryButtonHandler {
                 }
             };
 
-            ButtonWithIcon buttonFriendsList = new ButtonWithIcon(295830, startX, startY, this.textureFriendslist, this.textureFriendslistClicked);
+            ButtonAnimated buttonFriendsList = new ButtonAnimated(295830, startX, startY, this.textureFriendslist, this.textureFriendslistClicked);
             buttonFriendsList.setAction(actionFriendslist);
             event.getButtonList().add(buttonFriendsList);
         }

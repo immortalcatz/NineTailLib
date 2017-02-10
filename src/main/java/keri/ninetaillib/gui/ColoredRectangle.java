@@ -24,7 +24,6 @@ public class ColoredRectangle {
         this.end = end;
         this.startColor = color;
         this.endColor = color;
-        this.borderColor = color;
         this.border = false;
         this.borderColor = new ColourRGBA(0, 0, 0, 255);
     }
