@@ -26,7 +26,7 @@ public class ColoredRectangle {
         this.endColor = color;
         this.borderColor = color;
         this.border = false;
-        this.borderColor = new ColourRGBA(255, 255, 255, 255);
+        this.borderColor = new ColourRGBA(0, 0, 0, 255);
     }
 
     public ColoredRectangle(Vector2i start, Vector2i end, ColourRGBA startColor, ColourRGBA endColor){
@@ -35,7 +35,7 @@ public class ColoredRectangle {
         this.startColor = startColor;
         this.endColor = endColor;
         this.border = false;
-        this.borderColor = new ColourRGBA(255, 255, 255, 255);
+        this.borderColor = new ColourRGBA(0, 0, 0, 255);
     }
 
     public void draw(){
@@ -48,6 +48,7 @@ public class ColoredRectangle {
         GlStateManager.pushMatrix();
         GlStateManager.color(1F, 1F, 1F, 1F);
         GuiUtils.drawGradientRect(this.zLevel, startX, startY, endX, endY, startColor, endColor);
+        GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.popMatrix();
 
         if(this.border){
@@ -58,6 +59,7 @@ public class ColoredRectangle {
             this.drawHorizontalLine(startX, endX, endY, borderColor);
             this.drawVerticalLine(startX, startY, endY, borderColor);
             this.drawVerticalLine(endX, startY, endY, borderColor);
+            GlStateManager.color(1F, 1F, 1F, 1F);
             GlStateManager.popMatrix();
         }
     }

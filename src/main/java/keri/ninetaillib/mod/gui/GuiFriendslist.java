@@ -3,6 +3,8 @@ package keri.ninetaillib.mod.gui;
 import codechicken.lib.colour.ColourRGBA;
 import codechicken.lib.util.ClientUtils;
 import com.google.common.collect.Maps;
+import keri.ninetaillib.gui.ColoredRectangle;
+import keri.ninetaillib.util.Vector2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -48,58 +50,35 @@ public class GuiFriendslist extends GuiScreen {
     }
 
     private void drawMenuBackground(ColourRGBA color){
-        int left = 12;
-        int top = 12;
-        int right = this.width - 12;
-        int bottom = this.height - 12;
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(0D, 0D, -10D);
-        int colorD = color.argb();
-        int colorN = new ColourRGBA(color.r, color.g, color.b, color.a - 40).argb();
-        int colorL = new ColourRGBA(color.r, color.g, color.b, color.a - 160).argb();
-        this.drawGradientRect(left, top, right, bottom, colorN,colorL);
-        this.drawHorizontalLine(left, right, top, colorD);
-        this.drawHorizontalLine(left, right, bottom, colorD);
-        this.drawVerticalLine(left, top, bottom, colorD);
-        this.drawVerticalLine(right, top, bottom, colorD);
-        GlStateManager.popMatrix();
+        Vector2i start = new Vector2i(12, 12);
+        Vector2i end = new Vector2i(this.width - 12, this.height - 12);
+        ColourRGBA colorStart = new ColourRGBA(color.r, color.g, color.b, color.a - 40);
+        ColourRGBA colorEnd = new ColourRGBA(color.r, color.g, color.b, color.a - 180);
+        ColoredRectangle rectangle = new ColoredRectangle(start, end, colorStart, colorEnd);
+        rectangle.setHasBorder(true);
+        rectangle.setZLevel(-10);
+        rectangle.draw();
     }
 
     private void drawPlayerPreview(EntityPlayer player){
         int top = 24;
         int right = (this.width - 12) - 120;
         int bottom = this.height - 24;
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(0D, 0D, -9D);
-        this.drawGradientRect(right, top, right + 108, bottom, 0xFF000000, 0xFF000000);
-        this.drawHorizontalLine(right, right + 108, top, 0xCCCCCCCC);
-        this.drawHorizontalLine(right, right + 108, bottom, 0xCCCCCCCC);
-        this.drawVerticalLine(right, top, bottom, 0xCCCCCCCC);
-        this.drawVerticalLine(right + 108, top, bottom, 0xCCCCCCCC);
-        GlStateManager.popMatrix();
+        ColourRGBA color = new ColourRGBA(10, 10, 10, 255);
+        Vector2i start = new Vector2i(right, top);
+        Vector2i end = new Vector2i(right + 108, bottom);
+        ColoredRectangle rectangle = new ColoredRectangle(start, end, color);
+        rectangle.setHasBorder(true);
+        rectangle.setZLevel(-9);
+        rectangle.draw();
         GlStateManager.pushMatrix();
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
         GlStateManager.translate((float)right + 54, (float)top + 190, 50.0F);
-        GlStateManager.scale((float)(-80), (float)80, (float)80);
-        GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
-        float f = player.renderYawOffset;
-        float f1 = player.rotationYaw;
-        float f2 = player.rotationPitch;
-        float f3 = player.prevRotationYawHead;
-        float f4 = player.rotationYawHead;
-        GlStateManager.rotate(135.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.scale(-80F, 80F, 80F);
+        GlStateManager.rotate(180F, 0F, 0F, 1F);
         RenderHelper.enableStandardItemLighting();
-        GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(-((float)Math.atan((double)(0F / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-        player.renderYawOffset = (float)Math.atan((double)(0F / 40.0F)) * 20.0F;
-        player.rotationYaw = (float)Math.atan((double)(0F / 40.0F)) * 40.0F;
-        player.rotationPitch = -((float)Math.atan((double)(0F / 40.0F))) * 20.0F;
-        player.rotationYawHead = player.rotationYaw;
-        player.prevRotationYawHead = player.rotationYaw;
-        GlStateManager.translate(0.0F, 0.0F, 0.0F);
         RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
-        rendermanager.setPlayerViewY(180.0F);
         rendermanager.setRenderShadow(false);
 
         if(this.animatedPreview){
@@ -108,11 +87,6 @@ public class GuiFriendslist extends GuiScreen {
 
         rendermanager.doRenderEntity(player, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
         rendermanager.setRenderShadow(true);
-        player.renderYawOffset = f;
-        player.rotationYaw = f1;
-        player.rotationPitch = f2;
-        player.prevRotationYawHead = f3;
-        player.rotationYawHead = f4;
         GlStateManager.popMatrix();
         RenderHelper.disableStandardItemLighting();
         GlStateManager.disableRescaleNormal();
@@ -121,7 +95,6 @@ public class GuiFriendslist extends GuiScreen {
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
-        GlStateManager.translate(0D, 0D, -8D);
 
         if(player != null && player.getGameProfile() != null){
             this.fontRendererObj.drawStringWithShadow(player.getGameProfile().getName(), right + 4, top + 4, 0xFFFFFFFF);
@@ -143,7 +116,7 @@ public class GuiFriendslist extends GuiScreen {
         int buttonHeight = 20;
         GuiButton buttonClose = new GuiButton(0, left + 2, top + 2, buttonWidth, buttonHeight, "X");
         this.addButton(buttonClose);
-        GuiButton buttonAnimation = new GuiButton(1, left + 24, top + 2, buttonWidth, buttonHeight, "A");
+        GuiButton buttonAnimation = new GuiButton(1, left + 23, top + 2, buttonWidth, buttonHeight, "A");
         this.addButton(buttonAnimation);
     }
 
