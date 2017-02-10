@@ -3,6 +3,7 @@ package keri.ninetaillib.mod.gui;
 import codechicken.lib.colour.ColourRGBA;
 import codechicken.lib.util.ClientUtils;
 import com.google.common.collect.Maps;
+import com.mojang.authlib.GameProfile;
 import keri.ninetaillib.gui.ColoredRectangle;
 import keri.ninetaillib.util.Vector2i;
 import net.minecraft.client.Minecraft;
@@ -15,6 +16,9 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.PlayerInteractionManager;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,6 +33,7 @@ public class GuiFriendslist extends GuiScreen {
     private final ColourRGBA defaultColor = new ColourRGBA(200, 200, 200, 255);
     private static Map<UUID, ColourRGBA> colorMap = Maps.newHashMap();
     private boolean animatedPreview = true;
+    private GameProfile currentPreview = FriendsListHandler.INSTANCE.getPlayerProfile();
 
     static{
         colorMap.put(UUID.fromString("b2ac8c03-d994-4805-9e0f-57fede63c04d"), new ColourRGBA(250, 150, 0, 255));
@@ -46,7 +51,7 @@ public class GuiFriendslist extends GuiScreen {
         }
 
         this.drawMenuBackground(color);
-        this.drawPlayerPreview(player);
+        this.drawPlayerPreview(null, null, null);
     }
 
     private void drawMenuBackground(ColourRGBA color){
@@ -60,7 +65,8 @@ public class GuiFriendslist extends GuiScreen {
         rectangle.draw();
     }
 
-    private void drawPlayerPreview(EntityPlayer player){
+    private void drawPlayerPreview(MinecraftServer server, WorldServer world, PlayerInteractionManager pim){
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         int top = 24;
         int right = (this.width - 12) - 120;
         int bottom = this.height - 24;
@@ -118,6 +124,10 @@ public class GuiFriendslist extends GuiScreen {
         this.addButton(buttonClose);
         GuiButton buttonAnimation = new GuiButton(1, left + 23, top + 2, buttonWidth, buttonHeight, "A");
         this.addButton(buttonAnimation);
+        GuiButton buttonListPrev = new GuiButton(2, left + 44, top + 2, buttonWidth, buttonHeight, "<");
+        this.addButton(buttonListPrev);
+        GuiButton buttonListNext = new GuiButton(3, left + 65, top + 2, buttonWidth, buttonHeight, ">");
+        this.addButton(buttonListNext);
     }
 
     @Override
@@ -141,6 +151,12 @@ public class GuiFriendslist extends GuiScreen {
             else if(!this.animatedPreview){
                 this.animatedPreview = true;
             }
+        }
+        else if(button.id == 2){
+
+        }
+        else if(button.id == 3){
+
         }
     }
 
