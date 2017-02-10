@@ -3,7 +3,6 @@ package keri.ninetaillib.mod.gui;
 import codechicken.lib.colour.ColourRGBA;
 import codechicken.lib.util.ClientUtils;
 import com.google.common.collect.Maps;
-import keri.ninetaillib.util.ShaderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -17,9 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.ARBShaderObjects;
 
-import javax.vecmath.Vector2f;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
@@ -42,7 +39,7 @@ public class GuiFriendslist extends GuiScreen {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         ColourRGBA color = this.defaultColor;
 
-        if(player != null && player.getGameProfile().getId() != null){
+        if(player != null && player.getGameProfile() != null){
             color = colorMap.get(player.getGameProfile().getId());
         }
 
@@ -59,7 +56,7 @@ public class GuiFriendslist extends GuiScreen {
         GlStateManager.translate(0D, 0D, -10D);
         int colorD = color.argb();
         int colorN = new ColourRGBA(color.r, color.g, color.b, color.a - 40).argb();
-        int colorL = new ColourRGBA(color.r, color.g, color.b, color.a - 120).argb();
+        int colorL = new ColourRGBA(color.r, color.g, color.b, color.a - 160).argb();
         this.drawGradientRect(left, top, right, bottom, colorN,colorL);
         this.drawHorizontalLine(left, right, top, colorD);
         this.drawHorizontalLine(left, right, bottom, colorD);
@@ -125,7 +122,14 @@ public class GuiFriendslist extends GuiScreen {
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
         GlStateManager.translate(0D, 0D, -8D);
-        this.fontRendererObj.drawStringWithShadow(player.getGameProfile().getName(), right + 4, top + 4, 0xFFFFFFFF);
+
+        if(player != null && player.getGameProfile() != null){
+            this.fontRendererObj.drawStringWithShadow(player.getGameProfile().getName(), right + 4, top + 4, 0xFFFFFFFF);
+        }
+        else{
+            this.fontRendererObj.drawStringWithShadow("Invalid GameProfile !", right + 4, top + 4, 0xFFFFFFFF);
+        }
+
         GlStateManager.popMatrix();
     }
 
@@ -165,31 +169,6 @@ public class GuiFriendslist extends GuiScreen {
                 this.animatedPreview = true;
             }
         }
-    }
-
-    private static class BGShaderCallback implements ShaderUtils.IShaderCallback {
-
-        private Vector2f resolution;
-        private ColourRGBA color;
-
-        public BGShaderCallback(Vector2f resolution, ColourRGBA color){
-            this.resolution = resolution;
-            this.color = color;
-        }
-
-        @Override
-        public void call(int shader) {
-            float width = this.resolution.x;
-            float height = this.resolution.y;
-            float r = (float)(this.color.r / 255F);
-            float g = (float)(this.color.g / 255F);
-            float b = (float)(this.color.b / 255F);
-            int resolution = ARBShaderObjects.glGetUniformLocationARB(shader, "resolution");
-            ARBShaderObjects.glUniform2fARB(resolution, width, height);
-            int color = ARBShaderObjects.glGetUniformLocationARB(shader, "color");
-            ARBShaderObjects.glUniform3fARB(color, r, g, b);
-        }
-
     }
 
 }

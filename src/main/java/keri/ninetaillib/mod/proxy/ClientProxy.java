@@ -9,14 +9,12 @@ import keri.ninetaillib.item.ItemBase;
 import keri.ninetaillib.mod.NineTailLib;
 import keri.ninetaillib.mod.gui.InventoryButtonHandler;
 import keri.ninetaillib.mod.network.NineTailLibCPH;
-import keri.ninetaillib.mod.util.ModPrefs;
 import keri.ninetaillib.render.CustomBlockRenderer;
 import keri.ninetaillib.render.CustomItemRenderer;
 import keri.ninetaillib.render.IBlockRenderingHandler;
 import keri.ninetaillib.render.IItemRenderingHandler;
 import keri.ninetaillib.texture.IconRegistrar;
 import keri.ninetaillib.util.ClientUtils;
-import keri.ninetaillib.util.ShaderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -33,7 +31,6 @@ public class ClientProxy implements INineTailProxy {
 
     private ArrayList<BlockBase> blocksToHandle = Lists.newArrayList();
     private ArrayList<ItemBase> itemsToHandle = Lists.newArrayList();
-    public static int backgroundShader = 0;
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
@@ -54,7 +51,6 @@ public class ClientProxy implements INineTailProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         PacketCustom.assignHandler(NineTailLib.INSTANCE, new NineTailLibCPH());
-        backgroundShader = ShaderUtils.createShader(null, new ResourceLocation(ModPrefs.MODID, "shaders/background.frag"));
     }
 
     @Override
