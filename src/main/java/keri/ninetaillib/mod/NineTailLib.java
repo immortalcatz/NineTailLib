@@ -1,6 +1,5 @@
 package keri.ninetaillib.mod;
 
-import keri.ninetaillib.mod.init.NTLConfig;
 import keri.ninetaillib.mod.proxy.INineTailProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -20,11 +19,9 @@ public class NineTailLib {
     @SidedProxy(clientSide = CSIDE, serverSide = SSIDE)
     public static INineTailProxy PROXY;
     public static Logger LOGGER = LogManager.getLogger(NAME);
-    public static NTLConfig CONFIG;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
-        CONFIG = new NTLConfig(event);
         PROXY.preInit(event);
     }
 

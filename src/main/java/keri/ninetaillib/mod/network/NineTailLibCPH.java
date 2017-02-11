@@ -19,12 +19,6 @@ public class NineTailLibCPH implements PacketCustom.IClientPacketHandler {
             case 2:
                 this.handleTileRenderUpdate(packet, minecraft.theWorld);
                 break;
-            case 3:
-                this.handleFriendRequest(packet);
-                break;
-            case 4:
-                this.handleFriendRemoval(packet);
-                break;
         }
     }
 
@@ -44,14 +38,6 @@ public class NineTailLibCPH implements PacketCustom.IClientPacketHandler {
         if(tile instanceof TileEntityBase){
             ((TileEntityBase)tile).notifyRenderUpdate();
         }
-    }
-
-    private void handleFriendRequest(PacketCustom packet){
-        //more to do...
-    }
-
-    private void handleFriendRemoval(PacketCustom packet){
-        //at least SoundCloud works again
     }
 
 }
