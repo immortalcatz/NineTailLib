@@ -18,6 +18,7 @@ public abstract class TileEntityInventory extends TileEntityBase implements IInv
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
         this.getInternalInventory().writeInventoryToNBT(tag);
         return tag;
     }
