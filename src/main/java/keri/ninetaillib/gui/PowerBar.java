@@ -3,6 +3,7 @@ package keri.ninetaillib.gui;
 import codechicken.lib.colour.ColourRGBA;
 import keri.ninetaillib.mod.util.ModPrefs;
 import keri.ninetaillib.util.ResourceAction;
+import keri.ninetaillib.util.Vector2i;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,20 +25,20 @@ public class PowerBar {
     private PowerType powerType;
     private ColourRGBA barColor;
 
-    public PowerBar(GuiScreen screen, int x, int y, BackgroundType backgroundType, PowerType powerType) {
+    public PowerBar(GuiScreen screen, Vector2i pos, BackgroundType backgroundType, PowerType powerType) {
         this.backgroundType = backgroundType;
         this.powerType = powerType;
         this.screen = screen;
-        this.x = x;
-        this.y = y;
+        this.x = pos.getX();
+        this.y = pos.getY();
     }
 
-    public PowerBar(GuiScreen screen, int x, int y, BackgroundType backgroundType, ColourRGBA barColor) {
+    public PowerBar(GuiScreen screen, Vector2i pos, BackgroundType backgroundType, ColourRGBA barColor) {
         this.backgroundType = backgroundType;
         this.screen = screen;
         this.barColor = barColor;
-        this.x = x;
-        this.y = y;
+        this.x = pos.getX();
+        this.y = pos.getY();
     }
 
     public void draw (int power, int capacity) {
