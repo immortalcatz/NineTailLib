@@ -15,17 +15,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class PowerBar {
 
-    public static final int WIDTH = 14;
-    public static final int HEIGHT = 50;
-    private static final ResourceAction TEXTURE_SHEET = new ResourceAction(ModPrefs.MODID, "textures/gui/elements.png");
+    public final int WIDTH = 14;
+    public final int HEIGHT = 50;
+    private final ResourceAction TEXTURE_SHEET = new ResourceAction(ModPrefs.MODID, "textures/gui/elements.png");
     private final int x;
     private final int y;
     private final GuiScreen screen;
-    private final BackgroundType backgroundType;
+    private final EnumBackgroundType backgroundType;
     private PowerType powerType;
     private ColourRGBA barColor;
 
-    public PowerBar(GuiScreen screen, Vector2i pos, BackgroundType backgroundType, PowerType powerType) {
+    public PowerBar(GuiScreen screen, Vector2i pos, EnumBackgroundType backgroundType, PowerType powerType) {
         this.backgroundType = backgroundType;
         this.powerType = powerType;
         this.screen = screen;
@@ -33,7 +33,7 @@ public class PowerBar {
         this.y = pos.getY();
     }
 
-    public PowerBar(GuiScreen screen, Vector2i pos, BackgroundType backgroundType, ColourRGBA barColor) {
+    public PowerBar(GuiScreen screen, Vector2i pos, EnumBackgroundType backgroundType, ColourRGBA barColor) {
         this.backgroundType = backgroundType;
         this.screen = screen;
         this.barColor = barColor;
@@ -44,7 +44,7 @@ public class PowerBar {
     public void draw (int power, int capacity) {
         TEXTURE_SHEET.bind(true);
 
-        if (this.backgroundType == BackgroundType.LIGHT){
+        if (this.backgroundType == EnumBackgroundType.LIGHT){
             GlStateManager.pushMatrix();
             GlStateManager.pushAttrib();
             GlStateManager.color(1F, 1F, 1F, 1F);
@@ -52,7 +52,7 @@ public class PowerBar {
             GlStateManager.popAttrib();
             GlStateManager.popMatrix();
         }
-        else if (this.backgroundType == BackgroundType.DARK){
+        else if (this.backgroundType == EnumBackgroundType.DARK){
             GlStateManager.pushMatrix();
             GlStateManager.pushAttrib();
             GlStateManager.color(1F, 1F, 1F, 1F);
@@ -90,20 +90,6 @@ public class PowerBar {
         screen.drawTexturedModalRect(x + 1, (y + HEIGHT - powerOffset), 18, ((HEIGHT + 1) - powerOffset), WIDTH, (powerOffset + 2));
         GlStateManager.popAttrib();
         GlStateManager.popMatrix();
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public enum BackgroundType {
-        NONE,
-        LIGHT,
-        DARK,
     }
 
     public enum PowerType {
