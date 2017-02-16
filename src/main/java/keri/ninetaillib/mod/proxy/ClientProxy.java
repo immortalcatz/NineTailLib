@@ -5,6 +5,7 @@ import codechicken.lib.packet.PacketCustom;
 import com.google.common.collect.Lists;
 import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.block.IMetaBlock;
+import keri.ninetaillib.gui.InventoryButtonHandler;
 import keri.ninetaillib.item.ItemBase;
 import keri.ninetaillib.mod.NineTailLib;
 import keri.ninetaillib.mod.network.NineTailLibCPH;
@@ -34,6 +35,7 @@ public class ClientProxy implements INineTailProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(IconRegistrar.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new InventoryButtonHandler());
 
         for(BlockBase block : this.blocksToHandle){
             IconRegistrar.INSTANCE.registerBlock(block);

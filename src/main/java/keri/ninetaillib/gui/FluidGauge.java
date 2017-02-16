@@ -50,13 +50,21 @@ public class FluidGauge {
             this.gui.drawTexturedModalRect(this.x, this.y, 3, 176, 20, 68);
         }
 
-        GlStateManager.color(1F, 1F, 1F, 1F);
-        Rectangle4i dimension = new Rectangle4i(this.x + 2, this.y + 2, 16, 16);
+        GlStateManager.popAttrib();
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
+        GlStateManager.pushAttrib();
+        Rectangle4i dimension = new Rectangle4i(this.x + 2, this.y + 50, 16, 16);
         RenderUtils.preFluidRender();
         double density = ((fluid.amount * 64D) / maxAmount * 64D) / 1000D;
         RenderUtils.renderFluidGauge(fluid, dimension, density, 16D);
         RenderUtils.postFluidRender();
         GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.popAttrib();
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
+        GlStateManager.pushAttrib();
+        this.texture.bind(true);
 
         if(this.background == EnumBackgroundType.LIGHT){
             this.gui.drawTexturedModalRect(this.x + 1, this.y + 1, 24, 107, 18, 66);

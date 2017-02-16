@@ -5,6 +5,7 @@ import codechicken.lib.math.MathHelper;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Vector3;
 import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
 import keri.ninetaillib.item.IGuiItem;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -18,8 +19,11 @@ import net.minecraft.util.math.BlockPos;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class CommonUtils {
+
+    public static final GameProfile DEFAULT_PROFILE = new GameProfile(UUID.fromString("8667ba71-b85a-4004-af54-457a9734eed7"), "Steve");
 
     public static SoundType getSoundType(Material material){
         if(material == Material.ANVIL){
