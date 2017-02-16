@@ -41,7 +41,7 @@ public class PowerBar {
         this.y = pos.getY();
     }
 
-    public void draw (int power, int capacity) {
+    public void draw (int power, int capacity){
         TEXTURE_SHEET.bind(true);
 
         if (this.backgroundType == EnumBackgroundType.LIGHT){

@@ -1,5 +1,7 @@
 package keri.ninetaillib.gui;
 
+import codechicken.lib.render.RenderUtils;
+import codechicken.lib.vec.Rectangle4i;
 import keri.ninetaillib.mod.util.ModPrefs;
 import keri.ninetaillib.util.ResourceAction;
 import keri.ninetaillib.util.Vector2i;
@@ -14,8 +16,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class FluidGauge {
 
-    private final int HEIGHT = 64;
-    private final int WIDTH = 16;
     private final ResourceAction texture = new ResourceAction(ModPrefs.MODID, "textures/gui/elements.png");
     private final GuiScreen gui;
     private final EnumBackgroundType background;
@@ -29,19 +29,43 @@ public class FluidGauge {
         this.y = pos.getY();
     }
 
-    public void draw(Fluid fluid, int amount){
-        this.draw(new FluidStack(fluid, amount));
+    public void draw(Fluid fluid, int amount, int maxAmount){
+        this.draw(new FluidStack(fluid, amount), maxAmount);
     }
 
     public void draw(FluidTank tank){
-        this.draw(tank.getFluid());
+        this.draw(tank.getFluid(), tank.getCapacity());
     }
 
-    public void draw(FluidStack fluid){
+    public void draw(FluidStack fluid, int maxAmount){
+        this.texture.bind(true);
         GlStateManager.pushMatrix();
         GlStateManager.pushAttrib();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        //todo HAHAHA i am not cracra
+
+        if(this.background == EnumBackgroundType.LIGHT){
+            this.gui.drawTexturedModalRect(this.x, this.y, 3, 106, 20, 68);
+        }
+        else if(this.background == EnumBackgroundType.DARK){
+            this.gui.drawTexturedModalRect(this.x, this.y, 3, 176, 20, 68);
+        }
+
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        Rectangle4i dimension = new Rectangle4i(this.x + 2, this.y + 2, 16, 16);
+        RenderUtils.preFluidRender();
+        double density = ((fluid.amount * 64D) / maxAmount * 64D) / 1000D;
+        RenderUtils.renderFluidGauge(fluid, dimension, density, 16D);
+        RenderUtils.postFluidRender();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+
+        if(this.background == EnumBackgroundType.LIGHT){
+            this.gui.drawTexturedModalRect(this.x + 1, this.y + 1, 24, 107, 18, 66);
+        }
+        else if(this.background == EnumBackgroundType.DARK){
+            this.gui.drawTexturedModalRect(this.x + 1, this.y + 1, 24, 177, 18, 66);
+        }
+
+        GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.popAttrib();
         GlStateManager.popMatrix();
     }
