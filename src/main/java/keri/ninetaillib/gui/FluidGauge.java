@@ -24,8 +24,8 @@ import java.util.ArrayList;
 @SideOnly(Side.CLIENT)
 public class FluidGauge {
 
-    private final int WIDTH = 20;
-    private final int HEIGHT = 68;
+    private final int width = 20;
+    private final int height = 68;
     private final ResourceAction texture = new ResourceAction(ModPrefs.MODID, "textures/gui/elements.png");
     private final GuiScreen gui;
     private final EnumBackgroundType background;
@@ -54,10 +54,10 @@ public class FluidGauge {
         GlStateManager.color(1F, 1F, 1F, 1F);
 
         if(this.background == EnumBackgroundType.LIGHT){
-            this.gui.drawTexturedModalRect(this.position.getX(), this.position.getY(), 3, 106, this.WIDTH, this.HEIGHT);
+            this.gui.drawTexturedModalRect(this.position.getX(), this.position.getY(), 3, 106, this.width, this.height);
         }
         else if(this.background == EnumBackgroundType.DARK){
-            this.gui.drawTexturedModalRect(this.position.getX(), this.position.getY(), 3, 176, this.WIDTH, this.HEIGHT);
+            this.gui.drawTexturedModalRect(this.position.getX(), this.position.getY(), 3, 176, this.width, this.height);
         }
 
         GlStateManager.popAttrib();
@@ -77,10 +77,10 @@ public class FluidGauge {
         this.texture.bind(true);
 
         if(this.background == EnumBackgroundType.LIGHT){
-            this.gui.drawTexturedModalRect(this.position.getX() + 1, this.position.getY() + 1, 24, 107, this.WIDTH - 2, this.HEIGHT - 2);
+            this.gui.drawTexturedModalRect(this.position.getX() + 1, this.position.getY() + 1, 24, 107, this.width - 2, this.height - 2);
         }
         else if(this.background == EnumBackgroundType.DARK){
-            this.gui.drawTexturedModalRect(this.position.getX() + 1, this.position.getY() + 1, 24, 177, this.WIDTH - 2, this.HEIGHT - 2);
+            this.gui.drawTexturedModalRect(this.position.getX() + 1, this.position.getY() + 1, 24, 177, this.width - 2, this.height - 2);
         }
 
         GlStateManager.color(1F, 1F, 1F, 1F);
@@ -88,7 +88,7 @@ public class FluidGauge {
         GlStateManager.popMatrix();
 
         if(this.enableTooltip){
-            AxisAlignedBB aabb = new AxisAlignedBB(this.position.getX(), this.position.getY(), 0D, this.position.getX() + this.WIDTH, this.position.getY() + this.HEIGHT, 0D);
+            AxisAlignedBB aabb = new AxisAlignedBB(this.position.getX(), this.position.getY(), 0D, this.position.getX() + this.width, this.position.getY() + this.height, 0D);
 
             if(aabb.intersectsWithXY(new Vec3d(this.mousePos.getX(), this.mousePos.getY(), 0D))){
                 GlStateManager.pushMatrix();

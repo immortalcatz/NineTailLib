@@ -27,7 +27,7 @@ public class InventoryButtonHandler {
         GameProfile profile = player != null ? player.getGameProfile() : CommonUtils.DEFAULT_PROFILE;
 
         if(event.getGui() instanceof GuiContainerCreative || event.getGui() instanceof GuiInventory){
-            if(profile.getId().equals(UUID.fromString("b2ac8c03-d994-4805-9e0f-57fede63c04d"))){
+            if(profile.getId().equals(UUID.fromString("b2ac8c03-d994-4805-9e0f-57fede63c04d")) && CommonUtils.isDevEnvironment()){
                 IButtonAction actionDebug = new IButtonAction() {
                     @Override
                     public void performAction() {

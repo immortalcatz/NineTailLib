@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -157,6 +158,10 @@ public class CommonUtils {
         EntityEquipmentSlot slot = EntityEquipmentSlot.values()[ID / 100];
         ID %= 100;
         return slot;
+    }
+
+    public static boolean isDevEnvironment(){
+        return (Boolean)Launch.blackboard.get("fml.deobfuscatedEnvironment");
     }
 
 }
