@@ -19,6 +19,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import org.lwjgl.input.Keyboard;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -162,6 +163,14 @@ public class CommonUtils {
 
     public static boolean isDevEnvironment(){
         return (Boolean)Launch.blackboard.get("fml.deobfuscatedEnvironment");
+    }
+
+    public static ColourRGBA fromAWT(Color color){
+        return new ColourRGBA(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    }
+
+    public static Color toAWT(ColourRGBA color){
+        return new Color(color.rgba(), true);
     }
 
 }

@@ -3,7 +3,9 @@ package keri.ninetaillib.gui;
 import codechicken.lib.render.RenderUtils;
 import codechicken.lib.vec.Rectangle4i;
 import com.google.common.collect.Lists;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import keri.ninetaillib.mod.util.ModPrefs;
+import keri.ninetaillib.util.CommonUtils;
 import keri.ninetaillib.util.ResourceAction;
 import keri.ninetaillib.util.Vector2i;
 import net.minecraft.client.Minecraft;
@@ -65,10 +67,14 @@ public class FluidGauge {
         GlStateManager.pushMatrix();
         GlStateManager.pushAttrib();
         Rectangle4i dimension = new Rectangle4i(this.position.getX() + 2, this.position.getY() + 50, 16, 16);
-        double density = ((fluid.amount * 64D) / maxAmount * 64D) / 1000D;
-        RenderUtils.preFluidRender();
-        RenderUtils.renderFluidGauge(fluid, dimension, density, 16D);
-        RenderUtils.postFluidRender();
+
+        if(fluid != null){
+            double density = ((fluid.amount * 64D) / maxAmount * 64D) / 1000D;
+            RenderUtils.preFluidRender();
+            RenderUtils.renderFluidGauge(fluid, dimension, density, 16D);
+            RenderUtils.postFluidRender();
+        }
+
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.popAttrib();
         GlStateManager.popMatrix();
@@ -95,7 +101,13 @@ public class FluidGauge {
                 GlStateManager.pushAttrib();
                 GlStateManager.color(1F, 1F, 1F, 1F);
                 FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
-                ArrayList<String> text = Lists.newArrayList(Integer.toString(fluid.amount) + " mB");
+                ArrayList<String> text = Lists.newArrayList();
+                text.add((fluid != null ? Integer.toString(fluid.amount) : "0") + " mB");
+
+                if(CommonUtils.isShiftPressed()){
+                    text.add(ChatFormatting.YELLOW + (fluid != null ? fluid.getLocalizedName() : "Empty"));
+                }
+
                 int screenWidth = Minecraft.getMinecraft().displayWidth;
                 int screenHeight = Minecraft.getMinecraft().displayHeight;
                 GuiUtils.drawHoveringText(text, this.mousePos.getX(), this.mousePos.getY(), screenWidth, screenHeight, 200, fontRenderer);
