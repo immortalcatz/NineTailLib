@@ -2,6 +2,7 @@ package keri.ninetaillib.mod.proxy;
 
 import codechicken.lib.packet.PacketCustom;
 import keri.ninetaillib.block.BlockBase;
+import keri.ninetaillib.fluid.FluidBase;
 import keri.ninetaillib.item.ItemBase;
 import keri.ninetaillib.mod.NineTailLib;
 import keri.ninetaillib.mod.network.NineTailLibSPH;
@@ -33,6 +34,11 @@ public class CommonProxy implements INineTailProxy {
 
     @Override
     public void handleItem(ItemBase item) {
+
+    }
+
+    @Override
+    public void handleFluid(FluidBase fluid) {
 
     }
 

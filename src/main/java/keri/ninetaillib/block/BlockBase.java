@@ -52,29 +52,19 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
         super(material, mapColor);
         this.internalName = blockName;
         this.modid = modid;
-        this.setRegistryName(modid, blockName);
-        this.setUnlocalizedName(modid + "." + blockName);
-        this.setCreativeTab(this.getCreativeTab());
-
-        if(super.getClass().isAnnotationPresent(HideInventory.class)){
-            HideInventory annotation = super.getClass().getAnnotation(HideInventory.class);
-
-            if(!annotation.onlySubtypes()){
-                this.setCreativeTab((CreativeTabs) null);
-            }
-        }
-
-        NineTailLib.PROXY.handleBlock(this);
-        GameRegistry.register(this);
-        GameRegistry.register(this.getItemBlock().setRegistryName(this.getRegistryName()));
+        this.register();
     }
 
     public BlockBase(String modid, String blockName, Material material) {
         super(material);
         this.internalName = blockName;
         this.modid = modid;
-        this.setRegistryName(modid, blockName);
-        this.setUnlocalizedName(modid + "." + blockName);
+        this.register();
+    }
+
+    private void register(){
+        this.setRegistryName(this.modid, this.internalName);
+        this.setUnlocalizedName(this.modid + "." + this.internalName);
         this.setCreativeTab(this.getCreativeTab());
 
         if(super.getClass().isAnnotationPresent(HideInventory.class)){
@@ -226,26 +216,52 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
         return this.texture;
     }
 
-    public void setTextureName(String textureName){ this.textureName = textureName; }
+    public void setTextureName(String textureName){
+        this.textureName = textureName;
+    }
 
-    public void setHardness(float[] hardness){ this.hardness = hardness; }
+    public void setHardness(float[] hardness){
+        this.hardness = hardness;
+    }
 
-    public void setResistance(float[] resistance){ this.resistance = resistance; }
+    public void setResistance(float[] resistance){
+        this.resistance = resistance;
+    }
 
-    public void setMaterial(Material[] material){ this.material = material; }
+    public void setMaterial(Material[] material){
+        this.material = material;
+    }
 
-    public void setIsFullBlock(boolean isFullBlock){ this.isFullBlock = isFullBlock; }
+    public void setIsFullBlock(boolean isFullBlock){
+        this.isFullBlock = isFullBlock;
+    }
 
-    public void setMapColor(MapColor[] mapColor){ this.mapColor = mapColor; }
+    public void setMapColor(MapColor[] mapColor){
+        this.mapColor = mapColor;
+    }
 
-    public ItemBlock getItemBlock(){ return new ItemBlockBase(this); }
+    public ItemBlock getItemBlock(){
+        return new ItemBlockBase(this);
+    }
 
-    public Material[] getMaterial(){ return this.material; }
+    public Material[] getMaterial(){
+        return this.material;
+    }
 
-    public String getInternalName(){ return this.internalName; }
+    public String getInternalName(){
+        return this.internalName;
+    }
 
-    public CreativeTabs getCreativeTab(){ return CreativeTabs.SEARCH; }
+    public CreativeTabs getCreativeTab(){
+        return CreativeTabs.SEARCH;
+    }
 
-    public IBlockRenderingHandler getRenderingHandler(){ return new DefaultBlockRenderer(); }
+    public IBlockRenderingHandler getRenderingHandler(){
+        return new DefaultBlockRenderer();
+    }
+
+    public String getModId(){
+        return this.modid;
+    }
 
 }

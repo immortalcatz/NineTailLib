@@ -1,6 +1,7 @@
 package keri.ninetaillib.mod.proxy;
 
 import keri.ninetaillib.block.BlockBase;
+import keri.ninetaillib.fluid.FluidBase;
 import keri.ninetaillib.item.ItemBase;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -17,5 +18,7 @@ public interface INineTailProxy {
     void handleBlock(BlockBase block);
 
     void handleItem(ItemBase item);
+
+    void handleFluid(FluidBase fluid);
 
 }

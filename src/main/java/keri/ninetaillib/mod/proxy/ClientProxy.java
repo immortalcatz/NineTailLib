@@ -5,9 +5,11 @@ import codechicken.lib.packet.PacketCustom;
 import com.google.common.collect.Lists;
 import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.block.IMetaBlock;
+import keri.ninetaillib.fluid.FluidBase;
 import keri.ninetaillib.item.ItemBase;
 import keri.ninetaillib.mod.NineTailLib;
-import keri.ninetaillib.mod.gui.InventoryButtonHandler;
+import keri.ninetaillib.mod.handler.ClientEventHandler;
+import keri.ninetaillib.mod.handler.InventoryButtonHandler;
 import keri.ninetaillib.mod.network.NineTailLibCPH;
 import keri.ninetaillib.render.CustomBlockRenderer;
 import keri.ninetaillib.render.CustomItemRenderer;
@@ -15,6 +17,7 @@ import keri.ninetaillib.render.IBlockRenderingHandler;
 import keri.ninetaillib.render.IItemRenderingHandler;
 import keri.ninetaillib.texture.IconRegistrar;
 import keri.ninetaillib.util.ClientUtils;
+import keri.ninetaillib.util.FluidStateMapper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -31,20 +34,42 @@ public class ClientProxy implements INineTailProxy {
 
     private ArrayList<BlockBase> blocksToHandle = Lists.newArrayList();
     private ArrayList<ItemBase> itemsToHandle = Lists.newArrayList();
+    private ArrayList<FluidBase> fluidsToHandle = Lists.newArrayList();
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(IconRegistrar.INSTANCE);
         MinecraftForge.EVENT_BUS.register(new InventoryButtonHandler());
+        MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
 
         for(BlockBase block : this.blocksToHandle){
             IconRegistrar.INSTANCE.registerBlock(block);
             this.registerRenderingHandler(block, block.getRenderingHandler());
+
+            if(NineTailLib.CONFIG.enableBlockModelDebug){
+                NineTailLib.LOGGER.debug(block.getUnlocalizedName());
+            }
+        }
+
+        if(NineTailLib.CONFIG.enableBlockModelDebug){
+            NineTailLib.LOGGER.debug("Successfully loaded " + this.blocksToHandle.size() + " block models !");
         }
 
         for(ItemBase item : this.itemsToHandle){
             IconRegistrar.INSTANCE.registerItem(item);
             this.registerRenderingHandler(item, item.getRenderingHandler());
+
+            if(NineTailLib.CONFIG.enableItemModelDebug){
+                NineTailLib.LOGGER.debug(item.getUnlocalizedName());
+            }
+        }
+
+        if(NineTailLib.CONFIG.enableItemModelDebug){
+            NineTailLib.LOGGER.debug("Successfully loaded " + this.itemsToHandle.size() + " item models !");
+        }
+
+        for(FluidBase fluid : this.fluidsToHandle){
+            this.registerFluidModel(fluid);
         }
     }
 
@@ -66,6 +91,20 @@ public class ClientProxy implements INineTailProxy {
     @Override
     public void handleItem(ItemBase item) {
         this.itemsToHandle.add(item);
+    }
+
+    @Override
+    public void handleFluid(FluidBase fluid) {
+        this.fluidsToHandle.add(fluid);
+    }
+
+    private void registerFluidModel(FluidBase fluid){
+        Block block = fluid.getBlock();
+        Item item = Item.getItemFromBlock(block);
+        FluidStateMapper mapper = new FluidStateMapper(fluid);
+        ModelLoader.registerItemVariants(item);
+        ModelLoader.setCustomStateMapper(block, mapper);
+        ModelLoader.setCustomMeshDefinition(item, mapper);
     }
 
     private void registerRenderingHandler(Block block, IBlockRenderingHandler renderer){

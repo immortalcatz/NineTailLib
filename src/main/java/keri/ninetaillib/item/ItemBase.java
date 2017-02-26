@@ -161,15 +161,29 @@ public class ItemBase extends Item implements IIconItem {
         return this.texture[meta];
     }
 
-    public String getInternalName(){ return this.itemName; }
+    public String getInternalName(){
+        return this.itemName;
+    }
 
-    public String[] getSubNames(){ return this.subNames; }
+    public String[] getSubNames(){
+        return this.subNames;
+    }
 
-    public int getRenderType(){ return 0; }
+    public int getRenderType(){
+        return 0;
+    }
 
     @Override
-    public CreativeTabs getCreativeTab(){ return CreativeTabs.SEARCH; }
+    public CreativeTabs getCreativeTab(){
+        return CreativeTabs.SEARCH;
+    }
 
-    public IItemRenderingHandler getRenderingHandler(){ return new DefaultItemRenderer(); }
+    public IItemRenderingHandler getRenderingHandler(){
+        return new DefaultItemRenderer();
+    }
+
+    public String getModId(){
+        return this.modid;
+    }
 
 }

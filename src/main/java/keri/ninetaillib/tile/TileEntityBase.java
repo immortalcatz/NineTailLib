@@ -1,7 +1,5 @@
 package keri.ninetaillib.tile;
 
-import codechicken.lib.packet.PacketCustom;
-import keri.ninetaillib.mod.NineTailLib;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -33,44 +31,29 @@ public class TileEntityBase extends TileEntity {
         return this.writeToNBT(new NBTTagCompound());
     }
 
-    @Override
-    public void handleUpdateTag(NBTTagCompound tag) {
-        this.readFromNBT(tag);
-        this.notifyUpdate();
-    }
-
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        return new SPacketUpdateTileEntity(this.getPos(), 3, this.writeToNBT(new NBTTagCompound()));
+        return new SPacketUpdateTileEntity(this.pos, 255, this.getUpdateTag());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
         this.readFromNBT(packet.getNbtCompound());
-        this.notifyUpdate();
     }
 
-    public void notifyUpdate(){
-        IBlockState state = this.worldObj.getBlockState(this.getPos());
-        this.worldObj.notifyBlockUpdate(this.getPos(), state, state, 3);
-        this.worldObj.notifyNeighborsOfStateChange(this.getPos(), this.worldObj.getBlockState(this.getPos()).getBlock());
-    }
+    @Override
+    public void markDirty(){
+        super.markDirty();
 
-    public void notifyRenderUpdate(){
-        this.worldObj.markBlockRangeForRenderUpdate(this.getPos(), this.getPos());
-    }
+        if(getWorld() != null){
+            IBlockState state = getWorld().getBlockState(pos);
 
-    public void sendUpdateToClients(){
-        PacketCustom packet = new PacketCustom(NineTailLib.INSTANCE, 1);
-        packet.writePos(this.getPos());
-        packet.sendToClients();
-    }
-
-    public void sendRenderUpdateToClients(){
-        PacketCustom packet = new PacketCustom(NineTailLib.INSTANCE, 2);
-        packet.writePos(this.getPos());
-        packet.sendToClients();
+            if(state != null){
+                state.getBlock().updateTick(this.worldObj, this.pos, state, this.worldObj.rand);
+                this.worldObj.notifyBlockUpdate(pos, state, state, 3);
+            }
+        }
     }
 
     public void setOrientation(EnumFacing orientation){
