@@ -78,23 +78,28 @@ public abstract class ContainerBase extends Container {
                                 ItemStack t = d.getStack();
                                 if ((itemStack != null) && (itemStack.isItemEqual(t))) {
                                     int maxSize = t.getMaxStackSize();
+
                                     if (maxSize > d.getSlotStackLimit()) {
                                         maxSize = d.getSlotStackLimit();
                                     }
+
                                     int placeAble = maxSize - t.stackSize;
+
                                     if (itemStack.stackSize < placeAble) {
                                         placeAble = itemStack.stackSize;
                                     }
+
                                     t.stackSize += placeAble;
                                     itemStack.stackSize -= placeAble;
+
                                     if (itemStack.stackSize <= 0) {
                                         clickSlot.putStack(null);
                                         d.onSlotChanged();
-
                                         updateSlot(clickSlot);
                                         updateSlot(d);
                                         return null;
                                     }
+
                                     updateSlot(d);
                                 }
                             }
@@ -128,7 +133,8 @@ public abstract class ContainerBase extends Container {
                                     }
                                     updateSlot(d);
                                 }
-                            } else {
+                            }
+                            else {
                                 int maxSize = itemStack.getMaxStackSize();
                                 if (maxSize > d.getSlotStackLimit()) {
                                     maxSize = d.getSlotStackLimit();

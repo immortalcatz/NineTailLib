@@ -18,14 +18,16 @@ public class Vector2i {
         return this.y;
     }
 
-    public void add(int x, int y){
+    public Vector2i add(int x, int y){
         this.x += x;
         this.y += y;
+        return this;
     }
 
-    public void multiply(int multiplier){
+    public Vector2i multiply(int multiplier){
         this.x *= multiplier;
         this.y *= multiplier;
+        return this;
     }
 
 }
