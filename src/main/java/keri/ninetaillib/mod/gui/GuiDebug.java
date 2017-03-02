@@ -1,8 +1,11 @@
 package keri.ninetaillib.mod.gui;
 
+import codechicken.lib.colour.ColourRGBA;
+import keri.ninetaillib.gui.ColoredRectangle;
 import keri.ninetaillib.gui.EnumBackgroundType;
 import keri.ninetaillib.gui.FluidGauge;
 import keri.ninetaillib.gui.PowerBar;
+import keri.ninetaillib.util.GuiUtils;
 import keri.ninetaillib.util.Vector2i;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -46,6 +49,13 @@ public class GuiDebug extends GuiScreen {
         PowerBar powerBarTeslaDark = new PowerBar(this, new Vector2i(100, 90), EnumBackgroundType.DARK, PowerBar.PowerType.TESLA);
         powerBarTeslaDark.enableTooltip(new Vector2i(mouseX, mouseY));
         powerBarTeslaDark.draw(1200, 8000);
+        //Colored Rectangle
+        ColoredRectangle rectangle = new ColoredRectangle(new Vector2i(130, 10), new Vector2i(64, 64), new ColourRGBA(255, 255, 255, 255));
+        rectangle.setHasBorder(true);
+        rectangle.setBorderColor(new ColourRGBA(0, 0, 0, 255));
+        rectangle.draw();
+        //Gui Background
+        GuiUtils.drawBackground(this, new Vector2i(130, 80), new Vector2i(64, 64), GuiUtils.Alignment.NONE);
     }
 
 }
