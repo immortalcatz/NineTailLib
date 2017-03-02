@@ -32,7 +32,7 @@ public class ButtonAnimated extends GuiButton {
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        GlStateManager.translate(this.xPosition, this.yPosition, 0D);
+        GlStateManager.translate(this.xPosition, this.yPosition, 10D);
         GlStateManager.scale(0.0625D, 0.0625D, 0.0625D);
 
         if(this.isMouseOver(mouseX, mouseY, this.xPosition, this.yPosition)){
