@@ -36,7 +36,7 @@ public class InventoryButtonHandler {
                         FMLClientHandler.instance().displayGuiScreen(player, new GuiDebug());
                     }
                 };
-                
+
                 ButtonAnimated buttonDebug = new ButtonAnimated(13412, 20, 20, this.button_debug, this.button_debug_clicked);
                 buttonDebug.setAction(actionDebug);
                 event.getButtonList().add(buttonDebug);
