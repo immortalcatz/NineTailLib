@@ -1,7 +1,7 @@
-package keri.ninetaillib.mod.handler;
+package keri.ninetaillib.internal.handler;
 
 import com.mojang.authlib.GameProfile;
-import keri.ninetaillib.mod.NineTailLib;
+import keri.ninetaillib.internal.NineTailLib;
 import keri.ninetaillib.util.CommonUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

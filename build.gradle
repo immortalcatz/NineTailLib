@@ -17,7 +17,7 @@ repositories {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "0.0.43"
+version = "0.0.44"
 group= "keri.ninetaillib" 
 archivesBaseName = "NineTailLib-[1.10.2]"
 
@@ -33,7 +33,7 @@ minecraft {
 }
 
 dependencies {
-    deobfCompile "codechicken:CodeChickenLib:1.10.2-2.5.2.207:deobf"
+    deobfCompile "codechicken:CodeChickenLib:1.10.2-2.5.2.214:deobf"
 }
 
 processResources
@@ -49,25 +49,6 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
-}
-
-jar {
-    classifier = 'universal'
-}
-
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'deobf'
-}
-
-task srcJar(type: Jar) {
-    from sourceSets.main.allSource
-    classifier = 'sources'
-}
-
-artifacts {
-    archives deobfJar
-    archives srcJar
 }
 
 task("uploadJars", dependsOn: "reobf") {

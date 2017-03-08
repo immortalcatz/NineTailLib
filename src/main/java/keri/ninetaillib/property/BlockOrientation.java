@@ -2,6 +2,10 @@ package keri.ninetaillib.property;
 
 import net.minecraft.util.EnumFacing;
 
+/**
+ * Will be removed in the next updates !
+ */
+@Deprecated
 public class BlockOrientation {
 
     private EnumFacing orientation;

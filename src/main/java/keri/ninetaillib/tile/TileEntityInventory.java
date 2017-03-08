@@ -11,13 +11,13 @@ import javax.annotation.Nullable;
 public abstract class TileEntityInventory extends TileEntityBase implements IInventory {
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
+    public void readFromNBT(NBTTagCompound tag){
         super.readFromNBT(tag);
         this.getInternalInventory().readInventoryFromNBT(tag);
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag){
         super.writeToNBT(tag);
         this.getInternalInventory().writeInventoryToNBT(tag);
         return tag;

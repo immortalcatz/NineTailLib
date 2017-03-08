@@ -4,6 +4,6 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public interface IInventoryAction {
 
-    void actionPerformed(EntityPlayer player, EnumInventoryAction action);
+    void actionPerformed(EntityPlayer player, EnumInventoryAction action, int slot);
 
 }

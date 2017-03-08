@@ -2,7 +2,7 @@ package keri.ninetaillib.gui;
 
 import codechicken.lib.colour.ColourRGBA;
 import com.google.common.collect.Lists;
-import keri.ninetaillib.mod.util.ModPrefs;
+import keri.ninetaillib.internal.util.ModPrefs;
 import keri.ninetaillib.util.ResourceAction;
 import keri.ninetaillib.util.Vector2i;
 import net.minecraft.client.Minecraft;

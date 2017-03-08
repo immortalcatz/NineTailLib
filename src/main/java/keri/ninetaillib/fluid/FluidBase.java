@@ -1,6 +1,6 @@
 package keri.ninetaillib.fluid;
 
-import keri.ninetaillib.mod.NineTailLib;
+import keri.ninetaillib.internal.NineTailLib;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;

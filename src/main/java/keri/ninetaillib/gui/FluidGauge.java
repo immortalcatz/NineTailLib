@@ -4,7 +4,7 @@ import codechicken.lib.render.RenderUtils;
 import codechicken.lib.vec.Rectangle4i;
 import com.google.common.collect.Lists;
 import com.mojang.realmsclient.gui.ChatFormatting;
-import keri.ninetaillib.mod.util.ModPrefs;
+import keri.ninetaillib.internal.util.ModPrefs;
 import keri.ninetaillib.util.CommonUtils;
 import keri.ninetaillib.util.ResourceAction;
 import keri.ninetaillib.util.Vector2i;

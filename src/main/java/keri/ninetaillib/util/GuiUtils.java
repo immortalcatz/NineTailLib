@@ -1,7 +1,7 @@
 package keri.ninetaillib.util;
 
 import codechicken.lib.colour.ColourRGBA;
-import keri.ninetaillib.mod.util.ModPrefs;
+import keri.ninetaillib.internal.util.ModPrefs;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.fml.relauncher.Side;

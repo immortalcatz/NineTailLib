@@ -1,4 +1,4 @@
-package keri.ninetaillib.mod.proxy;
+package keri.ninetaillib.internal.proxy;
 
 import codechicken.lib.model.ModelRegistryHelper;
 import codechicken.lib.packet.PacketCustom;
@@ -6,11 +6,11 @@ import com.google.common.collect.Lists;
 import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.block.IMetaBlock;
 import keri.ninetaillib.fluid.FluidBase;
+import keri.ninetaillib.internal.NineTailLib;
+import keri.ninetaillib.internal.handler.ClientEventHandler;
+import keri.ninetaillib.internal.handler.InventoryButtonHandler;
+import keri.ninetaillib.internal.network.NineTailLibCPH;
 import keri.ninetaillib.item.ItemBase;
-import keri.ninetaillib.mod.NineTailLib;
-import keri.ninetaillib.mod.handler.ClientEventHandler;
-import keri.ninetaillib.mod.handler.InventoryButtonHandler;
-import keri.ninetaillib.mod.network.NineTailLibCPH;
 import keri.ninetaillib.render.CustomBlockRenderer;
 import keri.ninetaillib.render.CustomItemRenderer;
 import keri.ninetaillib.render.IBlockRenderingHandler;

@@ -1,8 +1,10 @@
-package keri.ninetaillib.mod;
+package keri.ninetaillib.internal;
 
-import keri.ninetaillib.mod.handler.CommonEventHandler;
-import keri.ninetaillib.mod.init.NineTailLibConfig;
-import keri.ninetaillib.mod.proxy.INineTailProxy;
+import codechicken.lib.packet.PacketCustom;
+import keri.ninetaillib.internal.handler.CommonEventHandler;
+import keri.ninetaillib.internal.init.NineTailLibConfig;
+import keri.ninetaillib.internal.network.NineTailLibSPH;
+import keri.ninetaillib.internal.proxy.INineTailProxy;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -13,7 +15,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static keri.ninetaillib.mod.util.ModPrefs.*;
+import static keri.ninetaillib.internal.util.ModPrefs.*;
 
 @Mod(modid = MODID, name = NAME, version = VERSION, dependencies = DEPS, acceptedMinecraftVersions = ACC_MC)
 public class NineTailLib {
@@ -40,6 +42,7 @@ public class NineTailLib {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event){
         PROXY.init(event);
+        PacketCustom.assignHandler(NineTailLib.INSTANCE, new NineTailLibSPH());
         LOGGER.info("Initilization phase done !");
     }
 

@@ -1,4 +1,4 @@
-package keri.ninetaillib.mod.init;
+package keri.ninetaillib.internal.init;
 
 import com.google.common.collect.Lists;
 import keri.ninetaillib.config.ConfigManagerBase;

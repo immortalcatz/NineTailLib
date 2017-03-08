@@ -1,6 +1,6 @@
 package keri.ninetaillib.item;
 
-import keri.ninetaillib.mod.NineTailLib;
+import keri.ninetaillib.internal.NineTailLib;
 import keri.ninetaillib.render.DefaultItemRenderer;
 import keri.ninetaillib.render.IItemRenderingHandler;
 import keri.ninetaillib.texture.IIconItem;

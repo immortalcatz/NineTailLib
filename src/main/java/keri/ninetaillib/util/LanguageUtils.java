@@ -1,6 +1,6 @@
 package keri.ninetaillib.util;
 
-import keri.ninetaillib.mod.util.ModPrefs;
+import keri.ninetaillib.internal.util.ModPrefs;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
 

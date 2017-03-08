@@ -105,17 +105,17 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
             if(this.blockRenderer.hasDynamicItemRendering()){
                 GlStateManager.pushMatrix();
                 GlStateManager.pushAttrib();
-                GlStateManager.enableBlend();
                 RenderHelper.enableStandardItemLighting();
                 VertexBuffer buffer = Tessellator.getInstance().getBuffer();
                 buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
                 CCRenderState renderState = CCRenderState.instance();
                 renderState.reset();
                 renderState.bind(buffer);
+                GlStateManager.enableBlend();
                 this.blockRenderer.renderItem(renderState, stack, this.random.nextLong());
+                GlStateManager.disableBlend();
                 Tessellator.getInstance().draw();
                 RenderHelper.disableStandardItemLighting();
-                GlStateManager.disableBlend();
                 GlStateManager.popAttrib();
                 GlStateManager.popMatrix();
             }
@@ -178,12 +178,12 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
         if(this.blockRenderer != null && this.blockRenderer instanceof IItemKeyProvider){
             IItemKeyProvider provider = (IItemKeyProvider)this.blockRenderer;
             builder.append(':');
-            provider.getExtendedItemKey(stack);
+            builder.append(provider.getExtendedItemKey(stack));
         }
         if(this.itemRenderer != null && this.itemRenderer instanceof IItemKeyProvider){
             IItemKeyProvider provider = (IItemKeyProvider)this.itemRenderer;
             builder.append(':');
-            provider.getExtendedItemKey(stack);
+            builder.append(provider.getExtendedItemKey(stack));
         }
 
         return builder.toString();

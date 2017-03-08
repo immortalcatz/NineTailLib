@@ -36,12 +36,24 @@ public class InternalInventory implements IInventory {
     @Nullable
     @Override
     public ItemStack decrStackSize(int index, int count) {
+        if(this.tile instanceof IInventoryAction){
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+            IInventoryAction listener = (IInventoryAction)this.tile;
+            listener.actionPerformed(player, EnumInventoryAction.DECR_STACK_SIZE, index);
+        }
+
         return InventoryUtils.decrStackSize(this, index, count);
     }
 
     @Nullable
     @Override
     public ItemStack removeStackFromSlot(int index) {
+        if(this.tile instanceof IInventoryAction){
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+            IInventoryAction listener = (IInventoryAction)this.tile;
+            listener.actionPerformed(player, EnumInventoryAction.REMOVE_STACK_FROM_SLOT, index);
+        }
+
         return InventoryUtils.removeStackFromSlot(this, index);
     }
 
@@ -52,7 +64,7 @@ public class InternalInventory implements IInventory {
         if(this.tile instanceof IInventoryAction){
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             IInventoryAction listener = (IInventoryAction)this.tile;
-            listener.actionPerformed(player, EnumInventoryAction.SET_SLOT_CONTENTS);
+            listener.actionPerformed(player, EnumInventoryAction.SET_SLOT_CONTENTS, index);
         }
     }
 
@@ -66,7 +78,7 @@ public class InternalInventory implements IInventory {
         if(this.tile instanceof IInventoryAction){
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             IInventoryAction listener = (IInventoryAction)this.tile;
-            listener.actionPerformed(player, EnumInventoryAction.MARK_DIRTY);
+            listener.actionPerformed(player, EnumInventoryAction.MARK_DIRTY, -1);
         }
     }
 
@@ -79,7 +91,7 @@ public class InternalInventory implements IInventory {
     public void openInventory(EntityPlayer player) {
         if(this.tile instanceof IInventoryAction){
             IInventoryAction listener = (IInventoryAction)this.tile;
-            listener.actionPerformed(player, EnumInventoryAction.OPEN);
+            listener.actionPerformed(player, EnumInventoryAction.OPEN, -1);
         }
     }
 
@@ -87,7 +99,7 @@ public class InternalInventory implements IInventory {
     public void closeInventory(EntityPlayer player) {
         if(this.tile instanceof IInventoryAction){
             IInventoryAction listener = (IInventoryAction)this.tile;
-            listener.actionPerformed(player, EnumInventoryAction.CLOSE);
+            listener.actionPerformed(player, EnumInventoryAction.CLOSE, -1);
         }
     }
 
@@ -120,8 +132,10 @@ public class InternalInventory implements IInventory {
         if(this.tile instanceof IInventoryAction){
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             IInventoryAction listener = (IInventoryAction)this.tile;
-            listener.actionPerformed(player, EnumInventoryAction.CLEAR);
+            listener.actionPerformed(player, EnumInventoryAction.CLEAR, -1);
         }
+
+        this.tile.markDirty();
     }
 
     @Override
