@@ -16,12 +16,16 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
+@SideOnly(Side.CLIENT)
 public class CustomBlockRenderer implements IBakedModel {
 
     private IBlockRenderingHandler blockRenderer;

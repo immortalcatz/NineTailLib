@@ -14,44 +14,49 @@ public class NetworkHandler {
         packet.writeBlockPos(pos);
         packet.writeInt(valueId);
 
-        if(value instanceof Integer){
-            packet.writeInt(EnumDataType.INTEGER.ordinal());
-            packet.writeInt((int)value);
-        }
-        else if(value instanceof Long){
-            packet.writeInt(EnumDataType.LONG.ordinal());
-            packet.writeLong((long)value);
-        }
-        else if(value instanceof Float){
-            packet.writeInt(EnumDataType.FLOAT.ordinal());
-            packet.writeFloat((float)value);
-        }
-        else if(value instanceof Double){
-            packet.writeInt(EnumDataType.DOUBLE.ordinal());
-            packet.writeDouble((double)value);
-        }
-        else if(value instanceof Boolean){
-            packet.writeInt(EnumDataType.BOOLEAN.ordinal());
-            packet.writeBoolean((boolean)value);
-        }
-        else if(value instanceof String){
-            packet.writeInt(EnumDataType.STRING.ordinal());
-            packet.writeString((String)value);
-        }
-        else if(value instanceof BlockPos){
-            packet.writeInt(EnumDataType.BLOCK_POS.ordinal());
-            packet.writeBlockPos((BlockPos)value);
-        }
-        else if(value instanceof FluidStack){
-            packet.writeInt(EnumDataType.FLUID_STACK.ordinal());
-            packet.writeFluidStack((FluidStack)value);
-        }
-        else if(value instanceof NBTTagCompound){
-            packet.writeInt(EnumDataType.NBT_TAG_COMPOUND.ordinal());
-            packet.writeNBTTagCompound((NBTTagCompound)value);
+        if(value != null){
+            if(value instanceof Integer){
+                packet.writeInt(EnumDataType.INTEGER.ordinal());
+                packet.writeInt((int)value);
+            }
+            else if(value instanceof Long){
+                packet.writeInt(EnumDataType.LONG.ordinal());
+                packet.writeLong((long)value);
+            }
+            else if(value instanceof Float){
+                packet.writeInt(EnumDataType.FLOAT.ordinal());
+                packet.writeFloat((float)value);
+            }
+            else if(value instanceof Double){
+                packet.writeInt(EnumDataType.DOUBLE.ordinal());
+                packet.writeDouble((double)value);
+            }
+            else if(value instanceof Boolean){
+                packet.writeInt(EnumDataType.BOOLEAN.ordinal());
+                packet.writeBoolean((boolean)value);
+            }
+            else if(value instanceof String){
+                packet.writeInt(EnumDataType.STRING.ordinal());
+                packet.writeString((String)value);
+            }
+            else if(value instanceof BlockPos){
+                packet.writeInt(EnumDataType.BLOCK_POS.ordinal());
+                packet.writeBlockPos((BlockPos)value);
+            }
+            else if(value instanceof FluidStack){
+                packet.writeInt(EnumDataType.FLUID_STACK.ordinal());
+                packet.writeFluidStack((FluidStack)value);
+            }
+            else if(value instanceof NBTTagCompound){
+                packet.writeInt(EnumDataType.NBT_TAG_COMPOUND.ordinal());
+                packet.writeNBTTagCompound((NBTTagCompound)value);
+            }
+            else{
+                throw new IllegalArgumentException("The value you entered is not a supported type !");
+            }
         }
         else{
-            throw new IllegalArgumentException("The value you entered is not a supported type !");
+            return;
         }
 
         switch(target){
