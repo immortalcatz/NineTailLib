@@ -163,7 +163,7 @@ public abstract class ContainerBase extends Container {
             clickSlot.putStack(itemStack != null ? itemStack.copy() : null);
         }
 
-        updateSlot(clickSlot);
+        this.updateSlot(clickSlot);
         return null;
     }
 

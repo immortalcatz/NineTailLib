@@ -5,7 +5,6 @@ import codechicken.lib.vec.Rectangle4i;
 import com.google.common.collect.Lists;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import keri.ninetaillib.internal.util.ModPrefs;
-import keri.ninetaillib.util.CommonUtils;
 import keri.ninetaillib.util.ResourceAction;
 import keri.ninetaillib.util.Vector2i;
 import net.minecraft.client.Minecraft;
@@ -103,11 +102,7 @@ public class FluidGauge {
                 FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
                 ArrayList<String> text = Lists.newArrayList();
                 text.add((fluid != null ? Integer.toString(fluid.amount) : "0") + " mB");
-
-                if(CommonUtils.isShiftPressed()){
-                    text.add(ChatFormatting.YELLOW + (fluid != null ? fluid.getLocalizedName() : "Empty"));
-                }
-
+                text.add(ChatFormatting.YELLOW + (fluid != null ? fluid.getLocalizedName() : "Empty"));
                 int screenWidth = Minecraft.getMinecraft().displayWidth;
                 int screenHeight = Minecraft.getMinecraft().displayHeight;
                 GuiUtils.drawHoveringText(text, this.mousePos.getX(), this.mousePos.getY(), screenWidth, screenHeight, 200, fontRenderer);

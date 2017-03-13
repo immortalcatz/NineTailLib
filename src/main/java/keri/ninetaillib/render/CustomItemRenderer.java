@@ -72,17 +72,20 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                     RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
                     SimpleBakedModel model = this.modelCache.get(this.getCacheKey(stack));
                     GlStateManager.pushMatrix();
+                    GlStateManager.pushAttrib();
                     GlStateManager.enableBlend();
                     GlStateManager.translate(0.5D, 0.5D, 0.5D);
                     if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.enableStandardItemLighting(); }
                     renderItem.renderItem(stack, model);
                     if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.disableStandardItemLighting(); }
                     GlStateManager.disableBlend();
+                    GlStateManager.popAttrib();
                     GlStateManager.popMatrix();
                 }
             }
             else{
                 GlStateManager.pushMatrix();
+                GlStateManager.pushAttrib();
                 GlStateManager.enableBlend();
                 if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.enableStandardItemLighting(); }
                 VertexBuffer buffer = Tessellator.getInstance().getBuffer();
@@ -94,12 +97,14 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                 Tessellator.getInstance().draw();
                 if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.disableStandardItemLighting(); }
                 GlStateManager.disableBlend();
+                GlStateManager.popAttrib();
                 GlStateManager.popMatrix();
             }
         }
         else{
             if(this.blockRenderer.hasDynamicItemRendering()){
                 GlStateManager.pushMatrix();
+                GlStateManager.pushAttrib();
                 RenderHelper.enableStandardItemLighting();
                 VertexBuffer buffer = Tessellator.getInstance().getBuffer();
                 buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
@@ -111,6 +116,7 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                 GlStateManager.disableBlend();
                 Tessellator.getInstance().draw();
                 RenderHelper.disableStandardItemLighting();
+                GlStateManager.popAttrib();
                 GlStateManager.popMatrix();
             }
             else{
@@ -137,12 +143,14 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                     RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
                     SimpleBakedModel model = this.modelCache.get(this.getCacheKey(stack));
                     GlStateManager.pushMatrix();
+                    GlStateManager.pushAttrib();
                     GlStateManager.enableBlend();
                     GlStateManager.translate(0.5D, 0.5D, 0.5D);
                     RenderHelper.enableStandardItemLighting();
                     renderItem.renderItem(stack, model);
                     RenderHelper.disableStandardItemLighting();
                     GlStateManager.disableBlend();
+                    GlStateManager.popAttrib();
                     GlStateManager.popMatrix();
                 }
             }
