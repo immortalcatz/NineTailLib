@@ -24,7 +24,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-@Deprecated
 @SideOnly(Side.CLIENT)
 public class CustomBlockRenderer implements IBakedModel {
 

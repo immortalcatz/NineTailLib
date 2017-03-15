@@ -7,8 +7,12 @@ import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.block.IMetaBlock;
 import keri.ninetaillib.fluid.FluidBase;
 import keri.ninetaillib.internal.NineTailLib;
-import keri.ninetaillib.internal.handler.ClientEventHandler;
-import keri.ninetaillib.internal.handler.InventoryButtonHandler;
+import keri.ninetaillib.internal.client.ClientEventHandler;
+import keri.ninetaillib.internal.client.gui.InventoryButtonHandler;
+import keri.ninetaillib.internal.client.playereffect.PlayerEffectChickens;
+import keri.ninetaillib.internal.client.playereffect.PlayerEffectEnderpearls;
+import keri.ninetaillib.internal.client.playereffect.PlayerEffectSheep;
+import keri.ninetaillib.internal.client.playereffect.PlayerEffectWolfs;
 import keri.ninetaillib.internal.network.NineTailLibCPH;
 import keri.ninetaillib.item.ItemBase;
 import keri.ninetaillib.render.CustomBlockRenderer;
@@ -29,6 +33,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class ClientProxy implements INineTailProxy {
 
@@ -40,7 +45,11 @@ public class ClientProxy implements INineTailProxy {
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(IconRegistrar.INSTANCE);
         MinecraftForge.EVENT_BUS.register(new InventoryButtonHandler());
-        MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+        MinecraftForge.EVENT_BUS.register(ClientEventHandler.INSTANCE);
+        ClientEventHandler.INSTANCE.registerPlayerEffect(UUID.fromString("b2ac8c03-d994-4805-9e0f-57fede63c04d"), new PlayerEffectChickens());
+        ClientEventHandler.INSTANCE.registerPlayerEffect(UUID.fromString("58d506e2-7ee7-4774-8b22-c7a57eda488b"), new PlayerEffectSheep());
+        ClientEventHandler.INSTANCE.registerPlayerEffect(UUID.fromString("1e25868f-6372-492d-8319-3a4627f0cc18"), new PlayerEffectEnderpearls());
+        ClientEventHandler.INSTANCE.registerPlayerEffect(UUID.fromString("1e2326e7-a592-4e11-9b4c-d0c930deeca3"), new PlayerEffectWolfs());
 
         for(BlockBase block : this.blocksToHandle){
             IconRegistrar.INSTANCE.registerBlock(block);
@@ -68,7 +77,7 @@ public class ClientProxy implements INineTailProxy {
             NineTailLib.LOGGER.debug("Successfully loaded " + this.itemsToHandle.size() + " item models !");
         }
 
-        for(FluidBase fluid : this.fluidsToHandle){
+        for(FluidBase fluid : this.fluidsToHandle) {
             this.registerFluidModel(fluid);
         }
     }

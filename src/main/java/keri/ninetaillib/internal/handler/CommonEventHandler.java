@@ -20,6 +20,7 @@ import java.util.UUID;
 
 public class CommonEventHandler {
 
+    public static final CommonEventHandler INSTANCE = new CommonEventHandler();
     private final Set<Block> whitelist = Sets.newHashSet(
             Blocks.DIRT,
             Blocks.GRASS,

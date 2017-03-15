@@ -1,4 +1,4 @@
-package keri.ninetaillib.internal.gui;
+package keri.ninetaillib.internal.client.gui;
 
 import codechicken.lib.colour.ColourRGBA;
 import keri.ninetaillib.gui.ColoredRectangle;

@@ -1,9 +1,8 @@
-package keri.ninetaillib.internal.handler;
+package keri.ninetaillib.internal.client.gui;
 
 import com.mojang.authlib.GameProfile;
 import keri.ninetaillib.gui.ButtonAnimated;
 import keri.ninetaillib.gui.IButtonAction;
-import keri.ninetaillib.internal.gui.GuiDebug;
 import keri.ninetaillib.internal.util.ModPrefs;
 import keri.ninetaillib.util.CommonUtils;
 import net.minecraft.client.Minecraft;
