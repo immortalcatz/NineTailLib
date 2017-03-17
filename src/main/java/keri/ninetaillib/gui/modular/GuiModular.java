@@ -14,13 +14,13 @@ import java.io.IOException;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class GuiModular extends GuiContainer {
+public abstract class GuiModular<C extends Container> extends GuiContainer {
 
-    private List<IGuiElement> elements;
+    private List<IGuiElement> elements = Lists.newArrayList();
 
-    private GuiModular(Container container, List<IGuiElement> elements){
+    public GuiModular(C container) {
         super(container);
-        this.elements = elements;
+        this.addElements(this.elements);
     }
 
     @Override
@@ -55,42 +55,11 @@ public class GuiModular extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         super.actionPerformed(button);
-
-        for(IGuiElement element : this.elements){
-            if(element instanceof IActiveGuiElement){
-                ((IActiveGuiElement)element).actionPerformed(this);
-            }
-        }
+        this.handleButtonAction(button.id);
     }
 
-    @SideOnly(Side.CLIENT)
-    public static class Builder<C extends Container> {
+    public abstract void addElements(List<IGuiElement> elements);
 
-        private List<IGuiElement> elements;
-        private C container;
-
-        public Builder(C container){
-            this.elements = Lists.newArrayList();
-            this.container = container;
-        }
-
-        public void clear(){
-            this.elements.clear();
-        }
-
-        public void addElement(IGuiElement element){
-            if(element != null){
-                this.elements.add(element);
-            }
-            else{
-                throw new IllegalArgumentException("IGuiElement cannot be null !");
-            }
-        }
-
-        public GuiModular build(){
-            return new GuiModular(this.container, this.elements);
-        }
-
-    }
+    public abstract void handleButtonAction(int buttonId);
 
 }
