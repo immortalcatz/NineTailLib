@@ -6,7 +6,11 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@Deprecated
+@SideOnly(Side.CLIENT)
 public class ButtonAnimated extends GuiButton {
 
     private ResourceAction texture;

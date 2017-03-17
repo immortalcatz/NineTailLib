@@ -2,7 +2,7 @@ package keri.ninetaillib.gui.modular;
 
 import codechicken.lib.colour.Colour;
 import codechicken.lib.colour.ColourRGBA;
-import keri.ninetaillib.tile.TileEntityBase;
+import keri.ninetaillib.gui.EnumRenderType;
 import keri.ninetaillib.util.GuiUtils;
 import keri.ninetaillib.util.Vector2i;
 import net.minecraft.client.gui.GuiScreen;
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ElementBackground implements IPassiveGuiElement<TileEntityBase> {
+public class ElementBackground implements IGuiElement {
 
     private Vector2i pos;
     private Vector2i size;
@@ -34,13 +34,15 @@ public class ElementBackground implements IPassiveGuiElement<TileEntityBase> {
     }
 
     @Override
-    public void onGuiInit(TileEntityBase tile, GuiScreen gui) {
+    public void onGuiInit(GuiScreen gui) {
 
     }
 
     @Override
-    public void renderElement(TileEntityBase tile, VertexBuffer buffer, GuiScreen gui) {
-        GuiUtils.drawBackground(gui, this.pos, this.size, this.alignment, new ColourRGBA(this.color.rgba()));
+    public void renderElement(VertexBuffer buffer, GuiScreen gui, EnumRenderType type) {
+        if(type == EnumRenderType.BACKGROUND){
+            GuiUtils.drawBackground(gui, this.pos, this.size, this.alignment, new ColourRGBA(this.color.rgba()));
+        }
     }
 
 }

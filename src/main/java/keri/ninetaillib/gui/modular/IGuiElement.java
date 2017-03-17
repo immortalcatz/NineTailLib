@@ -1,10 +1,13 @@
 package keri.ninetaillib.gui.modular;
 
+import keri.ninetaillib.gui.EnumRenderType;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.client.renderer.VertexBuffer;
 
-public interface IGuiElement<T extends TileEntity> {
+public interface IGuiElement {
 
-    void onGuiInit(T tile, GuiScreen gui);
+    void onGuiInit(GuiScreen gui);
+
+    void renderElement(VertexBuffer buffer, GuiScreen gui, EnumRenderType type);
 
 }

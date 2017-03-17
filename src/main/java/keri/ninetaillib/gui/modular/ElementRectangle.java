@@ -3,7 +3,7 @@ package keri.ninetaillib.gui.modular;
 import codechicken.lib.colour.Colour;
 import codechicken.lib.colour.ColourRGBA;
 import keri.ninetaillib.gui.ColoredRectangle;
-import keri.ninetaillib.tile.TileEntityBase;
+import keri.ninetaillib.gui.EnumRenderType;
 import keri.ninetaillib.util.Vector2i;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ElementRectangle implements IPassiveGuiElement<TileEntityBase> {
+public class ElementRectangle implements IGuiElement {
 
     private ColoredRectangle rectangle;
     private Vector2i pos;
@@ -37,7 +37,7 @@ public class ElementRectangle implements IPassiveGuiElement<TileEntityBase> {
     }
 
     @Override
-    public void onGuiInit(TileEntityBase tile, GuiScreen gui) {
+    public void onGuiInit(GuiScreen gui) {
         this.rectangle = new ColoredRectangle(this.pos, this.size, new ColourRGBA(this.color1.rgba()), new ColourRGBA(this.color2.rgba()));
 
         if(this.colorBorder != null){
@@ -47,8 +47,10 @@ public class ElementRectangle implements IPassiveGuiElement<TileEntityBase> {
     }
 
     @Override
-    public void renderElement(TileEntityBase tile, VertexBuffer buffer, GuiScreen gui) {
-        this.rectangle.draw();
+    public void renderElement(VertexBuffer buffer, GuiScreen gui, EnumRenderType type) {
+        if(type == EnumRenderType.BACKGROUND){
+            this.rectangle.draw();
+        }
     }
 
 }
