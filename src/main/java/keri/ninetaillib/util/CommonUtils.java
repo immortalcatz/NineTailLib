@@ -11,19 +11,24 @@ import keri.ninetaillib.item.IGuiItem;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 
 public class CommonUtils {
@@ -179,6 +184,55 @@ public class CommonUtils {
     public static Fluid makeFluid(String modid, String fluidName){
         FluidBase fluid = new FluidBase(modid, fluidName);
         return FluidRegistry.getFluid(fluid.getName());
+    }
+
+    public static void dropInventory(TileEntity tile) {
+        if (!(tile instanceof IInventory))
+            return;
+
+        IInventory inventory = (IInventory)tile;
+
+        if (inventory != null) {
+            dropInventory(tile, 0, inventory.getSizeInventory() - 1);
+        }
+    }
+
+    public static void dropInventory(TileEntity tile, int min, int max) {
+        if (!(tile instanceof IInventory)) {
+            return;
+        }
+
+        IInventory inventory = (IInventory)tile;
+        World world = tile.getWorld();
+        BlockPos blockPos = tile.getPos();
+
+        for (int i = min; i <= max; i++) {
+            ItemStack itemStack = inventory.getStackInSlot(i);
+
+            if (itemStack != null && itemStack.stackSize > 0) {
+                Random rand = new Random();
+
+                float dX = rand.nextFloat() * 0.8F + 0.1F;
+                float dY = rand.nextFloat() * 0.8F + 0.1F;
+                float dZ = rand.nextFloat() * 0.8F + 0.1F;
+
+                EntityItem entityItem = new EntityItem(world, blockPos.getX() + dX, blockPos.getY() + dY, blockPos.getZ() + dZ, itemStack.copy());
+
+                if (itemStack.hasTagCompound()) {
+                    entityItem.getEntityItem().setTagCompound((NBTTagCompound) itemStack.getTagCompound().copy());
+                }
+
+                float factor = 0.05F;
+                entityItem.motionX = rand.nextGaussian() * factor;
+                entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
+                entityItem.motionZ = rand.nextGaussian() * factor;
+                world.spawnEntityInWorld(entityItem);
+                itemStack.stackSize = 0;
+                inventory.setInventorySlotContents(i, null);
+            }
+        }
+
+        inventory.markDirty();
     }
 
 }

@@ -2,13 +2,17 @@ package keri.ninetaillib.tile;
 
 import keri.ninetaillib.inventory.InternalInventory;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nullable;
 
-public abstract class TileEntityInventory extends TileEntityBase implements IInventory {
+public abstract class TileEntityInventory extends TileEntityBase implements ISidedInventory {
 
     @Override
     public void readFromNBT(NBTTagCompound tag){
@@ -24,7 +28,7 @@ public abstract class TileEntityInventory extends TileEntityBase implements IInv
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getSizeInventory(){
         return this.getInternalInventory().getSizeInventory();
     }
 
@@ -104,6 +108,24 @@ public abstract class TileEntityInventory extends TileEntityBase implements IInv
     @Override
     public boolean hasCustomName() {
         return this.getInternalInventory().hasCustomName();
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+            return true;
+        }
+
+        return super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new SidedInvWrapper(this, facing));
+        }
+
+        return super.getCapability(capability, facing);
     }
 
     public abstract InternalInventory getInternalInventory();

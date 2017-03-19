@@ -6,6 +6,7 @@ import keri.ninetaillib.render.DefaultBlockRenderer;
 import keri.ninetaillib.render.IBlockRenderingHandler;
 import keri.ninetaillib.texture.IIconBlock;
 import keri.ninetaillib.texture.IIconRegistrar;
+import keri.ninetaillib.tile.TileEntityInventory;
 import keri.ninetaillib.util.CommonUtils;
 import keri.ninetaillib.util.HideInventory;
 import net.minecraft.block.Block;
@@ -164,6 +165,18 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
         }
         else{
             return super.getPickBlock(state, target, world, pos, player);
+        }
+    }
+
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state){
+        super.breakBlock(world, pos, state);
+        TileEntity tile = (TileEntity)world.getTileEntity(pos);
+
+        if(tile != null){
+            if(tile instanceof TileEntityInventory){
+                CommonUtils.dropInventory(tile);
+            }
         }
     }
 
