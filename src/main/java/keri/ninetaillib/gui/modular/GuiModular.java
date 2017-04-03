@@ -58,6 +58,8 @@ public abstract class GuiModular<C extends Container> extends GuiContainer {
         this.handleButtonAction(button.id);
     }
 
+    public List<GuiButton> getButtonList(){ return this.buttonList; }
+
     public abstract void addElements(List<IGuiElement> elements);
 
     public abstract void handleButtonAction(int buttonId);
