@@ -19,6 +19,10 @@ public class ElementLabel implements IGuiElement {
     private boolean shadow;
     private String text;
 
+    public ElementLabel(Vector2i position, String text, boolean hasShadow){
+        this(position, text, new ColourRGBA(0, 0, 0, 255), hasShadow);
+    }
+
     public ElementLabel(Vector2i position, String text, ColourRGBA color, boolean hasShadow){
         this.position = position;
         this.text = text;

@@ -9,9 +9,7 @@ import keri.ninetaillib.fluid.FluidBase;
 import keri.ninetaillib.internal.NineTailLib;
 import keri.ninetaillib.internal.client.ClientEventHandler;
 import keri.ninetaillib.internal.client.gui.InventoryButtonHandler;
-import keri.ninetaillib.internal.client.playereffect.PlayerEffectParticle;
-import keri.ninetaillib.internal.client.playereffect.PlayerEffectSheep;
-import keri.ninetaillib.internal.client.playereffect.PlayerEffectWolfs;
+import keri.ninetaillib.internal.client.render.PlayerRenderHandler;
 import keri.ninetaillib.internal.network.NineTailLibCPH;
 import keri.ninetaillib.item.ItemBase;
 import keri.ninetaillib.render.CustomBlockRenderer;
@@ -22,9 +20,10 @@ import keri.ninetaillib.texture.IconRegistrar;
 import keri.ninetaillib.util.ClientUtils;
 import keri.ninetaillib.util.FluidStateMapper;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,7 +32,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.util.ArrayList;
-import java.util.UUID;
+import java.util.Map;
 
 public class ClientProxy implements INineTailProxy {
 
@@ -45,13 +44,7 @@ public class ClientProxy implements INineTailProxy {
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(IconRegistrar.INSTANCE);
         MinecraftForge.EVENT_BUS.register(new InventoryButtonHandler());
-        MinecraftForge.EVENT_BUS.register(ClientEventHandler.INSTANCE);
-        ClientEventHandler.INSTANCE.registerPlayerEffect(UUID.fromString("b2ac8c03-d994-4805-9e0f-57fede63c04d"), new PlayerEffectParticle(EnumParticleTypes.FLAME, -0.2D));
-        ClientEventHandler.INSTANCE.registerPlayerEffect(UUID.fromString("9b2d08dc-720e-4e0b-bf30-c75b93239e25"), new PlayerEffectParticle(EnumParticleTypes.WATER_DROP, -0.1D));
-        ClientEventHandler.INSTANCE.registerPlayerEffect(UUID.fromString("1e25868f-6372-492d-8319-3a4627f0cc18"), new PlayerEffectParticle(EnumParticleTypes.DRAGON_BREATH, -0.2D));
-        ClientEventHandler.INSTANCE.registerPlayerEffect(UUID.fromString("0da699a0-6486-4c9a-916e-7144e39dc8b7"), new PlayerEffectParticle(EnumParticleTypes.SLIME, -0.2D));
-        ClientEventHandler.INSTANCE.registerPlayerEffect(UUID.fromString("58d506e2-7ee7-4774-8b22-c7a57eda488b"), new PlayerEffectSheep());
-        ClientEventHandler.INSTANCE.registerPlayerEffect(UUID.fromString("1e2326e7-a592-4e11-9b4c-d0c930deeca3"), new PlayerEffectWolfs());
+        MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
 
         for(BlockBase block : this.blocksToHandle){
             IconRegistrar.INSTANCE.registerBlock(block);
@@ -87,6 +80,7 @@ public class ClientProxy implements INineTailProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         PacketCustom.assignHandler(NineTailLib.INSTANCE, new NineTailLibCPH());
+        this.registerAuxRenderers();
     }
 
     @Override
@@ -107,6 +101,15 @@ public class ClientProxy implements INineTailProxy {
     @Override
     public void handleFluid(FluidBase fluid) {
         this.fluidsToHandle.add(fluid);
+    }
+
+    private void registerAuxRenderers(){
+        Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
+        RenderPlayer renderer = null;
+        renderer = skinMap.get("default");
+        renderer.addLayer(new PlayerRenderHandler());
+        renderer = skinMap.get("slim");
+        renderer.addLayer(new PlayerRenderHandler());
     }
 
     private void registerFluidModel(FluidBase fluid){
