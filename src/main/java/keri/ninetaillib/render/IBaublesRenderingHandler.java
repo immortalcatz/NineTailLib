@@ -9,6 +9,6 @@ public interface IBaublesRenderingHandler {
 
     Item getItem();
 
-    void renderBaubles(IInventory inventory, EntityPlayer player, float partialTicks, IRenderBauble.RenderType type);
+    void renderBauble(IInventory inventory, EntityPlayer player, float partialTicks, IRenderBauble.RenderType type);
 
 }

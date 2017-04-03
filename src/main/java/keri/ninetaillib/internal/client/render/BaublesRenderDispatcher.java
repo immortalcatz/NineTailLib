@@ -24,7 +24,7 @@ public class BaublesRenderDispatcher {
         IInventory inventory = BaublesApi.getBaubles(player);
 
         BaublesRenderingRegistry.INSTANCE.getRenderingHandlers().forEach(handler -> {
-            handler.renderBaubles(inventory, player, partialTicks, IRenderBauble.RenderType.BODY);
+            handler.renderBauble(inventory, player, partialTicks, IRenderBauble.RenderType.BODY);
             float yaw = player.prevRotationYawHead + (player.rotationYawHead - player.prevRotationYawHead) * partialTicks;
             float yawOffset = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialTicks;
             float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * partialTicks;
@@ -32,7 +32,7 @@ public class BaublesRenderDispatcher {
             GlStateManager.rotate(yawOffset, 0, -1, 0);
             GlStateManager.rotate(yaw - 270, 0, 1, 0);
             GlStateManager.rotate(pitch, 0, 0, 1);
-            handler.renderBaubles(inventory, player, partialTicks, IRenderBauble.RenderType.HEAD);
+            handler.renderBauble(inventory, player, partialTicks, IRenderBauble.RenderType.HEAD);
             GlStateManager.popMatrix();
         });
     }
