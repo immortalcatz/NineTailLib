@@ -7,7 +7,10 @@ import keri.ninetaillib.gui.PowerBar;
 import keri.ninetaillib.util.Vector2i;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ElementPowerBar implements IGuiElement {
 
     private Vector2i position;
