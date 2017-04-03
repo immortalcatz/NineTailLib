@@ -7,6 +7,7 @@ import keri.ninetaillib.util.Vector2i;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -18,6 +19,18 @@ public class ElementFluidGauge implements IGuiElement {
     private int max;
     private FluidStack fluid;
     private FluidGauge fluidGauge;
+
+    public ElementFluidGauge(Vector2i position, FluidTank tank){
+        this(position, EnumBackgroundType.LIGHT, tank);
+    }
+
+    public ElementFluidGauge(Vector2i position, int maxFluid, FluidStack fluid){
+        this(position, EnumBackgroundType.LIGHT, maxFluid, fluid);
+    }
+
+    public ElementFluidGauge(Vector2i position, EnumBackgroundType backgroundType, FluidTank tank){
+        this(position, backgroundType, tank.getCapacity(), tank.getFluid());
+    }
 
     public ElementFluidGauge(Vector2i position, EnumBackgroundType backgroundType, int maxFluid, FluidStack fluid){
         this.position = position;
