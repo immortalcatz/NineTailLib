@@ -1,4 +1,4 @@
-package keri.ninetaillib.internal.client;
+package keri.ninetaillib.internal.client.handler;
 
 import codechicken.lib.colour.ColourRGBA;
 import codechicken.lib.util.ClientUtils;

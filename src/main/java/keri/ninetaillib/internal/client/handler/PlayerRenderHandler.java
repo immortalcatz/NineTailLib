@@ -1,5 +1,6 @@
-package keri.ninetaillib.internal.client.render;
+package keri.ninetaillib.internal.client.handler;
 
+import keri.ninetaillib.internal.client.render.BaubleRenderingDispatcher;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +20,7 @@ public class PlayerRenderHandler implements LayerRenderer<EntityPlayer> {
                 scale
         };
 
-        BaublesRenderDispatcher.INSTANCE.disptatchRenderers(player, playerData, partialTicks);
+        BaubleRenderingDispatcher.INSTANCE.disptatchRenderers(player, playerData, partialTicks);
     }
 
     @Override

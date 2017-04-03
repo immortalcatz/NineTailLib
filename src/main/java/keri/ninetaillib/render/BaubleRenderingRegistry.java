@@ -5,12 +5,12 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 
-public class BaublesRenderingRegistry {
+public class BaubleRenderingRegistry {
 
-    public static final BaublesRenderingRegistry INSTANCE = new BaublesRenderingRegistry();
-    private List<IBaublesRenderingHandler> renderingHandlers = Lists.newArrayList();
+    public static final BaubleRenderingRegistry INSTANCE = new BaubleRenderingRegistry();
+    private List<IBaubleRenderingHandler> renderingHandlers = Lists.newArrayList();
 
-    public void registerRenderingHandler(IBaublesRenderingHandler handler){
+    public void registerRenderingHandler(IBaubleRenderingHandler handler){
         if(handler != null){
             if(handler.getItem() != null){
                 this.renderingHandlers.add(handler);
@@ -24,7 +24,7 @@ public class BaublesRenderingRegistry {
         }
     }
 
-    public ImmutableList<IBaublesRenderingHandler> getRenderingHandlers(){
+    public ImmutableList<IBaubleRenderingHandler> getRenderingHandlers(){
         return ImmutableList.copyOf(this.renderingHandlers);
     }
 
