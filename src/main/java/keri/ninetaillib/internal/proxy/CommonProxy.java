@@ -3,6 +3,7 @@ package keri.ninetaillib.internal.proxy;
 import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.fluid.FluidBase;
 import keri.ninetaillib.item.ItemBase;
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -36,6 +37,11 @@ public class CommonProxy implements INineTailProxy {
 
     @Override
     public void handleFluid(FluidBase fluid) {
+
+    }
+
+    @Override
+    public void handleItemSpecial(Item item) {
 
     }
 

@@ -1,5 +1,6 @@
 package keri.ninetaillib.item;
 
+import keri.ninetaillib.internal.NineTailLib;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.*;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -32,16 +33,17 @@ public class ItemToolHelper {
         return new ItemHoeCustom(material);
     }
 
+    public CreativeTabs getCreativeTab(){
+        return CreativeTabs.TOOLS;
+    };
+
     private void register(String itemName, Item item){
         item.setRegistryName(this.modid, itemName);
         item.setUnlocalizedName(this.modid + "." + itemName);
         item.setCreativeTab(this.getCreativeTab());
         GameRegistry.register(item);
+        NineTailLib.PROXY.handleItemSpecial(item);
     }
-
-    public CreativeTabs getCreativeTab(){
-        return CreativeTabs.TOOLS;
-    };
 
     private class ItemSwordCustom extends ItemSword {
 
