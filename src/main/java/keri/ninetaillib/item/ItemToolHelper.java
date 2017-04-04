@@ -1,9 +1,14 @@
 package keri.ninetaillib.item;
 
 import keri.ninetaillib.internal.NineTailLib;
+import keri.ninetaillib.texture.IIconItem;
+import keri.ninetaillib.texture.IIconRegistrar;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.*;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemToolHelper {
 
@@ -45,47 +50,122 @@ public class ItemToolHelper {
         NineTailLib.PROXY.handleItemSpecial(item);
     }
 
-    private class ItemSwordCustom extends ItemSword {
+    private class ItemSwordCustom extends ItemSword implements IIconItem {
 
         public ItemSwordCustom(ToolMaterial material) {
             super(material);
             register("sword_" + material.name(), this);
         }
 
+        @SideOnly(Side.CLIENT)
+        private TextureAtlasSprite texture;
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void registerIcons(IIconRegistrar registrar) {
+            this.texture = registrar.registerIcon(modid + ":items/tool/sword_" + this.getToolMaterialName());
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public TextureAtlasSprite getIcon(int meta) {
+            return this.texture;
+        }
+
     }
 
-    private class ItemPickaxeCustom extends ItemPickaxe {
+    private class ItemPickaxeCustom extends ItemPickaxe implements IIconItem {
 
         public ItemPickaxeCustom(ToolMaterial material) {
             super(material);
             register("pickaxe_" + material.name(), this);
         }
 
+        @SideOnly(Side.CLIENT)
+        private TextureAtlasSprite texture;
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void registerIcons(IIconRegistrar registrar) {
+            this.texture = registrar.registerIcon(modid + ":items/tool/pickaxe_" + this.getToolMaterialName());
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public TextureAtlasSprite getIcon(int meta) {
+            return this.texture;
+        }
+
     }
 
-    private class ItemShovelCustom extends ItemSpade {
+    private class ItemShovelCustom extends ItemSpade implements IIconItem {
 
         public ItemShovelCustom(ToolMaterial material) {
             super(material);
             register("shovel_" + material.name(), this);
         }
 
+        @SideOnly(Side.CLIENT)
+        private TextureAtlasSprite texture;
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void registerIcons(IIconRegistrar registrar) {
+            this.texture = registrar.registerIcon(modid + ":items/tool/shovel_" + this.getToolMaterialName());
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public TextureAtlasSprite getIcon(int meta) {
+            return this.texture;
+        }
+
     }
 
-    private class ItemAxeCustom extends ItemAxe {
+    private class ItemAxeCustom extends ItemAxe implements IIconItem {
 
         public ItemAxeCustom(ToolMaterial material) {
             super(material);
             register("axe_" + material.name(), this);
         }
 
+        @SideOnly(Side.CLIENT)
+        private TextureAtlasSprite texture;
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void registerIcons(IIconRegistrar registrar) {
+            this.texture = registrar.registerIcon(modid + ":items/tool/axe_" + this.getToolMaterialName());
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public TextureAtlasSprite getIcon(int meta) {
+            return this.texture;
+        }
+
     }
 
-    private class ItemHoeCustom extends ItemHoe {
+    private class ItemHoeCustom extends ItemHoe implements IIconItem {
 
         public ItemHoeCustom(ToolMaterial material) {
             super(material);
             register("hoe_" + material.name(), this);
+        }
+
+        @SideOnly(Side.CLIENT)
+        private TextureAtlasSprite texture;
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void registerIcons(IIconRegistrar registrar) {
+            this.texture = registrar.registerIcon(modid + ":items/tool/hoe_" + this.theToolMaterial.name());
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public TextureAtlasSprite getIcon(int meta) {
+            return this.texture;
         }
 
     }
