@@ -85,7 +85,7 @@ public class ItemArmorHelper {
                 case FEET: namePrefix = "boots_";
             }
 
-            String itemName = namePrefix + this.getArmorMaterial().getName();
+            String itemName = namePrefix + this.getArmorMaterial().getName().toLowerCase();
             this.itemName = itemName;
             this.setRegistryName(modid, itemName);
             this.setUnlocalizedName(modid + "." + itemName);

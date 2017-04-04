@@ -1,7 +1,7 @@
 package keri.ninetaillib.render;
 
+import codechicken.lib.render.CCModelState;
 import codechicken.lib.render.CCRenderState;
-import codechicken.lib.util.TransformUtils;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import keri.ninetaillib.texture.IIconItem;
@@ -27,6 +27,12 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class DefaultItemRenderer implements IItemRenderingHandler, IItemQuadProvider {
 
+    private CCModelState itemTransforms;
+
+    public DefaultItemRenderer(CCModelState transforms){
+        this.itemTransforms = transforms;
+    }
+
     @Override
     public void renderItem(CCRenderState renderState, ItemStack stack, long rand) {
 
@@ -41,7 +47,7 @@ public class DefaultItemRenderer implements IItemRenderingHandler, IItemQuadProv
         };
 
         TextureAtlasSprite texture = ((IIconItem)stack.getItem()).getIcon(stack.getMetadata());
-        IBakedModel layerModel = (new ItemLayerModel(ImmutableList.of(new ResourceLocation(texture.getIconName())))).bake(TransformUtils.DEFAULT_ITEM, DefaultVertexFormats.ITEM, bakedTextureGetter);
+        IBakedModel layerModel = (new ItemLayerModel(ImmutableList.of(new ResourceLocation(texture.getIconName())))).bake(this.itemTransforms, DefaultVertexFormats.ITEM, bakedTextureGetter);
         ImmutableList.Builder quadBuilder = ImmutableList.builder();
         quadBuilder.addAll(layerModel.getQuads((IBlockState)null, (EnumFacing)null, 0L));
         return quadBuilder.build();
@@ -49,7 +55,7 @@ public class DefaultItemRenderer implements IItemRenderingHandler, IItemQuadProv
 
     @Override
     public Pair<? extends IBakedModel, Matrix4f> handlePerspective(IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType) {
-        return IPerspectiveAwareModel.MapWrapper.handlePerspective(model, TransformUtils.DEFAULT_ITEM.getTransforms(), cameraTransformType);
+        return IPerspectiveAwareModel.MapWrapper.handlePerspective(model, this.itemTransforms, cameraTransformType);
     }
 
     @Override

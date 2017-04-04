@@ -63,7 +63,7 @@ public class ItemToolHelper {
         @Override
         @SideOnly(Side.CLIENT)
         public void registerIcons(IIconRegistrar registrar) {
-            this.texture = registrar.registerIcon(modid + ":items/tool/sword_" + this.getToolMaterialName());
+            this.texture = registrar.registerIcon(modid + ":items/tool/sword_" + this.getToolMaterialName().toLowerCase());
         }
 
         @Override
@@ -87,7 +87,7 @@ public class ItemToolHelper {
         @Override
         @SideOnly(Side.CLIENT)
         public void registerIcons(IIconRegistrar registrar) {
-            this.texture = registrar.registerIcon(modid + ":items/tool/pickaxe_" + this.getToolMaterialName());
+            this.texture = registrar.registerIcon(modid + ":items/tool/pickaxe_" + this.getToolMaterialName().toLowerCase());
         }
 
         @Override
@@ -111,7 +111,7 @@ public class ItemToolHelper {
         @Override
         @SideOnly(Side.CLIENT)
         public void registerIcons(IIconRegistrar registrar) {
-            this.texture = registrar.registerIcon(modid + ":items/tool/shovel_" + this.getToolMaterialName());
+            this.texture = registrar.registerIcon(modid + ":items/tool/shovel_" + this.getToolMaterialName().toLowerCase());
         }
 
         @Override
@@ -135,7 +135,7 @@ public class ItemToolHelper {
         @Override
         @SideOnly(Side.CLIENT)
         public void registerIcons(IIconRegistrar registrar) {
-            this.texture = registrar.registerIcon(modid + ":items/tool/axe_" + this.getToolMaterialName());
+            this.texture = registrar.registerIcon(modid + ":items/tool/axe_" + this.getToolMaterialName().toLowerCase());
         }
 
         @Override
@@ -159,7 +159,7 @@ public class ItemToolHelper {
         @Override
         @SideOnly(Side.CLIENT)
         public void registerIcons(IIconRegistrar registrar) {
-            this.texture = registrar.registerIcon(modid + ":items/tool/hoe_" + this.theToolMaterial.name());
+            this.texture = registrar.registerIcon(modid + ":items/tool/hoe_" + this.theToolMaterial.name().toLowerCase());
         }
 
         @Override

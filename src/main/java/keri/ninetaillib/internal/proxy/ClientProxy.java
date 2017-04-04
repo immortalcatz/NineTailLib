@@ -2,6 +2,8 @@ package keri.ninetaillib.internal.proxy;
 
 import codechicken.lib.model.ModelRegistryHelper;
 import codechicken.lib.packet.PacketCustom;
+import codechicken.lib.render.CCModelState;
+import codechicken.lib.util.TransformUtils;
 import com.google.common.collect.Lists;
 import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.block.IMetaBlock;
@@ -21,7 +23,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -195,7 +197,16 @@ public class ClientProxy implements INineTailProxy {
     private void registerSpecialItemModel(Item item){
         IconRegistrar.INSTANCE.registerItem((IIconItem)item);
         ResourceLocation rl = item.getRegistryName();
-        CustomItemRenderer itemRenderer = new CustomItemRenderer(new DefaultItemRenderer());
+        CCModelState itemTransforms;
+
+        if(item instanceof ItemSword || item instanceof ItemPickaxe || item instanceof ItemSpade || item instanceof ItemAxe || item instanceof ItemHoe){
+            itemTransforms = TransformUtils.DEFAULT_TOOL;
+        }
+        else{
+            itemTransforms = TransformUtils.DEFAULT_ITEM;
+        }
+
+        CustomItemRenderer itemRenderer = new CustomItemRenderer(new DefaultItemRenderer(itemTransforms));
         ModelResourceLocation location = new ModelResourceLocation(rl, "inventory");
         ModelLoader.setCustomModelResourceLocation(item, 0, location);
         ModelRegistryHelper.registerItemRenderer(item, itemRenderer);
