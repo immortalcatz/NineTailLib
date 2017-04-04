@@ -1,5 +1,6 @@
 package keri.ninetaillib.item;
 
+import codechicken.lib.util.TransformUtils;
 import keri.ninetaillib.internal.NineTailLib;
 import keri.ninetaillib.render.DefaultItemRenderer;
 import keri.ninetaillib.render.IItemRenderingHandler;
@@ -179,7 +180,7 @@ public class ItemBase extends Item implements IIconItem {
     }
 
     public IItemRenderingHandler getRenderingHandler(){
-        return new DefaultItemRenderer();
+        return new DefaultItemRenderer(TransformUtils.DEFAULT_ITEM);
     }
 
     public String getModId(){
