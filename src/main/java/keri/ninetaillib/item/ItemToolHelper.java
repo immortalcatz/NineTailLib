@@ -125,7 +125,7 @@ public class ItemToolHelper {
     private class ItemAxeCustom extends ItemAxe implements IIconItem {
 
         public ItemAxeCustom(ToolMaterial material) {
-            super(material);
+            super(material, material.getDamageVsEntity(), material.getEfficiencyOnProperMaterial());
             register("axe_" + material.name(), this);
         }
 
