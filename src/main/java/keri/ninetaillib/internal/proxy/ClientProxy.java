@@ -13,6 +13,7 @@ import keri.ninetaillib.internal.client.handler.PlayerRenderHandler;
 import keri.ninetaillib.internal.network.NineTailLibCPH;
 import keri.ninetaillib.item.ItemBase;
 import keri.ninetaillib.render.*;
+import keri.ninetaillib.texture.IIconItem;
 import keri.ninetaillib.texture.IconRegistrar;
 import keri.ninetaillib.util.ClientUtils;
 import keri.ninetaillib.util.FluidStateMapper;
@@ -43,35 +44,18 @@ public class ClientProxy implements INineTailProxy {
         MinecraftForge.EVENT_BUS.register(IconRegistrar.INSTANCE);
         MinecraftForge.EVENT_BUS.register(new InventoryButtonHandler());
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-
-        this.blocksToHandle.forEach(block -> {
-            IconRegistrar.INSTANCE.registerBlock(block);
-            this.registerRenderingHandler(block, block.getRenderingHandler());
-
-            if(NineTailLib.CONFIG.enableBlockModelDebug){
-                NineTailLib.LOGGER.debug(block.getUnlocalizedName());
-            }
-        });
+        this.blocksToHandle.forEach(block -> this.registerBlock(block));
+        this.itemsToHandle.forEach(item -> this.handleItem(item));
+        this.fluidsToHandle.forEach(fluid -> this.registerFluidModel(fluid));
+        this.specialItemToHandle.forEach(item -> this.registerSpecialItemModel(item));
 
         if(NineTailLib.CONFIG.enableBlockModelDebug){
             NineTailLib.LOGGER.debug("Successfully loaded " + this.blocksToHandle.size() + " block models !");
         }
 
-        this.itemsToHandle.forEach(item -> {
-            IconRegistrar.INSTANCE.registerItem(item);
-            this.registerRenderingHandler(item, item.getRenderingHandler());
-
-            if(NineTailLib.CONFIG.enableItemModelDebug){
-                NineTailLib.LOGGER.debug(item.getUnlocalizedName());
-            }
-        });
-
         if(NineTailLib.CONFIG.enableItemModelDebug){
             NineTailLib.LOGGER.debug("Successfully loaded " + this.itemsToHandle.size() + " item models !");
         }
-
-        this.fluidsToHandle.forEach(fluid -> this.registerFluidModel(fluid));
-        this.specialItemToHandle.forEach(item -> this.registerSpecialItemModel(item));
     }
 
     @Override
@@ -112,15 +96,6 @@ public class ClientProxy implements INineTailProxy {
         renderer.addLayer(new PlayerRenderHandler());
         renderer = skinMap.get("slim");
         renderer.addLayer(new PlayerRenderHandler());
-    }
-
-    private void registerFluidModel(FluidBase fluid){
-        Block block = fluid.getBlock();
-        Item item = Item.getItemFromBlock(block);
-        FluidStateMapper mapper = new FluidStateMapper(fluid);
-        ModelLoader.registerItemVariants(item);
-        ModelLoader.setCustomStateMapper(block, mapper);
-        ModelLoader.setCustomMeshDefinition(item, mapper);
     }
 
     private void registerRenderingHandler(Block block, IBlockRenderingHandler renderer){
@@ -190,7 +165,35 @@ public class ClientProxy implements INineTailProxy {
         }
     }
 
+    private void registerBlock(BlockBase block){
+        IconRegistrar.INSTANCE.registerBlock(block);
+        this.registerRenderingHandler(block, block.getRenderingHandler());
+
+        if(NineTailLib.CONFIG.enableBlockModelDebug){
+            NineTailLib.LOGGER.debug(block.getUnlocalizedName());
+        }
+    }
+
+    private void registerItem(ItemBase item){
+        IconRegistrar.INSTANCE.registerItem(item);
+        this.registerRenderingHandler(item, item.getRenderingHandler());
+
+        if(NineTailLib.CONFIG.enableItemModelDebug){
+            NineTailLib.LOGGER.debug(item.getUnlocalizedName());
+        }
+    }
+
+    private void registerFluidModel(FluidBase fluid){
+        Block block = fluid.getBlock();
+        Item item = Item.getItemFromBlock(block);
+        FluidStateMapper mapper = new FluidStateMapper(fluid);
+        ModelLoader.registerItemVariants(item);
+        ModelLoader.setCustomStateMapper(block, mapper);
+        ModelLoader.setCustomMeshDefinition(item, mapper);
+    }
+
     private void registerSpecialItemModel(Item item){
+        IconRegistrar.INSTANCE.registerItem((IIconItem)item);
         ResourceLocation rl = item.getRegistryName();
         CustomItemRenderer itemRenderer = new CustomItemRenderer(new DefaultItemRenderer());
         ModelResourceLocation location = new ModelResourceLocation(rl, "inventory");
