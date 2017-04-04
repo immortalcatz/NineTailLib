@@ -45,7 +45,7 @@ public class ClientProxy implements INineTailProxy {
         MinecraftForge.EVENT_BUS.register(new InventoryButtonHandler());
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
         this.blocksToHandle.forEach(block -> this.registerBlock(block));
-        this.itemsToHandle.forEach(item -> this.handleItem(item));
+        this.itemsToHandle.forEach(item -> this.registerItem(item));
         this.fluidsToHandle.forEach(fluid -> this.registerFluidModel(fluid));
         this.specialItemToHandle.forEach(item -> this.registerSpecialItemModel(item));
 
