@@ -24,6 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.Loader;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -39,7 +40,7 @@ public class CommonUtils {
         if(material == Material.ANVIL){
             return SoundType.ANVIL;
         }
-        else if(material == Material.CARPET || material == Material.CLOTH) {
+        else if(material == Material.CARPET || material == Material.CLOTH || material == Material.CAKE) {
             return SoundType.CLOTH;
         }
         else if(material == Material.GLASS || material == Material.ICE) {
@@ -233,6 +234,10 @@ public class CommonUtils {
         }
 
         inventory.markDirty();
+    }
+
+    public static boolean isBaublesLoaded(){
+        return Loader.isModLoaded("Baubles");
     }
 
 }
