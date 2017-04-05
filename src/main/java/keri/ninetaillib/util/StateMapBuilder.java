@@ -56,7 +56,7 @@ public class StateMapBuilder {
 
     public void applyStateMap(){
         for(ModelResourceLocation location : this.locations){
-            ModelLoader.setCustomStateMapper(this.block, new ClientUtils.SimpleStateMapper(location));
+            ModelLoader.setCustomStateMapper(this.block, new SimpleStateMapper(location));
         }
     }
 

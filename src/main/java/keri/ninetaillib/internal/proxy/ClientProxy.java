@@ -17,8 +17,8 @@ import keri.ninetaillib.item.ItemBase;
 import keri.ninetaillib.render.*;
 import keri.ninetaillib.texture.IIconItem;
 import keri.ninetaillib.texture.IconRegistrar;
-import keri.ninetaillib.util.ClientUtils;
 import keri.ninetaillib.util.FluidStateMapper;
+import keri.ninetaillib.util.SimpleStateMapper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -119,7 +119,7 @@ public class ClientProxy implements INineTailProxy {
 
             for(int i = 0; i < iface.getSubNames().length; i++){
                 ModelResourceLocation location = new ModelResourceLocation(rl, "type=" + iface.getSubNames()[i]);
-                ModelLoader.setCustomStateMapper(blockBase, new ClientUtils.SimpleStateMapper(location));
+                ModelLoader.setCustomStateMapper(blockBase, new SimpleStateMapper(location));
                 ModelRegistryHelper.register(location, blockRenderer);
             }
 
@@ -131,7 +131,7 @@ public class ClientProxy implements INineTailProxy {
             CustomItemRenderer itemRenderer = new CustomItemRenderer(renderer);
             ModelResourceLocation location = new ModelResourceLocation(rl, "normal");
             ModelResourceLocation locationInventory = new ModelResourceLocation(rl, "inventory");
-            ModelLoader.setCustomStateMapper(blockBase, new ClientUtils.SimpleStateMapper(location));
+            ModelLoader.setCustomStateMapper(blockBase, new SimpleStateMapper(location));
             ModelRegistryHelper.register(location, blockRenderer);
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockBase), 0, locationInventory);
             ModelRegistryHelper.registerItemRenderer(Item.getItemFromBlock(blockBase), itemRenderer);
