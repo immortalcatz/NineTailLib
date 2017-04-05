@@ -79,10 +79,18 @@ public class ItemArmorHelper {
             String namePrefix = null;
 
             switch(this.getEquipmentSlot()){
-                case HEAD: namePrefix = "helmet_";
-                case CHEST: namePrefix = "chestplate_";
-                case LEGS: namePrefix = "leggings_";
-                case FEET: namePrefix = "boots_";
+                case HEAD:
+                    namePrefix = "helmet_";
+                    break;
+                case CHEST:
+                    namePrefix = "chestplate_";
+                    break;
+                case LEGS:
+                    namePrefix = "leggings_";
+                    break;
+                case FEET:
+                    namePrefix = "boots_";
+                    break;
             }
 
             String itemName = namePrefix + this.getArmorMaterial().getName().toLowerCase();
