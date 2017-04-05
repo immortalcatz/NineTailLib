@@ -143,16 +143,18 @@ public class ItemBase extends Item implements IIconItem {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegistrar registrar) {
-        if(this.getSubNames() != null){
-            this.texture = new TextureAtlasSprite[this.subNames.length];
+        if(!this.isModelRenderer()){
+            if(this.getSubNames() != null){
+                this.texture = new TextureAtlasSprite[this.subNames.length];
 
-            for(int i = 0; i < this.subNames.length; i++){
-                this.texture[i] = registrar.registerIcon(this.modid + ":items/" + this.itemName + "_" + this.subNames[i]);
+                for(int i = 0; i < this.subNames.length; i++){
+                    this.texture[i] = registrar.registerIcon(this.modid + ":items/" + this.itemName + "_" + this.subNames[i]);
+                }
             }
-        }
-        else{
-            this.texture = new TextureAtlasSprite[1];
-            this.texture[0] = registrar.registerIcon(this.modid + ":items/" + this.itemName);
+            else{
+                this.texture = new TextureAtlasSprite[1];
+                this.texture[0] = registrar.registerIcon(this.modid + ":items/" + this.itemName);
+            }
         }
     }
 
@@ -185,6 +187,11 @@ public class ItemBase extends Item implements IIconItem {
 
     public String getModId(){
         return this.modid;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public boolean isModelRenderer(){
+        return false;
     }
 
 }

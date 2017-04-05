@@ -202,6 +202,12 @@ public class ClientProxy implements INineTailProxy {
         if(item instanceof ItemSword || item instanceof ItemPickaxe || item instanceof ItemSpade || item instanceof ItemAxe || item instanceof ItemHoe){
             itemTransforms = TransformUtils.DEFAULT_TOOL;
         }
+        else if(item instanceof ItemBow){
+            itemTransforms = TransformUtils.DEFAULT_BOW;
+        }
+        else if(item instanceof ItemFishingRod){
+            itemTransforms = TransformUtils.DEFAULT_HANDHELD_ROD;
+        }
         else{
             itemTransforms = TransformUtils.DEFAULT_ITEM;
         }
