@@ -28,11 +28,13 @@ public class ItemArmorHelper {
 
     public Item createArmorPiece(ItemArmor.ArmorMaterial material, EntityEquipmentSlot type, IArmorModelProvider modelProvider){
         ItemArmorCustom item = new ItemArmorCustom(material, type, modelProvider);
+        item.setCreativeTab(this.getCreativeTab());
         return item;
     }
 
     public Item createArmorPiece(ItemArmor.ArmorMaterial material, EntityEquipmentSlot type){
         ItemArmorCustom item = new ItemArmorCustom(material, type);
+        item.setCreativeTab(this.getCreativeTab());
         return item;
     }
 
@@ -97,7 +99,6 @@ public class ItemArmorHelper {
             this.itemName = itemName;
             this.setRegistryName(modid, itemName);
             this.setUnlocalizedName(modid + "." + itemName);
-            this.setCreativeTab(getCreativeTab());
             NineTailLib.PROXY.handleItemSpecial(this);
             GameRegistry.register(this);
         }

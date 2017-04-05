@@ -61,10 +61,10 @@ public class NetworkHandler {
 
         switch(target){
             case CLIENT:
-                packet.sendToClients();
+                packet.compress().sendToClients();
                 break;
             case SERVER:
-                packet.sendToServer();
+                packet.compress().sendToServer();
                 break;
         }
     }
