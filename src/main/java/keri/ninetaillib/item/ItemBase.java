@@ -27,31 +27,20 @@ public class ItemBase extends Item implements IIconItem {
     public ItemBase(String modid, String itemName) {
         this.itemName = itemName;
         this.modid = modid;
-        this.setRegistryName(modid, itemName);
-        this.setUnlocalizedName(modid + "." + itemName);
-
-        if(super.getClass().isAnnotationPresent(HideInventory.class)){
-            HideInventory annotation = super.getClass().getAnnotation(HideInventory.class);
-
-            if(!annotation.onlySubtypes()){
-                this.setCreativeTab((CreativeTabs) null);
-            }
-        }
-        else{
-            this.setCreativeTab(this.getCreativeTab());
-        }
-
-        NineTailLib.PROXY.handleItem(this);
-        GameRegistry.register(this);
+        this.register();
     }
 
     public ItemBase(String modid, String itemName, String... subNames) {
         this.itemName = itemName;
         this.modid = modid;
         this.subNames = subNames;
-        this.setRegistryName(modid, itemName);
-        this.setUnlocalizedName(modid + "." + itemName);
         this.setHasSubtypes(true);
+        this.register();
+    }
+
+    private void register(){
+        this.setRegistryName(this.modid, this.itemName);
+        this.setUnlocalizedName(this.modid + "." + this.itemName);
 
         if(super.getClass().isAnnotationPresent(HideInventory.class)){
             HideInventory annotation = super.getClass().getAnnotation(HideInventory.class);
