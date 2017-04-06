@@ -7,13 +7,11 @@ import keri.ninetaillib.texture.IIconRegistrar;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -127,14 +125,6 @@ public class ItemArmorHelper {
             else{
                 return super.getArmorModel(entity, stack, slot, defaultModel);
             }
-        }
-
-        @Override
-        @SideOnly(Side.CLIENT)
-        public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type){
-            ResourceLocation texture1 = new ResourceLocation(modid, "textures/models/armor/" + this.getArmorMaterial().getName().toLowerCase() + "_layer_1.png");
-            ResourceLocation texture2 = new ResourceLocation(modid, "textures/models/armor/" + this.getArmorMaterial().getName().toLowerCase() + "_layer_2.png");
-            return this.armorType.getIndex() == 2 ? texture2.toString() : texture1.toString();
         }
 
     }
