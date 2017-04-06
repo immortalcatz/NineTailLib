@@ -132,8 +132,8 @@ public class ItemArmorHelper {
         @Override
         @SideOnly(Side.CLIENT)
         public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type){
-            ResourceLocation texture1 = new ResourceLocation(modid, this.itemName + "_1");
-            ResourceLocation texture2 = new ResourceLocation(modid, this.itemName + "_2");
+            ResourceLocation texture1 = new ResourceLocation(modid, "textures/models/armor/" + this.itemName + "_1");
+            ResourceLocation texture2 = new ResourceLocation(modid, "textures/models/armor/" + this.itemName + "_2");
             return this.armorType.getIndex() == 2 ? texture2.toString() : texture1.toString();
         }
 
