@@ -24,33 +24,33 @@ public class ItemArmorHelper {
         this.modid = modid;
     }
 
-    public Item createArmorPiece(ItemArmor.ArmorMaterial material, EntityEquipmentSlot type, IArmorModelProvider modelProvider){
-        ItemArmorCustom item = new ItemArmorCustom(material, type, modelProvider);
+    public Item createArmorPiece(String materialName, ItemArmor.ArmorMaterial material, EntityEquipmentSlot type, IArmorModelProvider modelProvider){
+        ItemArmorCustom item = new ItemArmorCustom(materialName, material, type, modelProvider);
         item.setCreativeTab(this.getCreativeTab());
         return item;
     }
 
-    public Item createArmorPiece(ItemArmor.ArmorMaterial material, EntityEquipmentSlot type){
-        ItemArmorCustom item = new ItemArmorCustom(material, type);
+    public Item createArmorPiece(String materialName, ItemArmor.ArmorMaterial material, EntityEquipmentSlot type){
+        ItemArmorCustom item = new ItemArmorCustom(materialName, material, type);
         item.setCreativeTab(this.getCreativeTab());
         return item;
     }
 
-    public Item[] createArmorSet(ItemArmor.ArmorMaterial material, IArmorModelProvider modelProvider){
+    public Item[] createArmorSet(String materialName, ItemArmor.ArmorMaterial material, IArmorModelProvider modelProvider){
         Item[] items = new Item[4];
-        items[0] = createArmorPiece(material, EntityEquipmentSlot.HEAD, modelProvider);
-        items[1] = createArmorPiece(material, EntityEquipmentSlot.CHEST, modelProvider);
-        items[2] = createArmorPiece(material, EntityEquipmentSlot.LEGS, modelProvider);
-        items[3] = createArmorPiece(material, EntityEquipmentSlot.FEET, modelProvider);
+        items[0] = createArmorPiece(materialName, material, EntityEquipmentSlot.HEAD, modelProvider);
+        items[1] = createArmorPiece(materialName, material, EntityEquipmentSlot.CHEST, modelProvider);
+        items[2] = createArmorPiece(materialName, material, EntityEquipmentSlot.LEGS, modelProvider);
+        items[3] = createArmorPiece(materialName, material, EntityEquipmentSlot.FEET, modelProvider);
         return items;
     }
 
-    public Item[] createArmorSet(ItemArmor.ArmorMaterial material){
+    public Item[] createArmorSet(String materialName, ItemArmor.ArmorMaterial material){
         Item[] items = new Item[4];
-        items[0] = createArmorPiece(material, EntityEquipmentSlot.HEAD);
-        items[1] = createArmorPiece(material, EntityEquipmentSlot.CHEST);
-        items[2] = createArmorPiece(material, EntityEquipmentSlot.LEGS);
-        items[3] = createArmorPiece(material, EntityEquipmentSlot.FEET);
+        items[0] = createArmorPiece(materialName, material, EntityEquipmentSlot.HEAD);
+        items[1] = createArmorPiece(materialName, material, EntityEquipmentSlot.CHEST);
+        items[2] = createArmorPiece(materialName, material, EntityEquipmentSlot.LEGS);
+        items[3] = createArmorPiece(materialName, material, EntityEquipmentSlot.FEET);
         return items;
     }
 
@@ -61,16 +61,19 @@ public class ItemArmorHelper {
     private class ItemArmorCustom extends ItemArmor implements IIconItem {
 
         private IArmorModelProvider modelProvider;
+        private String materialName;
         private String itemName;
 
-        public ItemArmorCustom(ArmorMaterial material, EntityEquipmentSlot slot){
+        public ItemArmorCustom(String materialName, ArmorMaterial material, EntityEquipmentSlot slot){
             super(material, 0, slot);
+            this.materialName = materialName;
             this.modelProvider = null;
             this.register();
         }
 
-        public ItemArmorCustom(ArmorMaterial material, EntityEquipmentSlot slot, IArmorModelProvider modelProvider){
+        public ItemArmorCustom(String materialName, ArmorMaterial material, EntityEquipmentSlot slot, IArmorModelProvider modelProvider){
             super(material, 0, slot);
+            this.materialName = materialName;
             this.modelProvider = modelProvider;
             this.register();
         }
@@ -93,7 +96,7 @@ public class ItemArmorHelper {
                     break;
             }
 
-            String itemName = namePrefix + this.getArmorMaterial().getName().toLowerCase();
+            String itemName = namePrefix + this.materialName;
             this.itemName = itemName;
             this.setRegistryName(modid, itemName);
             this.setUnlocalizedName(modid + "." + itemName);
