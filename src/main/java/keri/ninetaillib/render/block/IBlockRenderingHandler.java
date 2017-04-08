@@ -28,6 +28,8 @@ public interface IBlockRenderingHandler {
 
     default String getItemKey(ItemStack stack){ return null; }
 
-    default List<BakedQuad> getBakedQuads(IBlockState state, EnumFacing side, long rand){ return null; }
+    default List<BakedQuad> getBlockQuads(IBlockState state, EnumFacing side, long rand){ return null; }
+
+    default List<BakedQuad> getItemQuads(ItemStack stack, long rand){ return null; }
 
 }

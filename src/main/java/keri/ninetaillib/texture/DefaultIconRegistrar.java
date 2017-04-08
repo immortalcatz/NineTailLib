@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -20,6 +21,10 @@ public class DefaultIconRegistrar implements IIconRegistrar {
     private ArrayList<IIconItem> itemsToRegister = Lists.newArrayList();
     private Map<String, ResourceLocation> locationMap = Maps.newHashMap();
     private Map<String, TextureAtlasSprite> iconMap = Maps.newHashMap();
+
+    public void preInit(){
+        MinecraftForge.EVENT_BUS.register(this);
+    }
 
     @Override
     public TextureAtlasSprite registerIcon(String path){

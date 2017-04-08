@@ -132,8 +132,8 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                     List<BakedQuad> quads = Lists.newArrayList();
                     quads.addAll(buffer.bake());
 
-                    if(this.itemRenderer.getBakedQuads(stack, this.random.nextLong()) != null){
-                        quads.addAll(this.itemRenderer.getBakedQuads(stack, this.random.nextLong()));
+                    if(this.blockRenderer.getItemQuads(stack, 0) != null){
+                        quads.addAll(this.blockRenderer.getItemQuads(stack, this.random.nextLong()));
                     }
 
                     SimpleBakedModel model = new SimpleBakedModel(quads);
