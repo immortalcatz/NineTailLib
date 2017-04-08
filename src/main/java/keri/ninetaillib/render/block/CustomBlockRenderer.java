@@ -1,9 +1,11 @@
-package keri.ninetaillib.render;
+package keri.ninetaillib.render.block;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.buffer.BakingVertexBuffer;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import keri.ninetaillib.render.util.QuadRotator;
+import keri.ninetaillib.render.util.VertexUtils;
 import keri.ninetaillib.texture.IIconBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;

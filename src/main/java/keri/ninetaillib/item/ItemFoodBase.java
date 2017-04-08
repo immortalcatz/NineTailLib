@@ -1,6 +1,6 @@
 package keri.ninetaillib.item;
 
-import keri.ninetaillib.internal.NineTailLib;
+import keri.ninetaillib.render.registry.IRenderingRegistry;
 import keri.ninetaillib.texture.IIconItem;
 import keri.ninetaillib.texture.IIconRegistrar;
 import keri.ninetaillib.util.HideInventory;
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemFoodBase extends ItemFood implements IIconItem {
+public abstract class ItemFoodBase extends ItemFood implements IIconItem {
 
     @SideOnly(Side.CLIENT)
     private TextureAtlasSprite texture;
@@ -47,7 +47,7 @@ public class ItemFoodBase extends ItemFood implements IIconItem {
             this.setCreativeTab(this.getCreativeTab());
         }
 
-        NineTailLib.PROXY.handleItemSpecial(this);
+        this.getRenderingRegistry().handleItemSpecial(this);
         GameRegistry.register(this);
     }
 
@@ -75,5 +75,7 @@ public class ItemFoodBase extends ItemFood implements IIconItem {
     public String getInternalName(){
         return this.itemName;
     }
+
+    public abstract IRenderingRegistry getRenderingRegistry();
 
 }

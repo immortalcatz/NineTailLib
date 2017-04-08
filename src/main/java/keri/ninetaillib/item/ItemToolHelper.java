@@ -1,6 +1,6 @@
 package keri.ninetaillib.item;
 
-import keri.ninetaillib.internal.NineTailLib;
+import keri.ninetaillib.render.registry.IRenderingRegistry;
 import keri.ninetaillib.texture.IIconItem;
 import keri.ninetaillib.texture.IIconRegistrar;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemToolHelper {
+public abstract class ItemToolHelper {
 
     private String modid;
 
@@ -38,16 +38,28 @@ public class ItemToolHelper {
         return new ItemHoeCustom(material);
     }
 
+    public Item[] createToolset(Item.ToolMaterial material){
+        Item[] items = new Item[5];
+        items[0] = createSword(material);
+        items[1] = createPickaxe(material);
+        items[2] = createShovel(material);
+        items[3] = createAxe(material);
+        items[4] = createHoe(material);
+        return items;
+    }
+
     public CreativeTabs getCreativeTab(){
         return CreativeTabs.TOOLS;
     };
+
+    public abstract IRenderingRegistry getRenderingRegistry();
 
     private void register(String itemName, Item item){
         item.setRegistryName(this.modid, itemName);
         item.setUnlocalizedName(this.modid + "." + itemName);
         item.setCreativeTab(this.getCreativeTab());
         GameRegistry.register(item);
-        NineTailLib.PROXY.handleItemSpecial(item);
+        this.getRenderingRegistry().handleItemSpecial(item);
     }
 
     private class ItemSwordCustom extends ItemSword implements IIconItem {

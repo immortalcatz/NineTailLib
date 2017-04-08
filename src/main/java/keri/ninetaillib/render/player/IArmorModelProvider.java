@@ -1,4 +1,4 @@
-package keri.ninetaillib.render;
+package keri.ninetaillib.render.player;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.EntityLivingBase;

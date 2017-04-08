@@ -1,7 +1,7 @@
 package keri.ninetaillib.item;
 
-import keri.ninetaillib.internal.NineTailLib;
-import keri.ninetaillib.render.IArmorModelProvider;
+import keri.ninetaillib.render.player.IArmorModelProvider;
+import keri.ninetaillib.render.registry.IRenderingRegistry;
 import keri.ninetaillib.texture.IIconItem;
 import keri.ninetaillib.texture.IIconRegistrar;
 import net.minecraft.client.model.ModelBiped;
@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemArmorHelper {
+public abstract class ItemArmorHelper {
 
     private String modid;
 
@@ -25,13 +25,13 @@ public class ItemArmorHelper {
     }
 
     public Item createArmorPiece(String materialName, ItemArmor.ArmorMaterial material, EntityEquipmentSlot type, IArmorModelProvider modelProvider){
-        ItemArmorCustom item = new ItemArmorCustom(materialName, material, type, modelProvider);
+        ItemArmorCustom item = new ItemArmorCustom(materialName, material, type, modelProvider, this.getRenderingRegistry());
         item.setCreativeTab(this.getCreativeTab());
         return item;
     }
 
     public Item createArmorPiece(String materialName, ItemArmor.ArmorMaterial material, EntityEquipmentSlot type){
-        ItemArmorCustom item = new ItemArmorCustom(materialName, material, type);
+        ItemArmorCustom item = new ItemArmorCustom(materialName, material, type, this.getRenderingRegistry());
         item.setCreativeTab(this.getCreativeTab());
         return item;
     }
@@ -58,23 +58,28 @@ public class ItemArmorHelper {
         return CreativeTabs.COMBAT;
     }
 
+    public abstract IRenderingRegistry getRenderingRegistry();
+
     private class ItemArmorCustom extends ItemArmor implements IIconItem {
 
         private IArmorModelProvider modelProvider;
         private String materialName;
         private String itemName;
+        private IRenderingRegistry renderingRegistry;
 
-        public ItemArmorCustom(String materialName, ArmorMaterial material, EntityEquipmentSlot slot){
+        public ItemArmorCustom(String materialName, ArmorMaterial material, EntityEquipmentSlot slot, IRenderingRegistry renderingRegistry){
             super(material, 0, slot);
             this.materialName = materialName;
             this.modelProvider = null;
+            this.renderingRegistry = renderingRegistry;
             this.register();
         }
 
-        public ItemArmorCustom(String materialName, ArmorMaterial material, EntityEquipmentSlot slot, IArmorModelProvider modelProvider){
+        public ItemArmorCustom(String materialName, ArmorMaterial material, EntityEquipmentSlot slot, IArmorModelProvider modelProvider, IRenderingRegistry renderingRegistry){
             super(material, 0, slot);
             this.materialName = materialName;
             this.modelProvider = modelProvider;
+            this.renderingRegistry = renderingRegistry;
             this.register();
         }
 
@@ -100,7 +105,7 @@ public class ItemArmorHelper {
             this.itemName = itemName;
             this.setRegistryName(modid, itemName);
             this.setUnlocalizedName(modid + "." + itemName);
-            NineTailLib.PROXY.handleItemSpecial(this);
+            this.renderingRegistry.handleItemSpecial(this);
             GameRegistry.register(this);
         }
 

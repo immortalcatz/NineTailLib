@@ -1,9 +1,10 @@
 package keri.ninetaillib.item;
 
 import codechicken.lib.util.TransformUtils;
-import keri.ninetaillib.internal.NineTailLib;
-import keri.ninetaillib.render.DefaultItemRenderer;
-import keri.ninetaillib.render.IItemRenderingHandler;
+import keri.ninetaillib.render.item.DefaultItemRenderer;
+import keri.ninetaillib.render.item.IBaubleRenderingHandler;
+import keri.ninetaillib.render.item.IItemRenderingHandler;
+import keri.ninetaillib.render.registry.IRenderingRegistry;
 import keri.ninetaillib.texture.IIconItem;
 import keri.ninetaillib.texture.IIconRegistrar;
 import keri.ninetaillib.util.*;
@@ -18,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class ItemBase extends Item implements IIconItem {
+public abstract class ItemBase extends Item implements IIconItem {
 
     private String itemName;
     private String modid;
@@ -53,7 +54,7 @@ public class ItemBase extends Item implements IIconItem {
             this.setCreativeTab(this.getCreativeTab());
         }
 
-        NineTailLib.PROXY.handleItem(this);
+        this.getRenderingRegistry().handleItem(this);
         GameRegistry.register(this);
     }
 
@@ -174,13 +175,18 @@ public class ItemBase extends Item implements IIconItem {
         return new DefaultItemRenderer(TransformUtils.DEFAULT_ITEM);
     }
 
+    public IBaubleRenderingHandler getBaubleRenderingHandler(){
+        return null;
+    }
+
     public String getModId(){
         return this.modid;
     }
 
-    @SideOnly(Side.CLIENT)
     public boolean isModelRenderer(){
         return false;
     }
+
+    public abstract IRenderingRegistry getRenderingRegistry();
 
 }

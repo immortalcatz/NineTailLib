@@ -6,7 +6,6 @@ import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Vector3;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
-import keri.ninetaillib.fluid.FluidBase;
 import keri.ninetaillib.item.IGuiItem;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -22,8 +21,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Loader;
 import org.lwjgl.input.Keyboard;
 
@@ -180,11 +177,6 @@ public class CommonUtils {
 
     public static Color toAWT(ColourRGBA color){
         return new Color(color.rgba(), true);
-    }
-
-    public static Fluid makeFluid(String modid, String fluidName){
-        FluidBase fluid = new FluidBase(modid, fluidName);
-        return FluidRegistry.getFluid(fluid.getName());
     }
 
     public static void dropInventory(TileEntity tile) {

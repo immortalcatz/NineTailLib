@@ -1,4 +1,4 @@
-package keri.ninetaillib.render;
+package keri.ninetaillib.render.item;
 
 import net.minecraft.item.ItemStack;
 

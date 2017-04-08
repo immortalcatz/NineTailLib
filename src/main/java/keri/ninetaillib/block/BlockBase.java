@@ -1,9 +1,9 @@
 package keri.ninetaillib.block;
 
-import keri.ninetaillib.internal.NineTailLib;
 import keri.ninetaillib.item.ItemBlockBase;
-import keri.ninetaillib.render.DefaultBlockRenderer;
-import keri.ninetaillib.render.IBlockRenderingHandler;
+import keri.ninetaillib.render.block.DefaultBlockRenderer;
+import keri.ninetaillib.render.block.IBlockRenderingHandler;
+import keri.ninetaillib.render.registry.IRenderingRegistry;
 import keri.ninetaillib.texture.IIconBlock;
 import keri.ninetaillib.texture.IIconRegistrar;
 import keri.ninetaillib.tile.TileEntityInventory;
@@ -34,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlockBase<T extends TileEntity> extends Block implements ITileEntityProvider, IIconBlock {
+public abstract class BlockBase<T extends TileEntity> extends Block implements ITileEntityProvider, IIconBlock {
 
     private String internalName;
     private String modid;
@@ -72,7 +72,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
             }
         }
 
-        NineTailLib.PROXY.handleBlock(this);
+        this.getRenderingRegistry().handleBlock(this);
         GameRegistry.register(this);
         GameRegistry.register(this.getItemBlock().setRegistryName(this.getRegistryName()));
     }
@@ -256,5 +256,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     public String getModId(){
         return this.modid;
     }
+
+    public abstract IRenderingRegistry getRenderingRegistry();
 
 }

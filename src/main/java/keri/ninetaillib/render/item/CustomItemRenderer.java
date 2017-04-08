@@ -1,4 +1,4 @@
-package keri.ninetaillib.render;
+package keri.ninetaillib.render.item;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.buffer.BakingVertexBuffer;
@@ -6,6 +6,8 @@ import codechicken.lib.render.item.IItemRenderer;
 import codechicken.lib.util.TransformUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import keri.ninetaillib.render.block.IBlockRenderingHandler;
+import keri.ninetaillib.render.util.SimpleBakedModel;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;

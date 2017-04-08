@@ -1,11 +1,11 @@
 package keri.ninetaillib.fluid;
 
-import keri.ninetaillib.internal.NineTailLib;
+import keri.ninetaillib.render.registry.IRenderingRegistry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
-public class FluidBase extends Fluid {
+public abstract class FluidBase extends Fluid {
 
     private String modid;
 
@@ -23,7 +23,7 @@ public class FluidBase extends Fluid {
     private void register(){
         FluidRegistry.registerFluid(this);
         FluidRegistry.addBucketForFluid(this);
-        NineTailLib.PROXY.handleFluid(this);
+        this.getRenderingRegistry().handleFluid(this);
     }
 
     @Override
@@ -34,5 +34,7 @@ public class FluidBase extends Fluid {
     public String getModId(){
         return this.modid;
     }
+
+    public abstract IRenderingRegistry getRenderingRegistry();
 
 }

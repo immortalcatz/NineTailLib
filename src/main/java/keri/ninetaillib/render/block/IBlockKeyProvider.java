@@ -1,4 +1,4 @@
-package keri.ninetaillib.render;
+package keri.ninetaillib.render.block;
 
 import net.minecraftforge.common.property.IExtendedBlockState;
 

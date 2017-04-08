@@ -1,4 +1,4 @@
-package keri.ninetaillib.render;
+package keri.ninetaillib.render.block;
 
 import codechicken.lib.render.CCModel;
 import codechicken.lib.render.CCRenderState;

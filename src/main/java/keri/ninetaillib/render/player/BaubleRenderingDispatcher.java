@@ -1,8 +1,8 @@
-package keri.ninetaillib.internal.client.render;
+package keri.ninetaillib.render.player;
 
 import baubles.api.BaublesApi;
 import baubles.api.render.IRenderBauble;
-import keri.ninetaillib.render.BaubleRenderingRegistry;
+import keri.ninetaillib.render.item.IBaubleRenderingHandler;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -11,12 +11,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
 @SideOnly(Side.CLIENT)
 public class BaubleRenderingDispatcher {
 
-    public static final BaubleRenderingDispatcher INSTANCE = new BaubleRenderingDispatcher();
+    private List<IBaubleRenderingHandler> baubleRenderingHandlers;
+
+    public BaubleRenderingDispatcher(List<IBaubleRenderingHandler> baubleRenderingHandlers){
+        this.baubleRenderingHandlers = baubleRenderingHandlers;
+    }
 
     public void disptatchRenderers(EntityPlayer player, float[] playerData, float partialTicks){
         if(player.getActivePotionEffect(MobEffects.INVISIBILITY) != null){
@@ -26,7 +31,7 @@ public class BaubleRenderingDispatcher {
         @SuppressWarnings("deprecation")
         IInventory inventory = BaublesApi.getBaubles(player);
 
-        BaubleRenderingRegistry.INSTANCE.getRenderingHandlers().forEach(handler -> {
+        this.baubleRenderingHandlers.forEach(handler -> {
             IntStream.range(0, inventory.getSizeInventory()).forEach(slot -> {
                 ItemStack stack = inventory.getStackInSlot(slot);
 
