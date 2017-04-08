@@ -54,49 +54,42 @@ public class CustomBlockRenderer implements IBakedModel {
                     List<BakedQuad> quads = Lists.newArrayList();
                     quads.addAll(buffer.bake());
 
-                    if(this.blockRenderer instanceof IBlockQuadProvider){
-                        IBlockQuadProvider provider = (IBlockQuadProvider)this.blockRenderer;
-                        quads.addAll(provider.getQuads(state, side, rand));
+                    if(this.blockRenderer.getBakedQuads(state, side, rand) != null){
+                        quads.addAll(this.blockRenderer.getBakedQuads(state, side, rand));
                     }
 
-                    if(this.blockRenderer instanceof IQuadRotator){
-                        IQuadRotator rotator = (IQuadRotator)this.blockRenderer;
-                        QuadRotator quadRotator = new QuadRotator();
-                        EnumFacing newForward = EnumFacing.NORTH;
-                        EnumFacing newUp = EnumFacing.UP;
+                    QuadRotator quadRotator = new QuadRotator();
+                    EnumFacing newForward = EnumFacing.NORTH;
+                    EnumFacing newUp = EnumFacing.UP;
 
-                        switch(rotator.getRotation(state)){
-                            case DOWN:
-                                newForward = EnumFacing.NORTH;
-                                newUp = EnumFacing.DOWN;
-                                break;
-                            case UP:
-                                newForward = EnumFacing.NORTH;
-                                newUp = EnumFacing.UP;
-                                break;
-                            case NORTH:
-                                newForward = EnumFacing.NORTH;
-                                newUp = EnumFacing.UP;
-                                break;
-                            case EAST:
-                                newForward = EnumFacing.EAST;
-                                newUp = EnumFacing.UP;
-                                break;
-                            case SOUTH:
-                                newForward = EnumFacing.SOUTH;
-                                newUp = EnumFacing.UP;
-                                break;
-                            case WEST:
-                                newForward = EnumFacing.WEST;
-                                newUp = EnumFacing.UP;
-                                break;
-                        }
+                    switch(this.blockRenderer.getRotation(state)){
+                        case DOWN:
+                            newForward = EnumFacing.NORTH;
+                            newUp = EnumFacing.DOWN;
+                            break;
+                        case UP:
+                            newForward = EnumFacing.NORTH;
+                            newUp = EnumFacing.UP;
+                            break;
+                        case NORTH:
+                            newForward = EnumFacing.NORTH;
+                            newUp = EnumFacing.UP;
+                            break;
+                        case EAST:
+                            newForward = EnumFacing.EAST;
+                            newUp = EnumFacing.UP;
+                            break;
+                        case SOUTH:
+                            newForward = EnumFacing.SOUTH;
+                            newUp = EnumFacing.UP;
+                            break;
+                        case WEST:
+                            newForward = EnumFacing.WEST;
+                            newUp = EnumFacing.UP;
+                            break;
+                    }
 
-                        map.put(layer, quadRotator.rotateQuads(quads, newForward, newUp));
-                    }
-                    else{
-                        map.put(layer, quads);
-                    }
+                    map.put(layer, quadRotator.rotateQuads(quads, newForward, newUp));
                 }
 
                 this.quadCache.put(this.getCacheKey(state), map);
@@ -124,10 +117,11 @@ public class CustomBlockRenderer implements IBakedModel {
         builder.append(':');
         builder.append(state.getBlock().getMetaFromState(state));
 
-        if(this.blockRenderer instanceof IBlockKeyProvider && state instanceof IExtendedBlockState){
-            IBlockKeyProvider provider = (IBlockKeyProvider)this.blockRenderer;
-            builder.append(':');
-            builder.append(provider.getExtendedBlockKey((IExtendedBlockState)state));
+        if(state instanceof IExtendedBlockState){
+            if(this.blockRenderer.getBlockKey((IExtendedBlockState)state) != null){
+                builder.append(':');
+                builder.append(this.blockRenderer.getBlockKey((IExtendedBlockState)state));
+            }
         }
 
         return builder.toString();

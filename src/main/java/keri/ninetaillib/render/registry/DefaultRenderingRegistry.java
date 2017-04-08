@@ -4,11 +4,11 @@ import baubles.api.IBauble;
 import codechicken.lib.model.ModelRegistryHelper;
 import codechicken.lib.render.CCModelState;
 import codechicken.lib.util.TransformUtils;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.block.IMetaBlock;
 import keri.ninetaillib.fluid.FluidBase;
-import keri.ninetaillib.internal.NineTailLib;
 import keri.ninetaillib.item.ItemBase;
 import keri.ninetaillib.render.block.CustomBlockRenderer;
 import keri.ninetaillib.render.block.IBlockRenderingHandler;
@@ -45,25 +45,45 @@ public class DefaultRenderingRegistry implements IRenderingRegistry {
     private Map<String, List<IBaubleRenderingHandler>> baubleRenderingHandlers = Maps.newHashMap();
 
     public void preInit(String modid){
-        this.blocksToHandle.get(modid).forEach(block -> this.registerBlock(block));
-        this.itemsToHandle.get(modid).forEach(item -> this.registerItem(item));
-        this.fluidsToHandle.get(modid).forEach(fluid -> this.registerFluidModel(fluid));
-        this.specialItemToHandle.get(modid).forEach(item -> this.registerSpecialItemModel(item));
+        if(this.blocksToHandle.containsKey(modid)){
+            this.blocksToHandle.get(modid).forEach(block -> this.registerBlock(block));
+        }
+
+        if(this.itemsToHandle.containsKey(modid)){
+            this.itemsToHandle.get(modid).forEach(item -> this.registerItem(item));
+        }
+
+        if(this.fluidsToHandle.containsKey(modid)){
+            this.fluidsToHandle.get(modid).forEach(fluid -> this.registerFluidModel(fluid));
+        }
+
+        if(this.specialItemToHandle.containsKey(modid)){
+            this.specialItemToHandle.get(modid).forEach(item -> this.registerSpecialItemModel(item));
+        }
     }
 
     public void init(String modid){
-        Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
-        RenderPlayer renderer = null;
-        renderer = skinMap.get("default");
-        renderer.addLayer(new PlayerRenderHandler(this.baubleRenderingHandlers.get(modid)));
-        renderer = skinMap.get("slim");
-        renderer.addLayer(new PlayerRenderHandler(this.baubleRenderingHandlers.get(modid)));
+        if(this.baubleRenderingHandlers.containsKey(modid)){
+            Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
+            RenderPlayer renderer = null;
+            renderer = skinMap.get("default");
+            renderer.addLayer(new PlayerRenderHandler(this.baubleRenderingHandlers.get(modid)));
+            renderer = skinMap.get("slim");
+            renderer.addLayer(new PlayerRenderHandler(this.baubleRenderingHandlers.get(modid)));
+        }
     }
 
     @Override
-    public void handleBlock(BlockBase block) {
+    public void handleBlock(BlockBase block){
         if(block != null){
-            this.blocksToHandle.get(block.getModId()).add(block);
+            if(this.blocksToHandle.containsKey(block.getModId())){
+                this.blocksToHandle.get(block.getModId()).add(block);
+            }
+            else{
+                List<BlockBase> list = Lists.newArrayList();
+                list.add(block);
+                this.blocksToHandle.put(block.getModId(), list);
+            }
         }
         else{
             throw new IllegalArgumentException("Block cannot be null !");
@@ -71,12 +91,26 @@ public class DefaultRenderingRegistry implements IRenderingRegistry {
     }
 
     @Override
-    public void handleItem(ItemBase item) {
+    public void handleItem(ItemBase item){
         if(item != null){
-            this.itemsToHandle.get(item.getModId()).add(item);
+            if(this.itemsToHandle.containsKey(item.getModId())){
+                this.itemsToHandle.get(item.getModId()).add(item);
+            }
+            else{
+                List<ItemBase> list = Lists.newArrayList();
+                list.add(item);
+                this.itemsToHandle.put(item.getModId(), list);
+            }
 
             if(item.getBaubleRenderingHandler() != null && item instanceof IBauble){
-                this.baubleRenderingHandlers.get(item.getModId()).add(item.getBaubleRenderingHandler());
+                if(this.baubleRenderingHandlers.containsKey(item.getModId())){
+                    this.baubleRenderingHandlers.get(item.getModId()).add(item.getBaubleRenderingHandler());
+                }
+                else{
+                    List<IBaubleRenderingHandler> list = Lists.newArrayList();
+                    list.add(item.getBaubleRenderingHandler());
+                    this.baubleRenderingHandlers.put(item.getModId(), list);
+                }
             }
         }
         else{
@@ -85,9 +119,16 @@ public class DefaultRenderingRegistry implements IRenderingRegistry {
     }
 
     @Override
-    public void handleFluid(FluidBase fluid) {
+    public void handleFluid(FluidBase fluid){
         if(fluid != null){
-            this.fluidsToHandle.get(fluid.getModId()).add(fluid);
+            if(this.fluidsToHandle.containsKey(fluid.getModId())){
+                this.fluidsToHandle.get(fluid.getModId()).add(fluid);
+            }
+            else{
+                List<FluidBase> list = Lists.newArrayList();
+                list.add(fluid);
+                this.fluidsToHandle.put(fluid.getModId(), list);
+            }
         }
         else{
             throw new IllegalArgumentException("Fluid cannot be null !");
@@ -95,9 +136,16 @@ public class DefaultRenderingRegistry implements IRenderingRegistry {
     }
 
     @Override
-    public void handleItemSpecial(Item item) {
+    public void handleItemSpecial(Item item){
         if(item != null){
-            this.specialItemToHandle.get(item.getRegistryName().getResourceDomain()).add(item);
+            if(this.specialItemToHandle.containsKey(item.getRegistryName().getResourceDomain())){
+                this.specialItemToHandle.get(item.getRegistryName().getResourceDomain()).add(item);
+            }
+            else{
+                List<Item> list = Lists.newArrayList();
+                list.add(item);
+                this.specialItemToHandle.put(item.getRegistryName().getResourceDomain(), list);
+            }
         }
         else{
             throw new IllegalArgumentException("Item cannot be null !");
@@ -174,19 +222,11 @@ public class DefaultRenderingRegistry implements IRenderingRegistry {
     private void registerBlock(BlockBase block){
         IconRegistrar.INSTANCE.registerBlock(block);
         this.registerRenderingHandler(block, block.getRenderingHandler());
-
-        if(NineTailLib.CONFIG.enableBlockModelDebug){
-            NineTailLib.LOGGER.debug(block.getUnlocalizedName());
-        }
     }
 
     private void registerItem(ItemBase item){
         IconRegistrar.INSTANCE.registerItem(item);
         this.registerRenderingHandler(item, item.getRenderingHandler());
-
-        if(NineTailLib.CONFIG.enableItemModelDebug){
-            NineTailLib.LOGGER.debug(item.getUnlocalizedName());
-        }
     }
 
     private void registerFluidModel(FluidBase fluid){
