@@ -4,7 +4,7 @@ import baubles.api.IBauble;
 import codechicken.lib.model.ModelRegistryHelper;
 import codechicken.lib.render.CCModelState;
 import codechicken.lib.util.TransformUtils;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.block.IMetaBlock;
 import keri.ninetaillib.fluid.FluidBase;
@@ -31,38 +31,39 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class DefaultRenderingRegistry implements IRenderingRegistry {
 
-    private ArrayList<BlockBase> blocksToHandle = Lists.newArrayList();
-    private ArrayList<ItemBase> itemsToHandle = Lists.newArrayList();
-    private ArrayList<FluidBase> fluidsToHandle = Lists.newArrayList();
-    private ArrayList<Item> specialItemToHandle = Lists.newArrayList();
-    private ArrayList<IBaubleRenderingHandler> baubleRenderingHandlers = Lists.newArrayList();
+    public static final DefaultRenderingRegistry INSTANCE = new DefaultRenderingRegistry();
+    private Map<String, List<BlockBase>> blocksToHandle = Maps.newHashMap();
+    private Map<String, List<ItemBase>> itemsToHandle = Maps.newHashMap();
+    private Map<String, List<FluidBase>> fluidsToHandle = Maps.newHashMap();
+    private Map<String, List<Item>> specialItemToHandle = Maps.newHashMap();
+    private Map<String, List<IBaubleRenderingHandler>> baubleRenderingHandlers = Maps.newHashMap();
 
-    public void preInit(){
-        this.blocksToHandle.forEach(block -> this.registerBlock(block));
-        this.itemsToHandle.forEach(item -> this.registerItem(item));
-        this.fluidsToHandle.forEach(fluid -> this.registerFluidModel(fluid));
-        this.specialItemToHandle.forEach(item -> this.registerSpecialItemModel(item));
+    public void preInit(String modid){
+        this.blocksToHandle.get(modid).forEach(block -> this.registerBlock(block));
+        this.itemsToHandle.get(modid).forEach(item -> this.registerItem(item));
+        this.fluidsToHandle.get(modid).forEach(fluid -> this.registerFluidModel(fluid));
+        this.specialItemToHandle.get(modid).forEach(item -> this.registerSpecialItemModel(item));
     }
 
-    public void init(){
+    public void init(String modid){
         Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
         RenderPlayer renderer = null;
         renderer = skinMap.get("default");
-        renderer.addLayer(new PlayerRenderHandler(this.baubleRenderingHandlers));
+        renderer.addLayer(new PlayerRenderHandler(this.baubleRenderingHandlers.get(modid)));
         renderer = skinMap.get("slim");
-        renderer.addLayer(new PlayerRenderHandler(this.baubleRenderingHandlers));
+        renderer.addLayer(new PlayerRenderHandler(this.baubleRenderingHandlers.get(modid)));
     }
 
     @Override
     public void handleBlock(BlockBase block) {
         if(block != null){
-            this.blocksToHandle.add(block);
+            this.blocksToHandle.get(block.getModId()).add(block);
         }
         else{
             throw new IllegalArgumentException("Block cannot be null !");
@@ -72,10 +73,10 @@ public class DefaultRenderingRegistry implements IRenderingRegistry {
     @Override
     public void handleItem(ItemBase item) {
         if(item != null){
-            this.itemsToHandle.add(item);
+            this.itemsToHandle.get(item.getModId()).add(item);
 
             if(item.getBaubleRenderingHandler() != null && item instanceof IBauble){
-                this.baubleRenderingHandlers.add(item.getBaubleRenderingHandler());
+                this.baubleRenderingHandlers.get(item.getModId()).add(item.getBaubleRenderingHandler());
             }
         }
         else{
@@ -86,7 +87,7 @@ public class DefaultRenderingRegistry implements IRenderingRegistry {
     @Override
     public void handleFluid(FluidBase fluid) {
         if(fluid != null){
-            this.fluidsToHandle.add(fluid);
+            this.fluidsToHandle.get(fluid.getModId()).add(fluid);
         }
         else{
             throw new IllegalArgumentException("Fluid cannot be null !");
@@ -96,7 +97,7 @@ public class DefaultRenderingRegistry implements IRenderingRegistry {
     @Override
     public void handleItemSpecial(Item item) {
         if(item != null){
-            this.specialItemToHandle.add(item);
+            this.specialItemToHandle.get(item.getRegistryName().getResourceDomain()).add(item);
         }
         else{
             throw new IllegalArgumentException("Item cannot be null !");
