@@ -54,8 +54,8 @@ public class CustomBlockRenderer implements IBakedModel {
                     List<BakedQuad> quads = Lists.newArrayList();
                     quads.addAll(buffer.bake());
 
-                    if(this.blockRenderer.getBakedQuads(state, side, rand) != null){
-                        quads.addAll(this.blockRenderer.getBakedQuads(state, side, rand));
+                    if(this.blockRenderer.getBlockQuads(state, side, rand) != null){
+                        quads.addAll(this.blockRenderer.getBlockQuads(state, side, rand));
                     }
 
                     QuadRotator quadRotator = new QuadRotator();
