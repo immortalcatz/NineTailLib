@@ -1,12 +1,14 @@
 package keri.ninetaillib.render.item;
 
 import codechicken.lib.render.CCRenderState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.vecmath.Matrix4f;
+import java.util.List;
 
 public interface IItemRenderingHandler {
 
@@ -14,8 +16,12 @@ public interface IItemRenderingHandler {
 
     Pair<? extends IBakedModel, Matrix4f> handlePerspective(IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType);
 
-    boolean useRenderCache();
+    default boolean useRenderCache(){ return true; };
 
-    boolean useStandardItemLighting();
+    default boolean useStandardItemLighting(){ return true; };
+
+    default List<BakedQuad> getBakedQuads(ItemStack stack, long rand){ return null; };
+
+    default String getItemKey(ItemStack stack){ return null; }
 
 }

@@ -62,9 +62,8 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                     List<BakedQuad> quads = Lists.newArrayList();
                     quads.addAll(buffer.bake());
 
-                    if(this.itemRenderer instanceof IItemQuadProvider){
-                        IItemQuadProvider provider = (IItemQuadProvider)this.itemRenderer;
-                        quads.addAll(provider.getQuads(stack, this.random.nextLong()));
+                    if(this.itemRenderer.getBakedQuads(stack, this.random.nextLong()) != null){
+                        quads.addAll(this.itemRenderer.getBakedQuads(stack, this.random.nextLong()));
                     }
 
                     SimpleBakedModel model = new SimpleBakedModel(quads);
@@ -133,9 +132,8 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                     List<BakedQuad> quads = Lists.newArrayList();
                     quads.addAll(buffer.bake());
 
-                    if(this.itemRenderer instanceof IItemQuadProvider){
-                        IItemQuadProvider provider = (IItemQuadProvider)this.itemRenderer;
-                        quads.addAll(provider.getQuads(stack, this.random.nextLong()));
+                    if(this.itemRenderer.getBakedQuads(stack, this.random.nextLong()) != null){
+                        quads.addAll(this.itemRenderer.getBakedQuads(stack, this.random.nextLong()));
                     }
 
                     SimpleBakedModel model = new SimpleBakedModel(quads);
@@ -177,15 +175,14 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
         builder.append(':');
         builder.append(stack.getMetadata());
 
-        if(this.blockRenderer != null && this.blockRenderer instanceof IItemKeyProvider){
-            IItemKeyProvider provider = (IItemKeyProvider)this.blockRenderer;
+        if(this.blockRenderer != null && this.blockRenderer.getItemKey(stack) != null){
             builder.append(':');
-            builder.append(provider.getExtendedItemKey(stack));
+            builder.append(this.blockRenderer.getItemKey(stack));
         }
-        if(this.itemRenderer != null && this.itemRenderer instanceof IItemKeyProvider){
-            IItemKeyProvider provider = (IItemKeyProvider)this.itemRenderer;
+
+        if(this.itemRenderer != null && this.itemRenderer.getItemKey(stack) != null){
             builder.append(':');
-            builder.append(provider.getExtendedItemKey(stack));
+            builder.append(this.itemRenderer.getItemKey(stack));
         }
 
         return builder.toString();

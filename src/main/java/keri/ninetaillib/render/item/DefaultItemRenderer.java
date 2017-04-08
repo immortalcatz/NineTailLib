@@ -25,7 +25,7 @@ import javax.vecmath.Matrix4f;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class DefaultItemRenderer implements IItemRenderingHandler, IItemQuadProvider {
+public class DefaultItemRenderer implements IItemRenderingHandler {
 
     private CCModelState itemTransforms;
 
@@ -34,12 +34,10 @@ public class DefaultItemRenderer implements IItemRenderingHandler, IItemQuadProv
     }
 
     @Override
-    public void renderItem(CCRenderState renderState, ItemStack stack, long rand) {
-
-    }
+    public void renderItem(CCRenderState renderState, ItemStack stack, long rand){}
 
     @Override
-    public List<BakedQuad> getQuads(ItemStack stack, long random){
+    public List<BakedQuad> getBakedQuads(ItemStack stack, long random){
         Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
             public TextureAtlasSprite apply(ResourceLocation input) {
                 return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(input.toString());
@@ -56,11 +54,6 @@ public class DefaultItemRenderer implements IItemRenderingHandler, IItemQuadProv
     @Override
     public Pair<? extends IBakedModel, Matrix4f> handlePerspective(IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType) {
         return IPerspectiveAwareModel.MapWrapper.handlePerspective(model, this.itemTransforms, cameraTransformType);
-    }
-
-    @Override
-    public boolean useRenderCache() {
-        return true;
     }
 
     @Override

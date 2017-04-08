@@ -18,7 +18,7 @@ import keri.ninetaillib.render.item.IBaubleRenderingHandler;
 import keri.ninetaillib.render.item.IItemRenderingHandler;
 import keri.ninetaillib.render.player.PlayerRenderHandler;
 import keri.ninetaillib.texture.IIconItem;
-import keri.ninetaillib.texture.IconRegistrar;
+import keri.ninetaillib.texture.IIconRegistrar;
 import keri.ninetaillib.util.FluidStateMapper;
 import keri.ninetaillib.util.SimpleStateMapper;
 import net.minecraft.block.Block;
@@ -35,54 +35,53 @@ import java.util.List;
 import java.util.Map;
 
 @SideOnly(Side.CLIENT)
-public class DefaultRenderingRegistry implements IRenderingRegistry {
+public abstract class SimpleRenderingRegistry implements IRenderingRegistry {
 
-    public static final DefaultRenderingRegistry INSTANCE = new DefaultRenderingRegistry();
     private Map<String, List<BlockBase>> blocksToHandle = Maps.newHashMap();
     private Map<String, List<ItemBase>> itemsToHandle = Maps.newHashMap();
     private Map<String, List<FluidBase>> fluidsToHandle = Maps.newHashMap();
     private Map<String, List<Item>> specialItemToHandle = Maps.newHashMap();
     private Map<String, List<IBaubleRenderingHandler>> baubleRenderingHandlers = Maps.newHashMap();
 
-    public void preInit(String modid){
-        if(this.blocksToHandle.containsKey(modid)){
-            this.blocksToHandle.get(modid).forEach(block -> this.registerBlock(block));
+    public void preInit(){
+        if(this.blocksToHandle.containsKey(this.getModid())){
+            this.blocksToHandle.get(this.getModid()).forEach(block -> this.registerBlock(block));
         }
 
-        if(this.itemsToHandle.containsKey(modid)){
-            this.itemsToHandle.get(modid).forEach(item -> this.registerItem(item));
+        if(this.itemsToHandle.containsKey(this.getModid())){
+            this.itemsToHandle.get(this.getModid()).forEach(item -> this.registerItem(item));
         }
 
-        if(this.fluidsToHandle.containsKey(modid)){
-            this.fluidsToHandle.get(modid).forEach(fluid -> this.registerFluidModel(fluid));
+        if(this.fluidsToHandle.containsKey(this.getModid())){
+            this.fluidsToHandle.get(this.getModid()).forEach(fluid -> this.registerFluidModel(fluid));
         }
 
-        if(this.specialItemToHandle.containsKey(modid)){
-            this.specialItemToHandle.get(modid).forEach(item -> this.registerSpecialItemModel(item));
+        if(this.specialItemToHandle.containsKey(this.getModid())){
+            this.specialItemToHandle.get(this.getModid()).forEach(item -> this.registerSpecialItemModel(item));
         }
     }
 
-    public void init(String modid){
-        if(this.baubleRenderingHandlers.containsKey(modid)){
+    public void init(){
+        if(this.baubleRenderingHandlers.containsKey(this.getModid())){
             Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
             RenderPlayer renderer = null;
             renderer = skinMap.get("default");
-            renderer.addLayer(new PlayerRenderHandler(this.baubleRenderingHandlers.get(modid)));
+            renderer.addLayer(new PlayerRenderHandler(this.baubleRenderingHandlers.get(this.getModid())));
             renderer = skinMap.get("slim");
-            renderer.addLayer(new PlayerRenderHandler(this.baubleRenderingHandlers.get(modid)));
+            renderer.addLayer(new PlayerRenderHandler(this.baubleRenderingHandlers.get(this.getModid())));
         }
     }
 
     @Override
     public void handleBlock(BlockBase block){
         if(block != null){
-            if(this.blocksToHandle.containsKey(block.getModId())){
-                this.blocksToHandle.get(block.getModId()).add(block);
+            if(this.blocksToHandle.containsKey(this.getModid())){
+                this.blocksToHandle.get(this.getModid()).add(block);
             }
             else{
                 List<BlockBase> list = Lists.newArrayList();
                 list.add(block);
-                this.blocksToHandle.put(block.getModId(), list);
+                this.blocksToHandle.put(this.getModid(), list);
             }
         }
         else{
@@ -93,23 +92,23 @@ public class DefaultRenderingRegistry implements IRenderingRegistry {
     @Override
     public void handleItem(ItemBase item){
         if(item != null){
-            if(this.itemsToHandle.containsKey(item.getModId())){
-                this.itemsToHandle.get(item.getModId()).add(item);
+            if(this.itemsToHandle.containsKey(this.getModid())){
+                this.itemsToHandle.get(this.getModid()).add(item);
             }
             else{
                 List<ItemBase> list = Lists.newArrayList();
                 list.add(item);
-                this.itemsToHandle.put(item.getModId(), list);
+                this.itemsToHandle.put(this.getModid(), list);
             }
 
             if(item.getBaubleRenderingHandler() != null && item instanceof IBauble){
-                if(this.baubleRenderingHandlers.containsKey(item.getModId())){
-                    this.baubleRenderingHandlers.get(item.getModId()).add(item.getBaubleRenderingHandler());
+                if(this.baubleRenderingHandlers.containsKey(this.getModid())){
+                    this.baubleRenderingHandlers.get(this.getModid()).add(item.getBaubleRenderingHandler());
                 }
                 else{
                     List<IBaubleRenderingHandler> list = Lists.newArrayList();
                     list.add(item.getBaubleRenderingHandler());
-                    this.baubleRenderingHandlers.put(item.getModId(), list);
+                    this.baubleRenderingHandlers.put(this.getModid(), list);
                 }
             }
         }
@@ -121,13 +120,13 @@ public class DefaultRenderingRegistry implements IRenderingRegistry {
     @Override
     public void handleFluid(FluidBase fluid){
         if(fluid != null){
-            if(this.fluidsToHandle.containsKey(fluid.getModId())){
-                this.fluidsToHandle.get(fluid.getModId()).add(fluid);
+            if(this.fluidsToHandle.containsKey(this.getModid())){
+                this.fluidsToHandle.get(this.getModid()).add(fluid);
             }
             else{
                 List<FluidBase> list = Lists.newArrayList();
                 list.add(fluid);
-                this.fluidsToHandle.put(fluid.getModId(), list);
+                this.fluidsToHandle.put(this.getModid(), list);
             }
         }
         else{
@@ -138,13 +137,13 @@ public class DefaultRenderingRegistry implements IRenderingRegistry {
     @Override
     public void handleItemSpecial(Item item){
         if(item != null){
-            if(this.specialItemToHandle.containsKey(item.getRegistryName().getResourceDomain())){
-                this.specialItemToHandle.get(item.getRegistryName().getResourceDomain()).add(item);
+            if(this.specialItemToHandle.containsKey(this.getModid())){
+                this.specialItemToHandle.get(this.getModid()).add(item);
             }
             else{
                 List<Item> list = Lists.newArrayList();
                 list.add(item);
-                this.specialItemToHandle.put(item.getRegistryName().getResourceDomain(), list);
+                this.specialItemToHandle.put(this.getModid(), list);
             }
         }
         else{
@@ -220,12 +219,12 @@ public class DefaultRenderingRegistry implements IRenderingRegistry {
     }
 
     private void registerBlock(BlockBase block){
-        IconRegistrar.INSTANCE.registerBlock(block);
+        this.getIconRegistrar().registerBlock(block);
         this.registerRenderingHandler(block, block.getRenderingHandler());
     }
 
     private void registerItem(ItemBase item){
-        IconRegistrar.INSTANCE.registerItem(item);
+        this.getIconRegistrar().registerItem(item);
         this.registerRenderingHandler(item, item.getRenderingHandler());
     }
 
@@ -239,7 +238,7 @@ public class DefaultRenderingRegistry implements IRenderingRegistry {
     }
 
     private void registerSpecialItemModel(Item item){
-        IconRegistrar.INSTANCE.registerItem((IIconItem)item);
+        this.getIconRegistrar().registerItem((IIconItem)item);
         ResourceLocation rl = item.getRegistryName();
         CCModelState itemTransforms;
 
@@ -261,5 +260,9 @@ public class DefaultRenderingRegistry implements IRenderingRegistry {
         ModelLoader.setCustomModelResourceLocation(item, 0, location);
         ModelRegistryHelper.registerItemRenderer(item, itemRenderer);
     }
+
+    public abstract String getModid();
+
+    public abstract IIconRegistrar getIconRegistrar();
 
 }

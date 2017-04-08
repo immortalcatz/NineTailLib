@@ -14,9 +14,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 @SideOnly(Side.CLIENT)
-public class IconRegistrar implements IIconRegistrar {
+public class DefaultIconRegistrar implements IIconRegistrar {
 
-    public static final IconRegistrar INSTANCE = new IconRegistrar();
     private ArrayList<IIconBlock> blocksToRegister = Lists.newArrayList();
     private ArrayList<IIconItem> itemsToRegister = Lists.newArrayList();
     private Map<String, ResourceLocation> locationMap = Maps.newHashMap();
@@ -34,11 +33,11 @@ public class IconRegistrar implements IIconRegistrar {
     @SubscribeEvent
     public void onTextureStitchPre(TextureStitchEvent.Pre event){
         for(IIconBlock block : this.blocksToRegister){
-            block.registerBlockIcons(INSTANCE);
+            block.registerBlockIcons(this);
         }
 
         for(IIconItem item : this.itemsToRegister){
-            item.registerIcons(INSTANCE);
+            item.registerIcons(this);
         }
 
         for(Map.Entry<String, ResourceLocation> entry : this.locationMap.entrySet()){
@@ -50,20 +49,22 @@ public class IconRegistrar implements IIconRegistrar {
     @SubscribeEvent
     public void onModelBake(ModelBakeEvent event){
         for(IIconBlock block : this.blocksToRegister){
-            block.registerBlockIcons(INSTANCE);
+            block.registerBlockIcons(this);
         }
 
         for(IIconItem item : this.itemsToRegister){
-            item.registerIcons(INSTANCE);
+            item.registerIcons(this);
         }
     }
 
+    @Override
     public void registerBlock(IIconBlock block){
         if(block != null){
             this.blocksToRegister.add(block);
         }
     }
 
+    @Override
     public void registerItem(IIconItem item){
         if(item != null){
             this.itemsToRegister.add(item);
