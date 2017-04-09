@@ -18,33 +18,33 @@ public abstract class ItemToolHelper {
         this.modid = modid;
     }
 
-    public Item createSword(Item.ToolMaterial material){
-        return new ItemSwordCustom(material);
+    public Item createSword(String materialName, Item.ToolMaterial material){
+        return new ItemSwordCustom(materialName, material);
     }
 
-    public Item createPickaxe(Item.ToolMaterial material){
-        return new ItemPickaxeCustom(material);
+    public Item createPickaxe(String materialName, Item.ToolMaterial material){
+        return new ItemPickaxeCustom(materialName, material);
     }
 
-    public Item createShovel(Item.ToolMaterial material){
-        return new ItemShovelCustom(material);
+    public Item createShovel(String materialName, Item.ToolMaterial material){
+        return new ItemShovelCustom(materialName, material);
     }
 
-    public Item createAxe(Item.ToolMaterial material){
-        return new ItemAxeCustom(material);
+    public Item createAxe(String materialName, Item.ToolMaterial material){
+        return new ItemAxeCustom(materialName, material);
     }
 
-    public Item createHoe(Item.ToolMaterial material){
-        return new ItemHoeCustom(material);
+    public Item createHoe(String materialName, Item.ToolMaterial material){
+        return new ItemHoeCustom(materialName, material);
     }
 
-    public Item[] createToolset(Item.ToolMaterial material){
+    public Item[] createToolset(String materialName, Item.ToolMaterial material){
         Item[] items = new Item[5];
-        items[0] = createSword(material);
-        items[1] = createPickaxe(material);
-        items[2] = createShovel(material);
-        items[3] = createAxe(material);
-        items[4] = createHoe(material);
+        items[0] = createSword(materialName, material);
+        items[1] = createPickaxe(materialName, material);
+        items[2] = createShovel(materialName, material);
+        items[3] = createAxe(materialName, material);
+        items[4] = createHoe(materialName, material);
         return items;
     }
 
@@ -64,9 +64,12 @@ public abstract class ItemToolHelper {
 
     private class ItemSwordCustom extends ItemSword implements IIconItem {
 
-        public ItemSwordCustom(ToolMaterial material) {
+        private String materialName;
+
+        public ItemSwordCustom(String materialName, ToolMaterial material) {
             super(material);
-            register("sword_" + material.name(), this);
+            this.materialName = materialName;
+            register("sword_" + materialName, this);
         }
 
         @SideOnly(Side.CLIENT)
@@ -75,7 +78,7 @@ public abstract class ItemToolHelper {
         @Override
         @SideOnly(Side.CLIENT)
         public void registerIcons(IIconRegistrar registrar) {
-            this.texture = registrar.registerIcon(modid + ":items/tool/sword_" + this.getToolMaterialName().toLowerCase());
+            this.texture = registrar.registerIcon(modid + ":items/tool/sword_" + this.materialName);
         }
 
         @Override
@@ -88,9 +91,12 @@ public abstract class ItemToolHelper {
 
     private class ItemPickaxeCustom extends ItemPickaxe implements IIconItem {
 
-        public ItemPickaxeCustom(ToolMaterial material) {
+        private String materialName;
+
+        public ItemPickaxeCustom(String materialName, ToolMaterial material) {
             super(material);
-            register("pickaxe_" + material.name(), this);
+            this.materialName = materialName;
+            register("pickaxe_" + materialName, this);
         }
 
         @SideOnly(Side.CLIENT)
@@ -99,7 +105,7 @@ public abstract class ItemToolHelper {
         @Override
         @SideOnly(Side.CLIENT)
         public void registerIcons(IIconRegistrar registrar) {
-            this.texture = registrar.registerIcon(modid + ":items/tool/pickaxe_" + this.getToolMaterialName().toLowerCase());
+            this.texture = registrar.registerIcon(modid + ":items/tool/pickaxe_" + this.materialName);
         }
 
         @Override
@@ -112,9 +118,12 @@ public abstract class ItemToolHelper {
 
     private class ItemShovelCustom extends ItemSpade implements IIconItem {
 
-        public ItemShovelCustom(ToolMaterial material) {
+        private String materialName;
+
+        public ItemShovelCustom(String materialName, ToolMaterial material) {
             super(material);
-            register("shovel_" + material.name(), this);
+            this.materialName = materialName;
+            register("shovel_" + materialName, this);
         }
 
         @SideOnly(Side.CLIENT)
@@ -123,7 +132,7 @@ public abstract class ItemToolHelper {
         @Override
         @SideOnly(Side.CLIENT)
         public void registerIcons(IIconRegistrar registrar) {
-            this.texture = registrar.registerIcon(modid + ":items/tool/shovel_" + this.getToolMaterialName().toLowerCase());
+            this.texture = registrar.registerIcon(modid + ":items/tool/shovel_" + this.materialName);
         }
 
         @Override
@@ -136,9 +145,12 @@ public abstract class ItemToolHelper {
 
     private class ItemAxeCustom extends ItemAxe implements IIconItem {
 
-        public ItemAxeCustom(ToolMaterial material) {
+        private String materialName;
+
+        public ItemAxeCustom(String materialName, ToolMaterial material) {
             super(material, material.getDamageVsEntity(), material.getEfficiencyOnProperMaterial());
-            register("axe_" + material.name(), this);
+            this.materialName = materialName;
+            register("axe_" + materialName, this);
         }
 
         @SideOnly(Side.CLIENT)
@@ -147,7 +159,7 @@ public abstract class ItemToolHelper {
         @Override
         @SideOnly(Side.CLIENT)
         public void registerIcons(IIconRegistrar registrar) {
-            this.texture = registrar.registerIcon(modid + ":items/tool/axe_" + this.getToolMaterialName().toLowerCase());
+            this.texture = registrar.registerIcon(modid + ":items/tool/axe_" + this.materialName);
         }
 
         @Override
@@ -160,9 +172,12 @@ public abstract class ItemToolHelper {
 
     private class ItemHoeCustom extends ItemHoe implements IIconItem {
 
-        public ItemHoeCustom(ToolMaterial material) {
+        private String materialName;
+
+        public ItemHoeCustom(String materialName, ToolMaterial material) {
             super(material);
-            register("hoe_" + material.name(), this);
+            this.materialName = materialName;
+            register("hoe_" + materialName, this);
         }
 
         @SideOnly(Side.CLIENT)
@@ -171,7 +186,7 @@ public abstract class ItemToolHelper {
         @Override
         @SideOnly(Side.CLIENT)
         public void registerIcons(IIconRegistrar registrar) {
-            this.texture = registrar.registerIcon(modid + ":items/tool/hoe_" + this.theToolMaterial.name().toLowerCase());
+            this.texture = registrar.registerIcon(modid + ":items/tool/hoe_" + this.materialName);
         }
 
         @Override
