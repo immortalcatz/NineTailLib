@@ -6,28 +6,26 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ResourceAction {
+public class ResourceAction extends ResourceLocation {
 
-    private ResourceLocation location;
-
-    public ResourceAction(ResourceLocation location){
-        this.location = location;
+    protected ResourceAction(int unused, String... resourceName) {
+        super(unused, resourceName);
     }
 
-    public ResourceAction(String path){
-        this.location = new ResourceLocation(path);
+    public ResourceAction(String resourceName) {
+        super(resourceName);
     }
 
-    public ResourceAction(String modid, String path){
-        this.location = new ResourceLocation(modid, path);
+    public ResourceAction(String resourceDomainIn, String resourcePathIn) {
+        super(resourceDomainIn, resourcePathIn);
     }
 
     public void bind(boolean useManager){
         if(useManager){
-            Minecraft.getMinecraft().getTextureManager().bindTexture(this.location);
+            Minecraft.getMinecraft().getTextureManager().bindTexture(this);
         }
         else{
-            Minecraft.getMinecraft().renderEngine.bindTexture(this.location);
+            Minecraft.getMinecraft().renderEngine.bindTexture(this);
         }
     }
 
