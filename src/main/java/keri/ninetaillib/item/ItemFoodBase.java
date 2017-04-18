@@ -47,7 +47,10 @@ public abstract class ItemFoodBase extends ItemFood implements IIconItem {
             this.setCreativeTab(this.getCreativeTab());
         }
 
-        this.getRenderingRegistry().handleItemSpecial(this);
+        if(this.getRenderingRegistry() != null){
+            this.getRenderingRegistry().handleItemSpecial(this);
+        }
+
         GameRegistry.register(this);
     }
 

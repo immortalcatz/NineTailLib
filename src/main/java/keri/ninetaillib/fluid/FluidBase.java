@@ -23,7 +23,10 @@ public abstract class FluidBase extends Fluid {
     private void register(){
         FluidRegistry.registerFluid(this);
         FluidRegistry.addBucketForFluid(this);
-        this.getRenderingRegistry().handleFluid(this);
+
+        if(this.getRenderingRegistry() != null){
+            this.getRenderingRegistry().handleFluid(this);
+        }
     }
 
     @Override

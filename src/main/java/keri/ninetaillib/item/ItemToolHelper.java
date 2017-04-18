@@ -59,7 +59,10 @@ public abstract class ItemToolHelper {
         item.setUnlocalizedName(this.modid + "." + itemName);
         item.setCreativeTab(this.getCreativeTab());
         GameRegistry.register(item);
-        this.getRenderingRegistry().handleItemSpecial(item);
+
+        if(this.getRenderingRegistry() != null){
+            this.getRenderingRegistry().handleItemSpecial(item);
+        }
     }
 
     private class ItemSwordCustom extends ItemSword implements IIconItem {

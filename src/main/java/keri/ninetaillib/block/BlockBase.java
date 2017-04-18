@@ -72,7 +72,10 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
             }
         }
 
-        this.getRenderingRegistry().handleBlock(this);
+        if(this.getRenderingRegistry() != null){
+            this.getRenderingRegistry().handleBlock(this);
+        }
+
         GameRegistry.register(this);
         GameRegistry.register(this.getItemBlock().setRegistryName(this.getRegistryName()));
     }

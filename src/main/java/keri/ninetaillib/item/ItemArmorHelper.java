@@ -105,7 +105,11 @@ public abstract class ItemArmorHelper {
             this.itemName = itemName;
             this.setRegistryName(modid, itemName);
             this.setUnlocalizedName(modid + "." + itemName);
-            this.renderingRegistry.handleItemSpecial(this);
+
+            if(this.renderingRegistry != null){
+                this.renderingRegistry.handleItemSpecial(this);
+            }
+
             GameRegistry.register(this);
         }
 

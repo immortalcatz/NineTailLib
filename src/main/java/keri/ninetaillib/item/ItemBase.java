@@ -54,7 +54,10 @@ public abstract class ItemBase extends Item implements IIconItem {
             this.setCreativeTab(this.getCreativeTab());
         }
 
-        this.getRenderingRegistry().handleItem(this);
+        if(this.getRenderingRegistry() != null){
+            this.getRenderingRegistry().handleItem(this);
+        }
+
         GameRegistry.register(this);
     }
 
