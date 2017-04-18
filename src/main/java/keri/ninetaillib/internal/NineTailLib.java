@@ -1,11 +1,9 @@
 package keri.ninetaillib.internal;
 
 import codechicken.lib.packet.PacketCustom;
-import keri.ninetaillib.internal.handler.CommonEventHandler;
 import keri.ninetaillib.internal.init.NineTailLibConfig;
 import keri.ninetaillib.internal.network.NineTailLibSPH;
 import keri.ninetaillib.internal.proxy.INineTailProxy;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -33,7 +31,6 @@ public class NineTailLib {
     public void preInit(FMLPreInitializationEvent event){
         CONFIG = new NineTailLibConfig(event);
         PROXY.preInit(event);
-        MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
         LOGGER.info("PreInitilization phase done !");
     }
 
