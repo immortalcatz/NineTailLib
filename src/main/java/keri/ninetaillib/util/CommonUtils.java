@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -230,6 +231,38 @@ public class CommonUtils {
 
     public static boolean isBaublesLoaded(){
         return Loader.isModLoaded("Baubles");
+    }
+
+    public static EnumFacing rotateAroundY(EnumFacing input, int amount){
+        switch(amount){
+            case 0: return input;
+            case 90:
+                switch(input){
+                    case NORTH: return EnumFacing.WEST;
+                    case EAST: return EnumFacing.NORTH;
+                    case SOUTH: return EnumFacing.EAST;
+                    case WEST: return EnumFacing.SOUTH;
+                    default: return input;
+                }
+            case 180:
+                switch(input){
+                    case NORTH: return EnumFacing.SOUTH;
+                    case EAST: return EnumFacing.WEST;
+                    case SOUTH: return EnumFacing.NORTH;
+                    case WEST: return EnumFacing.EAST;
+                    default: return input;
+                }
+            case 270:
+                switch(input){
+                    case NORTH: return EnumFacing.EAST;
+                    case EAST: return EnumFacing.SOUTH;
+                    case SOUTH: return EnumFacing.WEST;
+                    case WEST: return EnumFacing.NORTH;
+                    default: return input;
+                }
+            case 360: return input;
+            default: return input;
+        }
     }
 
 }
