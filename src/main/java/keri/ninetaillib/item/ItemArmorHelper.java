@@ -66,12 +66,14 @@ public abstract class ItemArmorHelper {
         private String materialName;
         private String itemName;
         private IRenderingRegistry renderingRegistry;
+        private EntityEquipmentSlot slot;
 
         public ItemArmorCustom(String materialName, ArmorMaterial material, EntityEquipmentSlot slot, IRenderingRegistry renderingRegistry){
             super(material, 0, slot);
             this.materialName = materialName;
             this.modelProvider = null;
             this.renderingRegistry = renderingRegistry;
+            this.slot = slot;
             this.register();
         }
 
@@ -80,13 +82,14 @@ public abstract class ItemArmorHelper {
             this.materialName = materialName;
             this.modelProvider = modelProvider;
             this.renderingRegistry = renderingRegistry;
+            this.slot = slot;
             this.register();
         }
 
         private void register(){
             String namePrefix = null;
 
-            switch(this.getEquipmentSlot()){
+            switch(this.slot){
                 case HEAD:
                     namePrefix = "helmet_";
                     break;
