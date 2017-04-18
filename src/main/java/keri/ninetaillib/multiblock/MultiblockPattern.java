@@ -71,20 +71,23 @@ public class MultiblockPattern {
         List<List<EnumFacing>> output = Lists.newArrayList();
 
         for(int i = 0; i < offsets.size(); i++){
-            if(offsets.get(i) != null){
-                List<EnumFacing> currentList = offsets.get(i);
-                List<EnumFacing> newList = Lists.newArrayList();
+            List<EnumFacing> currentList = offsets.get(i);
+            List<EnumFacing> newList = Lists.newArrayList();
 
+            if(currentList != null){
                 for(int j = 0; j < currentList.size(); j++){
                     EnumFacing currentOffset = currentList.get(j);
-                    newList.add(CommonUtils.rotateAroundY(currentOffset, amount));
-                }
 
-                output.add(newList);
+                    if(currentOffset != null){
+                        newList.add(CommonUtils.rotateAroundY(currentOffset, amount));
+                    }
+                }
             }
             else{
                 output.add(null);
             }
+
+            output.add(newList);
         }
 
         return output;
