@@ -5,6 +5,9 @@ import keri.ninetaillib.internal.handler.CommonEventHandler;
 import keri.ninetaillib.internal.init.NineTailLibConfig;
 import keri.ninetaillib.internal.network.NineTailLibSPH;
 import keri.ninetaillib.internal.proxy.INineTailProxy;
+import keri.ninetaillib.internal.util.ModPrefs;
+import keri.ninetaillib.multiblock.SimpleMultiblockLoader;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -27,8 +30,11 @@ public class NineTailLib {
     public static Logger LOGGER = LogManager.getLogger(NAME);
     public static NineTailLibConfig CONFIG;
 
+    public static SimpleMultiblockLoader multiblockLoader = new SimpleMultiblockLoader();
+
     static{
         FluidRegistry.enableUniversalBucket();
+        multiblockLoader.loadMultiblock("test_multiblock", new ResourceLocation(ModPrefs.MODID, "multiblocks/test_multiblock"));
     }
 
     @Mod.EventHandler
@@ -43,6 +49,7 @@ public class NineTailLib {
     public void init(FMLInitializationEvent event){
         PROXY.init(event);
         PacketCustom.assignHandler(NineTailLib.INSTANCE, new NineTailLibSPH());
+        multiblockLoader.loadMultiblocks();
         LOGGER.info("Initilization phase done !");
     }
 
