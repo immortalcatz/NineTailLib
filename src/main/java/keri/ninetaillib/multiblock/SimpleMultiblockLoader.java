@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.FMLLog;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -32,11 +31,6 @@ public class SimpleMultiblockLoader {
             List<IBlockState> componentBlockStates = Lists.newArrayList();
             List<List<EnumFacing>> componentOffsets = Lists.newArrayList();
 
-            //debug code start
-            String message1 = String.format("[MultiblockLoader] Loading multiblock structure: '%s'", multiblockName);
-            FMLLog.info(message1);
-            //debug code end
-
             for(int i = 0; i < fileContent.size(); i++){
                 String line = fileContent.get(i);
                 this.checkSyntax(line, i);
@@ -48,16 +42,7 @@ public class SimpleMultiblockLoader {
                 String component = line.substring(componentStart, componentEnd);
                 componentBlockStates.add(this.getBlockStateFromLine(component, i));
                 componentOffsets.add(this.getOffsetListFromLine(offset, i));
-
-                //debug code start
-                String message2 = String.format("[MultiblockLoader] Component: {%s}", this.getBlockStateFromLine(component, i).getBlock().getLocalizedName());
-                FMLLog.info(message2);
-                //debug code end
             }
-
-            //debug code start
-            String message3 = String.format("[MultiblockLoader] Loaded multiblock structure '%s'", multiblockName);
-            //debug code end
 
             MultiblockPattern pattern = new MultiblockPattern(componentOffsets, componentBlockStates);
             this.mutliblocks.put(multiblockName, pattern);
