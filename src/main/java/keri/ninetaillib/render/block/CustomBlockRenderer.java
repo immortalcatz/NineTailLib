@@ -38,7 +38,9 @@ public class CustomBlockRenderer implements IBakedModel {
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand){
+        this.blockState = state;
+
         if(side != null){
             if(!(this.particleIconCache.containsKey(this.getCacheKey(state)))){
                 this.particleIconCache.put(this.getCacheKey(state), this.blockRenderer.getParticleTexture(state));
