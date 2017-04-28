@@ -3,7 +3,6 @@ package keri.ninetaillib.internal.proxy;
 import codechicken.lib.packet.PacketCustom;
 import keri.ninetaillib.internal.NineTailLib;
 import keri.ninetaillib.internal.client.gui.InventoryButtonHandler;
-import keri.ninetaillib.internal.client.handler.ClientEventHandler;
 import keri.ninetaillib.internal.network.NineTailLibCPH;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -15,7 +14,6 @@ public class ClientProxy implements INineTailProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event){
         MinecraftForge.EVENT_BUS.register(new InventoryButtonHandler());
-        MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
     }
 
     @Override

@@ -5,7 +5,9 @@ import keri.ninetaillib.gui.ColoredRectangle;
 import keri.ninetaillib.gui.EnumBackgroundType;
 import keri.ninetaillib.gui.FluidGauge;
 import keri.ninetaillib.gui.PowerBar;
+import keri.ninetaillib.util.ElementAlignment;
 import keri.ninetaillib.util.GuiUtils;
+import keri.ninetaillib.util.PowerType;
 import keri.ninetaillib.util.Vector2i;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -36,17 +38,17 @@ public class GuiDebug extends GuiScreen {
         gaugeLavaDark.enableTooltip(new Vector2i(mouseX, mouseY));
         gaugeLavaDark.draw(FluidRegistry.getFluidStack("lava", 4000), 8000);
         //RF & Tesla (Light)
-        PowerBar powerBarRedstoneFlux = new PowerBar(this, new Vector2i(70, 10), EnumBackgroundType.LIGHT, PowerBar.PowerType.RF);
+        PowerBar powerBarRedstoneFlux = new PowerBar(this, new Vector2i(70, 10), EnumBackgroundType.LIGHT, PowerType.RF);
         powerBarRedstoneFlux.enableTooltip(new Vector2i(mouseX, mouseY));
         powerBarRedstoneFlux.draw(3450, 8000);
-        PowerBar powerBarTesla = new PowerBar(this, new Vector2i(70, 90), EnumBackgroundType.LIGHT, PowerBar.PowerType.TESLA);
+        PowerBar powerBarTesla = new PowerBar(this, new Vector2i(70, 90), EnumBackgroundType.LIGHT, PowerType.TESLA);
         powerBarTesla.enableTooltip(new Vector2i(mouseX, mouseY));
         powerBarTesla.draw(6000, 8000);
         //RF & Tesla (Dark)
-        PowerBar powerBarRedstoneFluxDark = new PowerBar(this, new Vector2i(100, 10), EnumBackgroundType.DARK, PowerBar.PowerType.RF);
+        PowerBar powerBarRedstoneFluxDark = new PowerBar(this, new Vector2i(100, 10), EnumBackgroundType.DARK, PowerType.RF);
         powerBarRedstoneFluxDark.enableTooltip(new Vector2i(mouseX, mouseY));
         powerBarRedstoneFluxDark.draw(5500, 8000);
-        PowerBar powerBarTeslaDark = new PowerBar(this, new Vector2i(100, 90), EnumBackgroundType.DARK, PowerBar.PowerType.TESLA);
+        PowerBar powerBarTeslaDark = new PowerBar(this, new Vector2i(100, 90), EnumBackgroundType.DARK, PowerType.TESLA);
         powerBarTeslaDark.enableTooltip(new Vector2i(mouseX, mouseY));
         powerBarTeslaDark.draw(1200, 8000);
         //Colored Rectangle
@@ -55,7 +57,7 @@ public class GuiDebug extends GuiScreen {
         rectangle.setBorderColor(new ColourRGBA(0, 0, 0, 255));
         rectangle.draw();
         //Gui Background
-        GuiUtils.drawBackground(this, new Vector2i(130, 80), new Vector2i(64, 64), GuiUtils.Alignment.NONE);
+        GuiUtils.drawBackground(this, new Vector2i(130, 80), new Vector2i(64, 64), ElementAlignment.NONE);
     }
 
 }
