@@ -46,8 +46,8 @@ public class DefaultBlockRenderer implements IBlockRenderingHandler {
     }
 
     @Override
-    public TextureAtlasSprite getParticleTexture(IIconBlock block, int meta) {
-        return block.getIcon(meta, 0);
+    public TextureAtlasSprite getParticleTexture(IBlockState state) {
+        return ((IIconBlock)state.getBlock()).getIcon(state.getBlock().getMetaFromState(state), 0);
     }
 
 }

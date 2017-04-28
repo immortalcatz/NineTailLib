@@ -6,7 +6,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import keri.ninetaillib.render.util.QuadRotator;
 import keri.ninetaillib.render.util.VertexUtils;
-import keri.ninetaillib.texture.IIconBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -31,6 +30,7 @@ public class CustomBlockRenderer implements IBakedModel {
 
     private IBlockRenderingHandler blockRenderer;
     private Map<String, Map<BlockRenderLayer, List<BakedQuad>>> quadCache = Maps.newHashMap();
+    private Map<String, TextureAtlasSprite> particleIconCache = Maps.newHashMap();
     private IBlockState blockState;
 
     public CustomBlockRenderer(IBlockRenderingHandler renderer){
@@ -39,9 +39,11 @@ public class CustomBlockRenderer implements IBakedModel {
 
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
-        this.blockState = state;
-
         if(side != null){
+            if(!(this.particleIconCache.containsKey(this.getCacheKey(state)))){
+                this.particleIconCache.put(this.getCacheKey(state), this.blockRenderer.getParticleTexture(state));
+            }
+
             if(!(this.quadCache.containsKey(this.getCacheKey(state)))){
                 Map<BlockRenderLayer, List<BakedQuad>> map = Maps.newHashMap();
 
@@ -129,8 +131,8 @@ public class CustomBlockRenderer implements IBakedModel {
     }
 
     @Override
-    public boolean isAmbientOcclusion() {
-        return true;
+    public boolean isAmbientOcclusion(){
+        return this.blockRenderer.ambientOcclusion();
     }
 
     @Override
@@ -144,8 +146,8 @@ public class CustomBlockRenderer implements IBakedModel {
     }
 
     @Override
-    public TextureAtlasSprite getParticleTexture() {
-        return this.blockState != null ? this.blockRenderer.getParticleTexture((IIconBlock)this.blockState.getBlock(), this.blockState.getBlock().getMetaFromState(this.blockState)) : null;
+    public TextureAtlasSprite getParticleTexture(){
+        return this.particleIconCache.get(this.getCacheKey(this.blockState));
     }
 
     @Override

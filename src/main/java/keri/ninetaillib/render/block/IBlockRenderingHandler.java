@@ -1,7 +1,6 @@
 package keri.ninetaillib.render.block;
 
 import codechicken.lib.render.CCRenderState;
-import keri.ninetaillib.texture.IIconBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -18,9 +17,11 @@ public interface IBlockRenderingHandler {
 
     void renderItem(CCRenderState renderState, ItemStack stack, long rand);
 
-    TextureAtlasSprite getParticleTexture(IIconBlock block, int meta);
+    TextureAtlasSprite getParticleTexture(IBlockState state);
 
     default boolean hasDynamicItemRendering(){ return false; };
+
+    default boolean ambientOcclusion(){ return true; }
 
     default EnumFacing getRotation(IBlockState state){ return EnumFacing.NORTH; }
 
