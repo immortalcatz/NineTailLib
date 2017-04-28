@@ -39,6 +39,8 @@ public class CustomBlockRenderer implements IBakedModel {
 
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+        this.blockState = state;
+
         if(side != null){
             if(!(this.quadCache.containsKey(this.getCacheKey(state)))){
                 Map<BlockRenderLayer, List<BakedQuad>> map = Maps.newHashMap();
@@ -99,7 +101,6 @@ public class CustomBlockRenderer implements IBakedModel {
 
                 for(Map.Entry<BlockRenderLayer, List<BakedQuad>> entry : map.entrySet()){
                     if(entry.getKey() == MinecraftForgeClient.getRenderLayer()){
-                        this.blockState = state;
                         return entry.getValue();
                     }
                 }
@@ -144,7 +145,7 @@ public class CustomBlockRenderer implements IBakedModel {
 
     @Override
     public TextureAtlasSprite getParticleTexture() {
-        return this.blockState != null ? this.blockRenderer.getParticleTexture((IIconBlock)this.blockState.getBlock(), this.blockState.getBlock().getMetaFromState(this.blockState)): null;
+        return this.blockState != null ? this.blockRenderer.getParticleTexture((IIconBlock)this.blockState.getBlock(), this.blockState.getBlock().getMetaFromState(this.blockState)) : null;
     }
 
     @Override

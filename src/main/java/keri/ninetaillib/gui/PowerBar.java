@@ -3,6 +3,7 @@ package keri.ninetaillib.gui;
 import codechicken.lib.colour.ColourRGBA;
 import com.google.common.collect.Lists;
 import keri.ninetaillib.internal.util.ModPrefs;
+import keri.ninetaillib.util.PowerType;
 import keri.ninetaillib.util.ResourceAction;
 import keri.ninetaillib.util.Vector2i;
 import net.minecraft.client.Minecraft;
@@ -133,11 +134,6 @@ public class PowerBar {
     public void enableTooltip(Vector2i mousePos){
         this.enableTooltip = true;
         this.mousePos = mousePos;
-    }
-
-    public enum PowerType {
-        RF,
-        TESLA
     }
 
 }
