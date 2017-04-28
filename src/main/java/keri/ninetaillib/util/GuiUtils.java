@@ -12,11 +12,11 @@ public class GuiUtils extends net.minecraftforge.fml.client.config.GuiUtils {
 
     private static final ResourceAction texture = new ResourceAction(ModPrefs.MODID, "textures/gui/background.png");
 
-    public static void drawBackground(GuiScreen gui, Vector2i pos, Vector2i size, Alignment alignment){
+    public static void drawBackground(GuiScreen gui, Vector2i pos, Vector2i size, ElementAlignment alignment){
         drawBackground(gui, pos, size, alignment, new ColourRGBA(255, 255, 255, 255));
     }
 
-    public static void drawBackground(GuiScreen gui, Vector2i pos, Vector2i size, Alignment alignment, ColourRGBA color){
+    public static void drawBackground(GuiScreen gui, Vector2i pos, Vector2i size, ElementAlignment alignment, ColourRGBA color){
         GlStateManager.pushMatrix();
         GlStateManager.pushAttrib();
         Vector2i posCornerTL = new Vector2i(pos.getX(), pos.getY());
@@ -227,16 +227,6 @@ public class GuiUtils extends net.minecraftforge.fml.client.config.GuiUtils {
         texture.bind(true);
         color.glColour();
         gui.drawTexturedModalRect(pos.getX(), pos.getY(), minUV.getX(), minUV.getY(), maxUV.getX(), maxUV.getY());
-    }
-
-    public static enum Alignment {
-
-        LEFT,
-        RIGHT,
-        TOP,
-        BOTTOM,
-        NONE
-
     }
 
 }

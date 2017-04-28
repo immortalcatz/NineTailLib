@@ -3,6 +3,7 @@ package keri.ninetaillib.multiblock;
 import com.google.common.collect.Lists;
 import keri.ninetaillib.util.CommonUtils;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -23,8 +24,36 @@ public class MultiblockPattern {
         this.components = components;
     }
 
+    public void notifyStructure(World world, BlockPos pos, EnumFacing side){
+        List<BlockPos> positions = this.compilePositions(pos, side);
+
+        for(int i = 0; i < positions.size(); i++){
+            IBlockState componentState = this.components.get(i);
+
+            if(world.getBlockState(positions.get(i)) == componentState){
+                TileEntity tile = (TileEntity)world.getTileEntity(positions.get(i));
+                tile.markDirty();
+            }
+        }
+    }
+
     public boolean isValid(World world, BlockPos pos, EnumFacing side){
         int validBlocks = 0;
+        List<BlockPos> positions = this.compilePositions(pos, side);
+
+        for(int i = 0; i < positions.size(); i++){
+            IBlockState componentState = this.components.get(i);
+
+            if(world.getBlockState(positions.get(i)) == componentState){
+                validBlocks++;
+            }
+        }
+
+        return validBlocks == this.components.size();
+    }
+
+    private List<BlockPos> compilePositions(BlockPos pos, EnumFacing side){
+        List<BlockPos> list = Lists.newArrayList();
         int rotation = 0;
 
         switch(side){
@@ -46,7 +75,6 @@ public class MultiblockPattern {
 
         for(int i = 0; i < orientedOffsets.size(); i++){
             List<EnumFacing> offsetList = orientedOffsets.get(i);
-            IBlockState componentBlockState = this.components.get(i);
             BlockPos currentComponentPosition = pos;
 
             if(offsetList != null){
@@ -59,12 +87,10 @@ public class MultiblockPattern {
                 }
             }
 
-            if(world.getBlockState(currentComponentPosition) == componentBlockState){
-                validBlocks++;
-            }
+            list.add(currentComponentPosition);
         }
 
-        return validBlocks == this.components.size();
+        return list;
     }
 
     private List<List<EnumFacing>> rotateAroundY(List<List<EnumFacing>> offsets, int amount){

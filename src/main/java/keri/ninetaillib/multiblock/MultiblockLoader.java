@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
 
-public class SimpleMultiblockLoader {
+public class MultiblockLoader {
 
     private static final String[] allowedCommentFormat = new String[]{"//", "#"};
     private static final char[] allowedOffsets = new char[]{'n', 'e', 's', 'w', 'u', 'd'};

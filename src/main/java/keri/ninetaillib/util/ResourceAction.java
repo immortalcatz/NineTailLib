@@ -12,12 +12,12 @@ public class ResourceAction extends ResourceLocation {
         super(unused, resourceName);
     }
 
-    public ResourceAction(String resourceName) {
-        super(resourceName);
+    public ResourceAction(String path) {
+        super(path);
     }
 
-    public ResourceAction(String resourceDomainIn, String resourcePathIn) {
-        super(resourceDomainIn, resourcePathIn);
+    public ResourceAction(String domain, String path) {
+        super(domain, path);
     }
 
     public void bind(boolean useManager){
