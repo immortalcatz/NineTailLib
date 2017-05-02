@@ -52,7 +52,7 @@ public class MultiblockPattern {
         return validBlocks == this.components.size();
     }
 
-    private List<BlockPos> compilePositions(BlockPos pos, EnumFacing side){
+    public List<BlockPos> compilePositions(BlockPos pos, EnumFacing side){
         List<BlockPos> list = Lists.newArrayList();
         int rotation = 0;
 

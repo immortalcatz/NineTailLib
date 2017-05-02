@@ -2,9 +2,11 @@ package keri.ninetaillib.render.block;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.buffer.BakingVertexBuffer;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import keri.ninetaillib.render.util.QuadRotator;
 import keri.ninetaillib.render.util.VertexUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -29,9 +31,13 @@ import java.util.Map;
 public class CustomBlockRenderer implements IBakedModel {
 
     private IBlockRenderingHandler blockRenderer;
-    private Map<String, Map<BlockRenderLayer, List<BakedQuad>>> quadCache = Maps.newHashMap();
-    private Map<String, TextureAtlasSprite> particleIconCache = Maps.newHashMap();
-    private IBlockState blockState;
+    private Map<String, List<BakedQuad>> quadCache = Maps.newHashMap();
+    private LoadingCache<String, List<BakedQuad>> cache = CacheBuilder.newBuilder().build(new CacheLoader<String, List<BakedQuad>>() {
+        @Override
+        public List<BakedQuad> load(String key) throws Exception {
+            return quadCache.get(key);
+        }
+    });
 
     public CustomBlockRenderer(IBlockRenderingHandler renderer){
         this.blockRenderer = renderer;
@@ -39,76 +45,17 @@ public class CustomBlockRenderer implements IBakedModel {
 
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand){
-        this.blockState = state;
-
         if(side != null){
-            if(!(this.particleIconCache.containsKey(this.getCacheKey(state)))){
-                this.particleIconCache.put(this.getCacheKey(state), this.blockRenderer.getParticleTexture(state));
-            }
-
-            if(!(this.quadCache.containsKey(this.getCacheKey(state)))){
-                Map<BlockRenderLayer, List<BakedQuad>> map = Maps.newHashMap();
-
-                for(BlockRenderLayer layer : BlockRenderLayer.values()){
-                    BakingVertexBuffer buffer = BakingVertexBuffer.create();
-                    buffer.begin(GL11.GL_QUADS, VertexUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
-                    CCRenderState renderState = CCRenderState.instance();
-                    renderState.reset();
-                    renderState.bind(buffer);
-                    this.blockRenderer.renderBlock(renderState, state, side, layer, rand);
-                    buffer.finishDrawing();
-                    List<BakedQuad> quads = Lists.newArrayList();
-                    quads.addAll(buffer.bake());
-
-                    if(this.blockRenderer.getBlockQuads(state, side, rand) != null){
-                        quads.addAll(this.blockRenderer.getBlockQuads(state, side, rand));
-                    }
-
-                    QuadRotator quadRotator = new QuadRotator();
-                    EnumFacing newForward = EnumFacing.NORTH;
-                    EnumFacing newUp = EnumFacing.UP;
-
-                    switch(this.blockRenderer.getRotation(state)){
-                        case DOWN:
-                            newForward = EnumFacing.NORTH;
-                            newUp = EnumFacing.DOWN;
-                            break;
-                        case UP:
-                            newForward = EnumFacing.NORTH;
-                            newUp = EnumFacing.UP;
-                            break;
-                        case NORTH:
-                            newForward = EnumFacing.NORTH;
-                            newUp = EnumFacing.UP;
-                            break;
-                        case EAST:
-                            newForward = EnumFacing.EAST;
-                            newUp = EnumFacing.UP;
-                            break;
-                        case SOUTH:
-                            newForward = EnumFacing.SOUTH;
-                            newUp = EnumFacing.UP;
-                            break;
-                        case WEST:
-                            newForward = EnumFacing.WEST;
-                            newUp = EnumFacing.UP;
-                            break;
-                    }
-
-                    map.put(layer, quadRotator.rotateQuads(quads, newForward, newUp));
-                }
-
-                this.quadCache.put(this.getCacheKey(state), map);
-            }
-            else{
-                Map<BlockRenderLayer, List<BakedQuad>> map = this.quadCache.get(this.getCacheKey(state));
-
-                for(Map.Entry<BlockRenderLayer, List<BakedQuad>> entry : map.entrySet()){
-                    if(entry.getKey() == MinecraftForgeClient.getRenderLayer()){
-                        return entry.getValue();
-                    }
-                }
-            }
+            BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
+            BakingVertexBuffer buffer = BakingVertexBuffer.create();
+            buffer.begin(GL11.GL_QUADS, VertexUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
+            CCRenderState renderState = CCRenderState.instance();
+            renderState.reset();
+            renderState.bind(buffer);
+            this.blockRenderer.renderBlock(renderState, state, side, layer, rand);
+            buffer.finishDrawing();
+            this.cache.put(this.getCacheKey(state), buffer.bake());
+            return this.cache.getUnchecked(this.getCacheKey(state));
         }
 
         return Lists.newArrayList();
@@ -149,7 +96,7 @@ public class CustomBlockRenderer implements IBakedModel {
 
     @Override
     public TextureAtlasSprite getParticleTexture(){
-        return this.particleIconCache.get(this.getCacheKey(this.blockState));
+        return this.blockRenderer.getParticleTexture();
     }
 
     @Override

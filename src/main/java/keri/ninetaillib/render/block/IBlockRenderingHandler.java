@@ -17,13 +17,11 @@ public interface IBlockRenderingHandler {
 
     void renderItem(CCRenderState renderState, ItemStack stack, long rand);
 
-    TextureAtlasSprite getParticleTexture(IBlockState state);
+    TextureAtlasSprite getParticleTexture();
 
     default boolean hasDynamicItemRendering(){ return false; };
 
     default boolean ambientOcclusion(){ return true; }
-
-    default EnumFacing getRotation(IBlockState state){ return EnumFacing.NORTH; }
 
     default String getBlockKey(IExtendedBlockState state){ return null; }
 
