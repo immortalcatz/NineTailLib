@@ -17,9 +17,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class DefaultBlockRenderer implements IBlockRenderingHandler {
 
+    private static CCModel model = CCModel.quadModel(24).generateBlock(0, new Cuboid6(0D, 0D, 0D, 1D, 1D, 1D)).computeNormals();
+    private TextureAtlasSprite texture;
+
     @Override
     public void renderBlock(CCRenderState renderState, IBlockState state, EnumFacing face, BlockRenderLayer layer, long rand) {
-        CCModel model = CCModel.quadModel(24).generateBlock(0, new Cuboid6(0D, 0D, 0D, 1D, 1D, 1D)).computeNormals();
+        this.texture = ((IIconBlock)state.getBlock()).getIcon(0, 0);
         int meta = state.getBlock().getMetaFromState(state);
 
         for(int i = 0; i < 6; i++){
@@ -33,7 +36,6 @@ public class DefaultBlockRenderer implements IBlockRenderingHandler {
 
     @Override
     public void renderItem(CCRenderState renderState, ItemStack stack, long rand) {
-        CCModel model = CCModel.quadModel(24).generateBlock(0, new Cuboid6(0D, 0D, 0D, 1D, 1D, 1D)).computeNormals();
         int meta = stack.getMetadata();
 
         for(int i = 0; i < 6; i++){
@@ -46,8 +48,8 @@ public class DefaultBlockRenderer implements IBlockRenderingHandler {
     }
 
     @Override
-    public TextureAtlasSprite getParticleTexture(IBlockState state) {
-        return ((IIconBlock)state.getBlock()).getIcon(state.getBlock().getMetaFromState(state), 0);
+    public TextureAtlasSprite getParticleTexture() {
+        return this.texture;
     }
 
 }
