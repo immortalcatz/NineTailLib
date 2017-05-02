@@ -46,16 +46,20 @@ public class CustomBlockRenderer implements IBakedModel {
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand){
         if(side != null){
-            BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
-            BakingVertexBuffer buffer = BakingVertexBuffer.create();
-            buffer.begin(GL11.GL_QUADS, VertexUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
-            CCRenderState renderState = CCRenderState.instance();
-            renderState.reset();
-            renderState.bind(buffer);
-            this.blockRenderer.renderBlock(renderState, state, side, layer, rand);
-            buffer.finishDrawing();
-            this.cache.put(this.getCacheKey(state), buffer.bake());
-            return this.cache.getUnchecked(this.getCacheKey(state));
+            if(this.cache.getIfPresent(this.getCacheKey(state)) == null){
+                BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
+                BakingVertexBuffer buffer = BakingVertexBuffer.create();
+                buffer.begin(GL11.GL_QUADS, VertexUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
+                CCRenderState renderState = CCRenderState.instance();
+                renderState.reset();
+                renderState.bind(buffer);
+                this.blockRenderer.renderBlock(renderState, state, side, layer, rand);
+                buffer.finishDrawing();
+                this.cache.put(this.getCacheKey(state), buffer.bake());
+            }
+            else{
+                return this.cache.getUnchecked(this.getCacheKey(state));
+            }
         }
 
         return Lists.newArrayList();
