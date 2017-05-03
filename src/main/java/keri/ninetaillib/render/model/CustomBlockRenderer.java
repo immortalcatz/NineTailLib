@@ -3,6 +3,7 @@ package keri.ninetaillib.render.model;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.buffer.BakingVertexBuffer;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import keri.ninetaillib.render.registry.IBlockRenderingHandler;
 import keri.ninetaillib.render.util.VertexUtils;
 import net.minecraft.block.state.IBlockState;
@@ -22,11 +23,13 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class CustomBlockRenderer implements IBakedModel {
 
     private IBlockRenderingHandler blockRenderer;
+    private Map<String, List<BakedQuad>> quadCache = Maps.newHashMap();
 
     public CustomBlockRenderer(IBlockRenderingHandler renderer){
         this.blockRenderer = renderer;
@@ -35,7 +38,7 @@ public class CustomBlockRenderer implements IBakedModel {
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand){
         if(side != null){
-            if(!GlobalModelCache.isBlockModelPresent(this.getCacheKey(state))){
+            if(!this.quadCache.containsKey(this.getCacheKey(state))){
                 BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
                 BakingVertexBuffer buffer = BakingVertexBuffer.create();
                 buffer.begin(GL11.GL_QUADS, VertexUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
@@ -44,10 +47,10 @@ public class CustomBlockRenderer implements IBakedModel {
                 renderState.bind(buffer);
                 this.blockRenderer.renderBlock(renderState, state, side, layer, rand);
                 buffer.finishDrawing();
-                GlobalModelCache.putBlockModel(this.getCacheKey(state), buffer.bake());
+                this.quadCache.put(this.getCacheKey(state), buffer.bake());
             }
             else{
-                return GlobalModelCache.getBlockModel(this.getCacheKey(state));
+                return this.quadCache.get(this.getCacheKey(state));
             }
         }
 
