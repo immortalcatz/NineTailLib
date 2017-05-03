@@ -4,6 +4,9 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.buffer.BakingVertexBuffer;
 import codechicken.lib.render.item.IItemRenderer;
 import codechicken.lib.util.TransformUtils;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import keri.ninetaillib.render.registry.IBlockRenderingHandler;
@@ -39,6 +42,12 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
     private IItemRenderingHandler itemRenderer;
     private Random random = new Random();
     private Map<String, List<BakedQuad>> quadCache = Maps.newHashMap();
+    private LoadingCache<String, List<BakedQuad>> cache = CacheBuilder.newBuilder().build(new CacheLoader<String, List<BakedQuad>>() {
+        @Override
+        public List<BakedQuad> load(String key) throws Exception {
+            return quadCache.get(key);
+        }
+    });
 
     public CustomItemRenderer(IBlockRenderingHandler renderer){
         this.blockRenderer = renderer;
@@ -52,7 +61,7 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
     public void renderItem(ItemStack stack){
         if(this.itemRenderer != null){
             if(this.itemRenderer.useRenderCache()){
-                if(!this.quadCache.containsKey(this.getCacheKey(stack))){
+                if(this.cache.getIfPresent(this.getCacheKey(stack)) == null){
                     BakingVertexBuffer buffer = BakingVertexBuffer.create();
                     buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
                     CCRenderState renderState = CCRenderState.instance();
@@ -67,11 +76,11 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                         quads.addAll(this.itemRenderer.getBakedQuads(stack, this.random.nextLong()));
                     }
 
-                    this.quadCache.put(this.getCacheKey(stack), quads);
+                    this.cache.put(this.getCacheKey(stack), quads);
                 }
                 else{
                     RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-                    SimpleBakedModel model = new SimpleBakedModel(this.quadCache.get(this.getCacheKey(stack)));
+                    SimpleBakedModel model = new SimpleBakedModel(this.cache.getUnchecked(this.getCacheKey(stack)));
                     GlStateManager.pushMatrix();
                     GlStateManager.pushAttrib();
                     GlStateManager.enableBlend();
@@ -121,7 +130,7 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                 GlStateManager.popMatrix();
             }
             else{
-                if(!this.quadCache.containsKey(this.getCacheKey(stack))){
+                if(this.cache.getIfPresent(this.getCacheKey(stack)) == null){
                     BakingVertexBuffer buffer = BakingVertexBuffer.create();
                     buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
                     CCRenderState renderState = CCRenderState.instance();
@@ -136,11 +145,11 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                         quads.addAll(this.blockRenderer.getItemQuads(stack, this.random.nextLong()));
                     }
 
-                    this.quadCache.put(this.getCacheKey(stack), quads);
+                    this.cache.put(this.getCacheKey(stack), quads);
                 }
                 else{
                     RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-                    SimpleBakedModel model = new SimpleBakedModel(this.quadCache.get(this.getCacheKey(stack)));
+                    SimpleBakedModel model = new SimpleBakedModel(this.cache.getUnchecked(this.getCacheKey(stack)));
                     GlStateManager.pushMatrix();
                     GlStateManager.pushAttrib();
                     GlStateManager.enableBlend();
