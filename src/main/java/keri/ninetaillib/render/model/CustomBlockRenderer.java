@@ -47,7 +47,7 @@ public class CustomBlockRenderer implements IBakedModel {
                 GlobalModelCache.putBlockModel(this.getCacheKey(state), buffer.bake());
             }
             else{
-                return GlobalModelCache.getItemModel(this.getCacheKey(state));
+                return GlobalModelCache.getBlockModel(this.getCacheKey(state));
             }
         }
 
