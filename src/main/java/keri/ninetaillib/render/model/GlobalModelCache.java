@@ -54,14 +54,4 @@ public class GlobalModelCache {
         return itemModelLoadingCache.getIfPresent(key) != null;
     }
 
-    public static void nukeBlockModels(){
-        blockModelCache.clear();
-        blockModelLoadingCache.cleanUp();
-    }
-
-    public static void nukeItemModel(){
-        itemModelCache.clear();
-        itemModelLoadingCache.cleanUp();
-    }
-
 }

@@ -3,13 +3,11 @@ package keri.ninetaillib.internal.network;
 import codechicken.lib.packet.PacketCustom;
 import keri.ninetaillib.network.INetworkTile;
 import keri.ninetaillib.network.NetworkHandler;
-import keri.ninetaillib.render.model.GlobalModelCache;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class NineTailLibCPH implements PacketCustom.IClientPacketHandler {
@@ -19,9 +17,6 @@ public class NineTailLibCPH implements PacketCustom.IClientPacketHandler {
         switch(packet.getType()){
             case 1:
                 this.handleUpdatePacket(packet, minecraft.theWorld);
-                break;
-            case 2:
-                this.handleCommandPacket(packet);
                 break;
         }
     }
@@ -65,25 +60,6 @@ public class NineTailLibCPH implements PacketCustom.IClientPacketHandler {
                 ((INetworkTile)tile).onUpdatePacket(Side.CLIENT, packet.readNBTTagCompound(), valueId);
                 break;
         }
-    }
-
-    private void handleCommandPacket(PacketCustom packet){
-        final byte type = packet.readByte();
-
-        switch(type){
-            case 0:
-                GlobalModelCache.nukeBlockModels();
-                GlobalModelCache.nukeItemModel();
-                break;
-            case 1:
-                GlobalModelCache.nukeBlockModels();
-                break;
-            case 2:
-                GlobalModelCache.nukeItemModel();
-                break;
-        }
-
-        FMLLog.info("MODEL CACHE NUKED!");
     }
 
 }
