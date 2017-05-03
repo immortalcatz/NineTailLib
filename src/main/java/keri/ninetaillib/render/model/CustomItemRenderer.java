@@ -1,12 +1,12 @@
-package keri.ninetaillib.render.item;
+package keri.ninetaillib.render.model;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.buffer.BakingVertexBuffer;
 import codechicken.lib.render.item.IItemRenderer;
 import codechicken.lib.util.TransformUtils;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import keri.ninetaillib.render.block.IBlockRenderingHandler;
+import keri.ninetaillib.render.registry.IBlockRenderingHandler;
+import keri.ninetaillib.render.registry.IItemRenderingHandler;
 import keri.ninetaillib.render.util.SimpleBakedModel;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -28,7 +28,6 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 @SideOnly(Side.CLIENT)
@@ -37,7 +36,6 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
     private IBlockRenderingHandler blockRenderer;
     private IItemRenderingHandler itemRenderer;
     private Random random = new Random();
-    private Map<String, SimpleBakedModel> modelCache = Maps.newHashMap();
 
     public CustomItemRenderer(IBlockRenderingHandler renderer){
         this.blockRenderer = renderer;
@@ -51,7 +49,7 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
     public void renderItem(ItemStack stack){
         if(this.itemRenderer != null){
             if(this.itemRenderer.useRenderCache()){
-                if(!(this.modelCache.containsKey(this.getCacheKey(stack)))){
+                if(!GlobalModelCache.isItemModelPresent(this.getCacheKey(stack))){
                     BakingVertexBuffer buffer = BakingVertexBuffer.create();
                     buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
                     CCRenderState renderState = CCRenderState.instance();
@@ -66,12 +64,11 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                         quads.addAll(this.itemRenderer.getBakedQuads(stack, this.random.nextLong()));
                     }
 
-                    SimpleBakedModel model = new SimpleBakedModel(quads);
-                    this.modelCache.put(this.getCacheKey(stack), model);
+                    GlobalModelCache.putItemModel(this.getCacheKey(stack), quads);
                 }
                 else{
                     RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-                    SimpleBakedModel model = this.modelCache.get(this.getCacheKey(stack));
+                    SimpleBakedModel model = new SimpleBakedModel(GlobalModelCache.getItemModel(this.getCacheKey(stack)));
                     GlStateManager.pushMatrix();
                     GlStateManager.pushAttrib();
                     GlStateManager.enableBlend();
@@ -121,7 +118,7 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                 GlStateManager.popMatrix();
             }
             else{
-                if(!(this.modelCache.containsKey(this.getCacheKey(stack)))){
+                if(!GlobalModelCache.isItemModelPresent(this.getCacheKey(stack))){
                     BakingVertexBuffer buffer = BakingVertexBuffer.create();
                     buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
                     CCRenderState renderState = CCRenderState.instance();
@@ -136,12 +133,11 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                         quads.addAll(this.blockRenderer.getItemQuads(stack, this.random.nextLong()));
                     }
 
-                    SimpleBakedModel model = new SimpleBakedModel(quads);
-                    this.modelCache.put(this.getCacheKey(stack), model);
+                    GlobalModelCache.putItemModel(this.getCacheKey(stack), quads);
                 }
                 else{
                     RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-                    SimpleBakedModel model = this.modelCache.get(this.getCacheKey(stack));
+                    SimpleBakedModel model = new SimpleBakedModel(GlobalModelCache.getItemModel(this.getCacheKey(stack)));
                     GlStateManager.pushMatrix();
                     GlStateManager.pushAttrib();
                     GlStateManager.enableBlend();

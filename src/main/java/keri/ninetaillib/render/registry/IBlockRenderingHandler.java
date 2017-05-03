@@ -1,4 +1,4 @@
-package keri.ninetaillib.render.block;
+package keri.ninetaillib.render.registry;
 
 import codechicken.lib.render.CCRenderState;
 import net.minecraft.block.state.IBlockState;

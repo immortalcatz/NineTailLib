@@ -1,9 +1,10 @@
-package keri.ninetaillib.render.block;
+package keri.ninetaillib.render.model;
 
 import codechicken.lib.render.CCModel;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.uv.IconTransformation;
+import keri.ninetaillib.render.registry.IBlockRenderingHandler;
 import keri.ninetaillib.texture.IIconBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

@@ -1,4 +1,4 @@
-package keri.ninetaillib.render.item;
+package keri.ninetaillib.render.registry;
 
 import baubles.api.render.IRenderBauble;
 import net.minecraft.entity.player.EntityPlayer;

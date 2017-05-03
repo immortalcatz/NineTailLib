@@ -1,12 +1,9 @@
-package keri.ninetaillib.render.block;
+package keri.ninetaillib.render.model;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.buffer.BakingVertexBuffer;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import keri.ninetaillib.render.registry.IBlockRenderingHandler;
 import keri.ninetaillib.render.util.VertexUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -25,19 +22,11 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class CustomBlockRenderer implements IBakedModel {
 
     private IBlockRenderingHandler blockRenderer;
-    private Map<String, List<BakedQuad>> quadCache = Maps.newHashMap();
-    private LoadingCache<String, List<BakedQuad>> cache = CacheBuilder.newBuilder().build(new CacheLoader<String, List<BakedQuad>>() {
-        @Override
-        public List<BakedQuad> load(String key) throws Exception {
-            return quadCache.get(key);
-        }
-    });
 
     public CustomBlockRenderer(IBlockRenderingHandler renderer){
         this.blockRenderer = renderer;
@@ -46,7 +35,7 @@ public class CustomBlockRenderer implements IBakedModel {
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand){
         if(side != null){
-            if(this.cache.getIfPresent(this.getCacheKey(state)) == null){
+            if(!GlobalModelCache.isBlockModelPresent(this.getCacheKey(state))){
                 BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
                 BakingVertexBuffer buffer = BakingVertexBuffer.create();
                 buffer.begin(GL11.GL_QUADS, VertexUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
@@ -55,10 +44,10 @@ public class CustomBlockRenderer implements IBakedModel {
                 renderState.bind(buffer);
                 this.blockRenderer.renderBlock(renderState, state, side, layer, rand);
                 buffer.finishDrawing();
-                this.cache.put(this.getCacheKey(state), buffer.bake());
+                GlobalModelCache.putBlockModel(this.getCacheKey(state), buffer.bake());
             }
             else{
-                return this.cache.getUnchecked(this.getCacheKey(state));
+                return GlobalModelCache.getItemModel(this.getCacheKey(state));
             }
         }
 

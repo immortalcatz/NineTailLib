@@ -1,8 +1,8 @@
 package keri.ninetaillib.block;
 
 import keri.ninetaillib.item.ItemBlockBase;
-import keri.ninetaillib.render.block.DefaultBlockRenderer;
-import keri.ninetaillib.render.block.IBlockRenderingHandler;
+import keri.ninetaillib.render.model.DefaultBlockRenderer;
+import keri.ninetaillib.render.registry.IBlockRenderingHandler;
 import keri.ninetaillib.render.registry.IRenderingRegistry;
 import keri.ninetaillib.texture.IIconBlock;
 import keri.ninetaillib.texture.IIconRegistrar;

@@ -1,9 +1,10 @@
-package keri.ninetaillib.render.item;
+package keri.ninetaillib.render.model;
 
 import codechicken.lib.render.CCModelState;
 import codechicken.lib.render.CCRenderState;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
+import keri.ninetaillib.render.registry.IItemRenderingHandler;
 import keri.ninetaillib.texture.IIconItem;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

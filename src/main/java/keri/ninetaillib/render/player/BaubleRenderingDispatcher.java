@@ -2,7 +2,7 @@ package keri.ninetaillib.render.player;
 
 import baubles.api.BaublesApi;
 import baubles.api.render.IRenderBauble;
-import keri.ninetaillib.render.item.IBaubleRenderingHandler;
+import keri.ninetaillib.render.registry.IBaubleRenderingHandler;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
