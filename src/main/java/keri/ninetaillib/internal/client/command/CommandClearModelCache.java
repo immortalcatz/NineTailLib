@@ -1,6 +1,8 @@
 package keri.ninetaillib.internal.client.command;
 
+import codechicken.lib.packet.PacketCustom;
 import com.google.common.collect.Lists;
+import keri.ninetaillib.internal.NineTailLib;
 import keri.ninetaillib.render.model.GlobalModelCache;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -8,6 +10,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
@@ -39,24 +42,21 @@ public class CommandClearModelCache implements ICommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        Side effectiveSide = FMLCommonHandler.instance().getEffectiveSide();
+        PacketCustom packet = new PacketCustom(NineTailLib.INSTANCE, 2);
 
-        if(effectiveSide == Side.CLIENT){
-            if(args != null){
-                if(args.length == 1){
-                    if(args[0].equals("blocks")){
-                        GlobalModelCache.nukeBlockModels();
-                    }
-                    else if(args[0].equals("items")){
-                        GlobalModelCache.nukeItemModel();
-                    }
-                }
+        if(args != null && args.length > 0){
+            if(args[0].equals("blocks")){
+                packet.writeByte(1);
             }
-            else{
-                GlobalModelCache.nukeBlockModels();
-                GlobalModelCache.nukeItemModel();
+            else if(args[0].equals("items")){
+                packet.writeByte(2);
             }
         }
+        else{
+            packet.writeByte(0);
+        }
+
+        packet.compress().sendToClients();
     }
 
     @Override
