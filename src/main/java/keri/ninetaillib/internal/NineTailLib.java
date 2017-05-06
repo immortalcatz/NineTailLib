@@ -3,7 +3,6 @@ package keri.ninetaillib.internal;
 import codechicken.lib.packet.PacketCustom;
 import keri.ninetaillib.internal.network.NineTailLibSPH;
 import keri.ninetaillib.internal.proxy.INineTailProxy;
-import keri.ninetaillib.multiblock.MultiblockLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -26,7 +25,6 @@ public class NineTailLib {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
         PROXY.preInit(event);
-        MultiblockLoader.INSTANCE.loadMultiblocks();
         LOGGER.info("PreInitilization phase done !");
     }
 

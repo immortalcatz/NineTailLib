@@ -7,6 +7,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ProgressManager;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,14 +20,13 @@ import java.util.Map;
 
 public class MultiblockLoader {
 
-    public static final MultiblockLoader INSTANCE = new MultiblockLoader();
     private static final String[] allowedCommentFormat = new String[]{"//", "#"};
     private static final char[] allowedOffsets = new char[]{'n', 'e', 's', 'w', 'u', 'd'};
     private static Map<String, ResourceLocation> fileLocations = Maps.newHashMap();
     private static Map<String, MultiblockPattern> mutliblocks = Maps.newHashMap();
 
-    public void loadMultiblocks(){
-        ProgressManager.ProgressBar loadingBar = ProgressManager.push("NineTailLib: loading multiblocks", fileLocations.size());
+    public void loadMultiblocks(FMLPreInitializationEvent event){
+        ProgressManager.ProgressBar loadingBar = ProgressManager.push(String.format("%s: loading multiblocks", event.getModMetadata().name), fileLocations.size());
 
         for(Map.Entry<String, ResourceLocation> fileLocation : this.fileLocations.entrySet()){
             String multiblockName = fileLocation.getKey();
