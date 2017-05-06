@@ -28,7 +28,18 @@ public class FMSModel {
         CCModel[] model = new CCModel[this.modelPartData.size()];
 
         for(int i = 0; i < this.modelPartData.size(); i++){
-            model[i] = CCModel.quadModel(24).generateBlock(0, this.modelPartData.get(i).getBounds()).computeNormals();
+            ModelPartData data = this.modelPartData.get(i);
+            model[i] = CCModel.quadModel(24).generateBlock(0, data.getBounds()).computeNormals();
+
+            for(int j = 0; j < data.getTransformations().size(); j++){
+                model[i].apply(data.getTransformations().get(j));
+            }
+
+            for(int j = 0; j < data.getUVTransformations().size(); j++){
+                model[i].apply(data.getUVTransformations().get(j));
+            }
+
+            model[i].setColour(data.getColor());
         }
 
         return model;
