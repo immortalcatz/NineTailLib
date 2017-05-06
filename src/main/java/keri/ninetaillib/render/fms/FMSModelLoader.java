@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.ProgressManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
@@ -47,6 +48,8 @@ public class FMSModelLoader {
     private static Map<String, TextureAtlasSprite> specialTextures = Maps.newHashMap();
 
     public void loadModels(){
+        ProgressManager.ProgressBar loadingBar = ProgressManager.push("NineTailLib: loading models", fileLocations.size());
+
         for(Map.Entry<String, ResourceLocation> file : this.fileLocations.entrySet()){
             String modelName = file.getKey();
             ResourceLocation modelLocation = file.getValue();
@@ -69,8 +72,11 @@ public class FMSModelLoader {
                 operations.add(operationLine);
             }
 
+            loadingBar.step(String.format("FMS Model: [%s]", modelLocation.toString()));
             this.models.put(modelName, this.parseModel(operations, specialTextures));
         }
+
+        ProgressManager.pop(loadingBar);
     }
 
     private Pair<Operation, Object[]> parseOperation(String s){

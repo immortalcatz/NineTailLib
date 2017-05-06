@@ -4,6 +4,7 @@ import codechicken.lib.packet.PacketCustom;
 import keri.ninetaillib.internal.NineTailLib;
 import keri.ninetaillib.internal.client.gui.InventoryButtonHandler;
 import keri.ninetaillib.internal.network.NineTailLibCPH;
+import keri.ninetaillib.render.fms.FMSModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -14,6 +15,7 @@ public class ClientProxy implements INineTailProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event){
         MinecraftForge.EVENT_BUS.register(new InventoryButtonHandler());
+        FMSModelLoader.INSTANCE.loadModels();
     }
 
     @Override
