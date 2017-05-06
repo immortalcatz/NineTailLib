@@ -2,12 +2,9 @@ package keri.ninetaillib.render.model;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.buffer.BakingVertexBuffer;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import keri.ninetaillib.render.registry.IBlockRenderingHandler;
+import keri.ninetaillib.render.util.BakedQuadCache;
 import keri.ninetaillib.render.util.VertexUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -26,19 +23,12 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class CustomBlockRenderer implements IBakedModel {
 
     private IBlockRenderingHandler blockRenderer;
-    private Map<String, List<BakedQuad>> quadCache = Maps.newHashMap();
-    private LoadingCache<String, List<BakedQuad>> cache = CacheBuilder.newBuilder().build(new CacheLoader<String, List<BakedQuad>>() {
-        @Override
-        public List<BakedQuad> load(String key) throws Exception {
-            return quadCache.get(key);
-        }
-    });
+    private static BakedQuadCache quadCache = BakedQuadCache.create();
 
     public CustomBlockRenderer(IBlockRenderingHandler renderer){
         this.blockRenderer = renderer;
@@ -47,19 +37,28 @@ public class CustomBlockRenderer implements IBakedModel {
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand){
         if(side != null){
-            if(this.cache.getIfPresent(this.getCacheKey(state)) == null){
+            if(!quadCache.isPresent(this.getCacheKey(state))){
                 BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
                 BakingVertexBuffer buffer = BakingVertexBuffer.create();
                 buffer.begin(GL11.GL_QUADS, VertexUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
                 CCRenderState renderState = CCRenderState.instance();
                 renderState.reset();
                 renderState.bind(buffer);
-                this.blockRenderer.renderBlock(renderState, state, side, layer, rand);
+                List<BakedQuad> quads = Lists.newArrayList();
+
+                if(this.blockRenderer.renderBlock(renderState, state, side, layer, rand) != null){
+                    quads.addAll(this.blockRenderer.renderBlock(renderState, state, side, layer, rand));
+                }
+                else{
+                    this.blockRenderer.renderBlock(renderState, state, side, layer, rand);
+                }
+
                 buffer.finishDrawing();
-                this.cache.put(this.getCacheKey(state), buffer.bake());
+                quads.addAll(buffer.bake());
+                quadCache.put(this.getCacheKey(state), quads);
             }
             else{
-                return this.cache.getUnchecked(this.getCacheKey(state));
+                return quadCache.get(this.getCacheKey(state));
             }
         }
 

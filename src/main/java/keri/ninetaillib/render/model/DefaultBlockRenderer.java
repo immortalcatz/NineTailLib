@@ -8,12 +8,15 @@ import keri.ninetaillib.render.registry.IBlockRenderingHandler;
 import keri.ninetaillib.texture.IIconBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class DefaultBlockRenderer implements IBlockRenderingHandler {
@@ -22,7 +25,7 @@ public class DefaultBlockRenderer implements IBlockRenderingHandler {
     private TextureAtlasSprite texture;
 
     @Override
-    public void renderBlock(CCRenderState renderState, IBlockState state, EnumFacing face, BlockRenderLayer layer, long rand) {
+    public List<BakedQuad> renderBlock(CCRenderState renderState, IBlockState state, EnumFacing face, BlockRenderLayer layer, long rand) {
         this.texture = ((IIconBlock)state.getBlock()).getIcon(0, 0);
         int meta = state.getBlock().getMetaFromState(state);
 
@@ -33,10 +36,12 @@ public class DefaultBlockRenderer implements IBlockRenderingHandler {
                 model.render(renderState, 0 + (4 * i), 4 + (4 * i), new IconTransformation(texture));
             }
         }
+
+        return null;
     }
 
     @Override
-    public void renderItem(CCRenderState renderState, ItemStack stack, long rand) {
+    public List<BakedQuad> renderItem(CCRenderState renderState, ItemStack stack, long rand) {
         int meta = stack.getMetadata();
 
         for(int i = 0; i < 6; i++){
@@ -46,6 +51,8 @@ public class DefaultBlockRenderer implements IBlockRenderingHandler {
                 model.render(renderState, 0 + (4 * i), 4 + (4 * i), new IconTransformation(texture));
             }
         }
+
+        return null;
     }
 
     @Override

@@ -35,10 +35,7 @@ public class DefaultItemRenderer implements IItemRenderingHandler {
     }
 
     @Override
-    public void renderItem(CCRenderState renderState, ItemStack stack, long rand){}
-
-    @Override
-    public List<BakedQuad> getBakedQuads(ItemStack stack, long random){
+    public List<BakedQuad> renderItem(CCRenderState renderState, ItemStack stack, long rand){
         Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
             public TextureAtlasSprite apply(ResourceLocation input) {
                 return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(input.toString());

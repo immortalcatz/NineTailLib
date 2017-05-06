@@ -13,9 +13,9 @@ import java.util.List;
 
 public interface IBlockRenderingHandler {
 
-    void renderBlock(CCRenderState renderState, IBlockState state, EnumFacing face, BlockRenderLayer layer, long rand);
+    List<BakedQuad> renderBlock(CCRenderState renderState, IBlockState state, EnumFacing face, BlockRenderLayer layer, long rand);
 
-    void renderItem(CCRenderState renderState, ItemStack stack, long rand);
+    List<BakedQuad> renderItem(CCRenderState renderState, ItemStack stack, long rand);
 
     TextureAtlasSprite getParticleTexture();
 
@@ -26,9 +26,5 @@ public interface IBlockRenderingHandler {
     default String getBlockKey(IExtendedBlockState state){ return null; }
 
     default String getItemKey(ItemStack stack){ return null; }
-
-    default List<BakedQuad> getBlockQuads(IBlockState state, EnumFacing side, long rand){ return null; }
-
-    default List<BakedQuad> getItemQuads(ItemStack stack, long rand){ return null; }
 
 }
