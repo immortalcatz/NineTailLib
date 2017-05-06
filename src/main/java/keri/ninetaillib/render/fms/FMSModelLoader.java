@@ -2,24 +2,16 @@ package keri.ninetaillib.render.fms;
 
 import codechicken.lib.colour.Colour;
 import codechicken.lib.math.MathHelper;
-import codechicken.lib.render.CCModel;
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.buffer.BakingVertexBuffer;
-import codechicken.lib.texture.TextureUtils;
 import codechicken.lib.vec.*;
-import codechicken.lib.vec.uv.MultiIconTransformation;
 import codechicken.lib.vec.uv.UVTranslation;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.opengl.GL11;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -354,7 +346,7 @@ public class FMSModelLoader {
     public void registerModel(String name, ResourceLocation location){
         if(name != null && name != ""){
             if(location != null){
-                this.fileLocations.put(name, location);
+                fileLocations.put(name, location);
             }
             else{
                 throw new FMSModelLoaderException("Multiblock location can't be null!");
@@ -379,61 +371,13 @@ public class FMSModelLoader {
         }
     }
 
-    public List<BakedQuad> getModel(VertexFormat format, String name){
-        if(name != null && name != ""){
-            List<ModelPartData> modelPartData = this.models.get(name);
-            BakingVertexBuffer buffer = BakingVertexBuffer.create();
-            buffer.begin(GL11.GL_QUADS, format);
-            CCRenderState renderState = CCRenderState.instance();
-            renderState.reset();
-            renderState.bind(buffer);
-
-            for(int i = 0; i < modelPartData.size(); i++){
-                ModelPartData data = modelPartData.get(i);
-                CCModel modelPart = CCModel.quadModel(24).generateBlock(0, data.getBounds()).computeNormals();
-
-                for(int j = 0; j < data.getTransformations().size(); j++){
-                    modelPart.apply(data.getTransformations().get(j));
-                }
-
-                for(int j = 0; j < data.getUVTransformations().size(); j++){
-                    modelPart.apply(data.getUVTransformations().get(j));
-                }
-
-                modelPart.setColour(data.getColor());
-
-                if(data.getHasBrightnessOverride()){
-                    renderState.brightness = data.getBrightness();
-                }
-
-                TextureAtlasSprite[] texture = null;
-
-                if(data.getHasSpecialTexture()){
-                    texture = data.getTextureSpecial();
-                }
-                else{
-                    texture = this.getTexture(data.getTexture());
-                }
-
-                modelPart.render(renderState, new MultiIconTransformation(texture));
-            }
-
-            buffer.finishDrawing();
-            return buffer.bake();
+    public FMSModel getModel(String name){
+        if(name != null && name != "") {
+            return new FMSModel(models.get(name));
         }
         else{
             throw new FMSModelLoaderException("Name can't be empty or null!");
         }
-    }
-
-    private TextureAtlasSprite[] getTexture(ResourceLocation[] paths){
-        TextureAtlasSprite[] texture = new TextureAtlasSprite[paths.length];
-
-        for(int i = 0; i < paths.length; i++){
-            texture[i] = TextureUtils.getTexture(paths[i]);
-        }
-
-        return texture;
     }
 
     private class FMSModelLoaderException extends IllegalArgumentException {
