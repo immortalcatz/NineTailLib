@@ -2,6 +2,7 @@ package keri.ninetaillib.network;
 
 import codechicken.lib.packet.PacketCustom;
 import keri.ninetaillib.internal.NineTailLib;
+import keri.ninetaillib.util.EnumDataType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
@@ -16,39 +17,39 @@ public class NetworkHandler {
 
         if(value != null){
             if(value instanceof Integer){
-                packet.writeInt(EnumDataType.INTEGER.ordinal());
+                packet.writeInt(EnumDataType.INTEGER.getIndex());
                 packet.writeInt((int)value);
             }
             else if(value instanceof Long){
-                packet.writeInt(EnumDataType.LONG.ordinal());
+                packet.writeInt(EnumDataType.LONG.getIndex());
                 packet.writeLong((long)value);
             }
             else if(value instanceof Float){
-                packet.writeInt(EnumDataType.FLOAT.ordinal());
+                packet.writeInt(EnumDataType.FLOAT.getIndex());
                 packet.writeFloat((float)value);
             }
             else if(value instanceof Double){
-                packet.writeInt(EnumDataType.DOUBLE.ordinal());
+                packet.writeInt(EnumDataType.DOUBLE.getIndex());
                 packet.writeDouble((double)value);
             }
             else if(value instanceof Boolean){
-                packet.writeInt(EnumDataType.BOOLEAN.ordinal());
+                packet.writeInt(EnumDataType.BOOLEAN.getIndex());
                 packet.writeBoolean((boolean)value);
             }
             else if(value instanceof String){
-                packet.writeInt(EnumDataType.STRING.ordinal());
+                packet.writeInt(EnumDataType.STRING.getIndex());
                 packet.writeString((String)value);
             }
             else if(value instanceof BlockPos){
-                packet.writeInt(EnumDataType.BLOCK_POS.ordinal());
+                packet.writeInt(EnumDataType.BLOCK_POS.getIndex());
                 packet.writeBlockPos((BlockPos)value);
             }
             else if(value instanceof FluidStack){
-                packet.writeInt(EnumDataType.FLUID_STACK.ordinal());
+                packet.writeInt(EnumDataType.FLUID_STACK.getIndex());
                 packet.writeFluidStack((FluidStack)value);
             }
             else if(value instanceof NBTTagCompound){
-                packet.writeInt(EnumDataType.NBT_TAG_COMPOUND.ordinal());
+                packet.writeInt(EnumDataType.NBT_TAG_COMPOUND.getIndex());
                 packet.writeNBTTagCompound((NBTTagCompound)value);
             }
             else{
@@ -67,20 +68,6 @@ public class NetworkHandler {
                 packet.compress().sendToServer();
                 break;
         }
-    }
-
-    public static enum EnumDataType {
-
-        INTEGER,
-        LONG,
-        FLOAT,
-        DOUBLE,
-        BOOLEAN,
-        STRING,
-        BLOCK_POS,
-        FLUID_STACK,
-        NBT_TAG_COMPOUND
-
     }
 
 }

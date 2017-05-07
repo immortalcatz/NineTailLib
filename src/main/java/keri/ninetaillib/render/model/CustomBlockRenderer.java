@@ -13,6 +13,8 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -25,7 +27,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class CustomBlockRenderer implements IBakedModel {
+public class CustomBlockRenderer implements IBakedModel, IResourceManagerReloadListener {
 
     private IBlockRenderingHandler blockRenderer;
     private static BakedQuadCache quadCache = BakedQuadCache.create();
@@ -63,6 +65,11 @@ public class CustomBlockRenderer implements IBakedModel {
         }
 
         return Lists.newArrayList();
+    }
+
+    @Override
+    public void onResourceManagerReload(IResourceManager resourceManager) {
+        quadCache.clear();
     }
 
     private String getCacheKey(IBlockState state){

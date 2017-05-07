@@ -54,6 +54,16 @@ public class BakedQuadCache {
         }
     }
 
+    public void clear(){
+        this.quadMap.clear();
+        this.quadCache = CacheBuilder.newBuilder().build(new CacheLoader<String, List<BakedQuad>>() {
+            @Override
+            public List<BakedQuad> load(String key) throws Exception {
+                return quadMap.get(key);
+            }
+        });
+    }
+
     public static BakedQuadCache create(){
         return new BakedQuadCache();
     }

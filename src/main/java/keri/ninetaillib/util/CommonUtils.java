@@ -26,7 +26,7 @@ import net.minecraftforge.fml.common.Loader;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -122,8 +122,8 @@ public class CommonUtils {
         tag.setIntArray(name, colorData);
     }
 
-    public static ArrayList<BlockPos> readPosList(String name, NBTTagCompound tag){
-        ArrayList<BlockPos> list = Lists.newArrayList();
+    public static List<BlockPos> readPosList(String name, NBTTagCompound tag){
+        List<BlockPos> list = Lists.newArrayList();
         int[] xCoords = tag.getIntArray(name + "_x");
         int[] yCoords = tag.getIntArray(name + "_y");
         int[] zCoords = tag.getIntArray(name + "_z");
@@ -135,7 +135,7 @@ public class CommonUtils {
         return list;
     }
 
-    public static void writePosList(String name, NBTTagCompound tag, ArrayList<BlockPos> list){
+    public static void writePosList(String name, NBTTagCompound tag, List<BlockPos> list){
         int[] xCoords = new int[list.size()];
         int[] yCoords = new int[list.size()];
         int[] zCoords = new int[list.size()];

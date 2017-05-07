@@ -7,6 +7,8 @@ import codechicken.lib.vec.uv.UVTranslation;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ProgressManager;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -23,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 @SideOnly(Side.CLIENT)
-public class FMSModelLoader {
+public class FMSModelLoader implements IResourceManagerReloadListener {
 
     private static final String[] allowedCommentFormat = new String[]{
             "//",
@@ -46,6 +48,36 @@ public class FMSModelLoader {
     private static Map<String, ResourceLocation> fileLocations = Maps.newHashMap();
     private static Map<String, List<ModelPartData>> models = Maps.newHashMap();
     private static Map<String, TextureAtlasSprite> specialTextures = Maps.newHashMap();
+
+    @Override
+    public void onResourceManagerReload(IResourceManager resourceManager) {
+        models.clear();
+
+        for(Map.Entry<String, ResourceLocation> file : this.fileLocations.entrySet()){
+            String modelName = file.getKey();
+            ResourceLocation modelLocation = file.getValue();
+            List<String> fileContent = this.readFile(modelLocation);
+            List<List<Pair<Operation, Object[]>>> operations = Lists.newArrayList();
+
+            for(String line : fileContent){
+                List<Pair<Operation, Object[]>> operationLine = Lists.newArrayList();
+
+                for(int possibleOperation = 0; possibleOperation < allowedOperations.length; possibleOperation++){
+                    if(line.contains(allowedOperations[possibleOperation])){
+                        int operationStart = line.indexOf(allowedOperations[possibleOperation]);
+                        int operationEnd = line.indexOf(')', operationStart) + 1;
+                        String lineOperation = line.substring(operationStart, operationEnd);
+                        Pair<Operation, Object[]> operation = this.parseOperation(lineOperation);
+                        operationLine.add(operation);
+                    }
+                }
+
+                operations.add(operationLine);
+            }
+
+            this.models.put(modelName, this.parseModel(operations, specialTextures));
+        }
+    }
 
     public void loadModels(FMLPreInitializationEvent event){
         ProgressManager.ProgressBar loadingBar = ProgressManager.push(String.format("%s: loading models", event.getModMetadata().name), fileLocations.size());

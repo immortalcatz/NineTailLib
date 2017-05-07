@@ -2,7 +2,7 @@ package keri.ninetaillib.internal.network;
 
 import codechicken.lib.packet.PacketCustom;
 import keri.ninetaillib.network.INetworkTile;
-import keri.ninetaillib.network.NetworkHandler;
+import keri.ninetaillib.util.EnumDataType;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.INetHandlerPlayServer;
 import net.minecraft.tileentity.TileEntity;
@@ -31,7 +31,7 @@ public class NineTailLibSPH implements PacketCustom.IServerPacketHandler {
             return;
         }
 
-        switch(NetworkHandler.EnumDataType.values()[dataType]){
+        switch(EnumDataType.VALUES[dataType]){
             case INTEGER:
                 ((INetworkTile)tile).onUpdatePacket(Side.SERVER, packet.readInt(), valueId);
                 break;

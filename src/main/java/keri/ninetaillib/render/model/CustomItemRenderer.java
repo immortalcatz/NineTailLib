@@ -18,6 +18,8 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
@@ -32,7 +34,7 @@ import java.util.List;
 import java.util.Random;
 
 @SideOnly(Side.CLIENT)
-public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel {
+public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel, IResourceManagerReloadListener {
 
     private IBlockRenderingHandler blockRenderer;
     private IItemRenderingHandler itemRenderer;
@@ -167,6 +169,11 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
         else{
             return MapWrapper.handlePerspective(this, TransformUtils.DEFAULT_BLOCK.getTransforms(), cameraTransformType);
         }
+    }
+
+    @Override
+    public void onResourceManagerReload(IResourceManager resourceManager) {
+        quadCache.clear();
     }
 
     private String getCacheKey(ItemStack stack){
