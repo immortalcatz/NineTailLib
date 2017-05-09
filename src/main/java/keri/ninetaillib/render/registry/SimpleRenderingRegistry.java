@@ -7,17 +7,14 @@ import codechicken.lib.util.TransformUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import keri.ninetaillib.block.BlockBase;
-import keri.ninetaillib.block.IMetaBlock;
 import keri.ninetaillib.fluid.FluidBase;
 import keri.ninetaillib.item.ItemBase;
-import keri.ninetaillib.render.model.CustomBlockRenderer;
 import keri.ninetaillib.render.model.CustomItemRenderer;
 import keri.ninetaillib.render.model.DefaultItemRenderer;
 import keri.ninetaillib.render.player.PlayerRenderHandler;
 import keri.ninetaillib.texture.IIconItem;
 import keri.ninetaillib.texture.IIconRegistrar;
 import keri.ninetaillib.util.FluidStateMapper;
-import keri.ninetaillib.util.SimpleStateMapper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -156,12 +153,13 @@ public abstract class SimpleRenderingRegistry implements IRenderingRegistry {
             throw new IllegalArgumentException("Block must be an instance of BlockBase !");
         }
 
+        /**
         BlockBase blockBase = (BlockBase)block;
         ResourceLocation rl = new ResourceLocation(blockBase.getRegistryName().getResourceDomain(), blockBase.getInternalName());
 
         if(blockBase instanceof IMetaBlock){
             IMetaBlock iface = (IMetaBlock)blockBase;
-            CustomBlockRenderer blockRenderer = new CustomBlockRenderer(renderer);
+            CustomBlockRendererOld blockRenderer = new CustomBlockRendererOld(renderer);
             CustomItemRenderer itemRenderer = new CustomItemRenderer(renderer);
             ModelResourceLocation locationInventory = new ModelResourceLocation(rl, "inventory");
 
@@ -175,7 +173,7 @@ public abstract class SimpleRenderingRegistry implements IRenderingRegistry {
             ModelRegistryHelper.registerItemRenderer(Item.getItemFromBlock(blockBase), itemRenderer);
         }
         else{
-            CustomBlockRenderer blockRenderer = new CustomBlockRenderer(renderer);
+            CustomBlockRendererOld blockRenderer = new CustomBlockRendererOld(renderer);
             CustomItemRenderer itemRenderer = new CustomItemRenderer(renderer);
             ModelResourceLocation location = new ModelResourceLocation(rl, "normal");
             ModelResourceLocation locationInventory = new ModelResourceLocation(rl, "inventory");
@@ -184,6 +182,7 @@ public abstract class SimpleRenderingRegistry implements IRenderingRegistry {
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockBase), 0, locationInventory);
             ModelRegistryHelper.registerItemRenderer(Item.getItemFromBlock(blockBase), itemRenderer);
         }
+         */
     }
 
     private void registerRenderingHandler(Item item, IItemRenderingHandler renderer){
@@ -194,6 +193,7 @@ public abstract class SimpleRenderingRegistry implements IRenderingRegistry {
             throw new IllegalArgumentException("Item must be an instance of ItemBase !");
         }
 
+        /**
         ItemBase itemBase = (ItemBase)item;
         ResourceLocation rl = new ResourceLocation(itemBase.getRegistryName().getResourceDomain(), itemBase.getInternalName());
 
@@ -213,6 +213,7 @@ public abstract class SimpleRenderingRegistry implements IRenderingRegistry {
             ModelLoader.setCustomModelResourceLocation(itemBase, 0, location);
             ModelRegistryHelper.registerItemRenderer(itemBase, itemRenderer);
         }
+         */
     }
 
     private void registerBlock(BlockBase block){

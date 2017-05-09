@@ -1,30 +1,18 @@
 package keri.ninetaillib.render.registry;
 
 import codechicken.lib.render.CCRenderState;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.property.IExtendedBlockState;
-
-import java.util.List;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 public interface IBlockRenderingHandler {
 
-    List<BakedQuad> renderBlock(CCRenderState renderState, IBlockState state, EnumFacing face, BlockRenderLayer layer, long rand);
+    boolean renderBlock(CCRenderState renderState, IBlockAccess world, BlockPos pos, BlockRenderLayer layer);
 
-    List<BakedQuad> renderItem(CCRenderState renderState, ItemStack stack, long rand);
+    void renderBlockDamage(CCRenderState renderState, IBlockAccess world, BlockPos pos, TextureAtlasSprite texture);
 
-    TextureAtlasSprite getParticleTexture();
-
-    default boolean hasDynamicItemRendering(){ return false; };
-
-    default boolean ambientOcclusion(){ return true; }
-
-    default String getBlockKey(IExtendedBlockState state){ return null; }
-
-    default String getItemKey(ItemStack stack){ return null; }
+    void renderItem(CCRenderState renderState, ItemStack stack);
 
 }
