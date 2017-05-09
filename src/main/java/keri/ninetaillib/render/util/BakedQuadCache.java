@@ -14,12 +14,12 @@ import java.util.Map;
 @SideOnly(Side.CLIENT)
 public class BakedQuadCache {
 
-    private Map<String, List<BakedQuad>> quadMap;
-    private LoadingCache<String, List<BakedQuad>> quadCache;
+    private static Map<String, List<BakedQuad>> quadMap;
+    private static LoadingCache<String, List<BakedQuad>> quadCache;
 
     private BakedQuadCache(){
-        this.quadMap = Maps.newHashMap();
-        this.quadCache = CacheBuilder.newBuilder().build(new CacheLoader<String, List<BakedQuad>>() {
+        quadMap = Maps.newHashMap();
+        quadCache = CacheBuilder.newBuilder().build(new CacheLoader<String, List<BakedQuad>>() {
             @Override
             public List<BakedQuad> load(String key) throws Exception {
                 return quadMap.get(key);
@@ -29,7 +29,7 @@ public class BakedQuadCache {
 
     public void put(String key, List<BakedQuad> quads){
         if(key != null){
-            this.quadCache.put(key, quads);
+            quadCache.put(key, quads);
         }
         else{
             throw new IllegalArgumentException("Cache key cannot be null!");
@@ -38,7 +38,7 @@ public class BakedQuadCache {
 
     public List<BakedQuad> get(String key){
         if(key != null){
-            return this.quadCache.getUnchecked(key);
+            return quadCache.getUnchecked(key);
         }
         else{
             throw new IllegalArgumentException("Cache key cannot be null!");
@@ -47,7 +47,7 @@ public class BakedQuadCache {
 
     public boolean isPresent(String key){
         if(key != null){
-            return this.quadCache.getIfPresent(key) != null;
+            return quadCache.getIfPresent(key) != null;
         }
         else{
             throw new IllegalArgumentException("Cache key cannot be null!");
@@ -55,13 +55,8 @@ public class BakedQuadCache {
     }
 
     public void clear(){
-        this.quadMap.clear();
-        this.quadCache = CacheBuilder.newBuilder().build(new CacheLoader<String, List<BakedQuad>>() {
-            @Override
-            public List<BakedQuad> load(String key) throws Exception {
-                return quadMap.get(key);
-            }
-        });
+        quadMap.clear();
+        quadCache.invalidateAll();
     }
 
     public static BakedQuadCache create(){
