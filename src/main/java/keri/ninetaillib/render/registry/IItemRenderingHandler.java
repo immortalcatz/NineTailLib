@@ -1,25 +1,21 @@
 package keri.ninetaillib.render.registry;
 
 import codechicken.lib.render.CCRenderState;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import codechicken.lib.util.TransformUtils;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.vecmath.Matrix4f;
-import java.util.List;
 
 public interface IItemRenderingHandler {
 
-    List<BakedQuad> renderItem(CCRenderState renderState, ItemStack stack, long rand);
+    void renderItem(CCRenderState renderState, ItemStack stack);
 
-    Pair<? extends IBakedModel, Matrix4f> handlePerspective(IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType);
-
-    default boolean useRenderCache(){ return true; };
-
-    default boolean useStandardItemLighting(){ return true; };
-
-    default String getItemKey(ItemStack stack){ return null; }
+    default Pair<? extends IBakedModel, Matrix4f> handlePerspective(IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType){
+        return IPerspectiveAwareModel.MapWrapper.handlePerspective(model, TransformUtils.DEFAULT_ITEM.getTransforms(), cameraTransformType);
+    }
 
 }

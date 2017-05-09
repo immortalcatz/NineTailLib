@@ -19,6 +19,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class CustomBlockRenderer implements ICCBlockRenderer {
 
+    /**
+     * MORE TODO IN HERE YA' LAZY FUCKTURD
+     */
+
     private IBlockRenderingHandler renderingHandler;
     private EnumBlockRenderType renderType = BlockRenderingRegistry.createRenderType("ntl_block_rendering_handler");
 

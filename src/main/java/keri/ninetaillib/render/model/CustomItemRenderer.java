@@ -1,23 +1,16 @@
 package keri.ninetaillib.render.model;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.buffer.BakingVertexBuffer;
 import codechicken.lib.render.item.IItemRenderer;
 import codechicken.lib.util.TransformUtils;
 import com.google.common.collect.Lists;
 import keri.ninetaillib.render.registry.IBlockRenderingHandler;
 import keri.ninetaillib.render.registry.IItemRenderingHandler;
-import keri.ninetaillib.render.util.BakedQuadCache;
-import keri.ninetaillib.render.util.SimpleBakedModel;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.item.ItemStack;
@@ -26,20 +19,20 @@ import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import java.util.List;
-import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel, IResourceManagerReloadListener {
 
+    /**
+     * MORE TODO IN HERE YA' LAZY FUCKTURD
+     */
+
     private IBlockRenderingHandler blockRenderer;
     private IItemRenderingHandler itemRenderer;
-    private Random random = new Random();
-    private static BakedQuadCache quadCache = BakedQuadCache.create();
 
     public CustomItemRenderer(IBlockRenderingHandler renderer){
         this.blockRenderer = renderer;
@@ -51,6 +44,7 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
 
     @Override
     public void renderItem(ItemStack stack){
+        /**
         if(this.itemRenderer != null){
             if(this.itemRenderer.useRenderCache()){
                 if(!quadCache.isPresent(this.getCacheKey(stack))){
@@ -159,6 +153,7 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                 }
             }
         }
+         */
     }
 
     @Override
@@ -173,9 +168,10 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
-        quadCache.clear();
+        //quadCache.clear();
     }
 
+    /**
     private String getCacheKey(ItemStack stack){
         StringBuilder builder = new StringBuilder();
         builder.append(stack.getItem().getRegistryName().getResourceDomain());
@@ -196,6 +192,7 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
 
         return builder.toString();
     }
+     */
 
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {

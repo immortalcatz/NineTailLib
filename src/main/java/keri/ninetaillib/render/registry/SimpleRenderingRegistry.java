@@ -154,6 +154,10 @@ public abstract class SimpleRenderingRegistry implements IRenderingRegistry {
         }
 
         /**
+         * MORE TODO IN HERE YA' LAZY FUCKTURD
+         */
+
+        /**
         BlockBase blockBase = (BlockBase)block;
         ResourceLocation rl = new ResourceLocation(blockBase.getRegistryName().getResourceDomain(), blockBase.getInternalName());
 
@@ -192,6 +196,10 @@ public abstract class SimpleRenderingRegistry implements IRenderingRegistry {
         if(!(item instanceof ItemBase)){
             throw new IllegalArgumentException("Item must be an instance of ItemBase !");
         }
+
+        /**
+         * MORE TODO IN HERE YA' LAZY FUCKTURD
+         */
 
         /**
         ItemBase itemBase = (ItemBase)item;
