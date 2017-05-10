@@ -1,4 +1,4 @@
-package keri.ninetaillib.render.model;
+package keri.ninetaillib.render.render;
 
 import codechicken.lib.render.CCModel;
 import codechicken.lib.render.CCRenderState;
@@ -47,11 +47,12 @@ public class DefaultBlockRenderer implements IBlockRenderingHandler {
     @Override
     public void renderBlockDamage(CCRenderState renderState, IBlockAccess world, BlockPos pos, TextureAtlasSprite texture) {
         CCModel model = CCModel.quadModel(24).generateBlock(0, new Cuboid6(0D, 0D, 0D, 1D, 1D, 1D)).computeNormals();
+        model.apply(new Translation(Vector3.fromBlockPos(pos)));
         model.render(renderState, new IconTransformation(texture));
     }
 
     @Override
-    public void renderItem(CCRenderState renderState, ItemStack stack) {
+    public void renderItem(CCRenderState renderState, ItemStack stack){
         CCModel model = CCModel.quadModel(24).generateBlock(0, new Cuboid6(0D, 0D, 0D, 1D, 1D, 1D)).computeNormals();
         IIconBlock iconProvider = (IIconBlock)Block.getBlockFromItem(stack.getItem());
 

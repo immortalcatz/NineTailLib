@@ -1,4 +1,4 @@
-package keri.ninetaillib.render.util;
+package keri.ninetaillib.render.model;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;

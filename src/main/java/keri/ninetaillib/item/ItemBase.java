@@ -4,6 +4,7 @@ import codechicken.lib.util.TransformUtils;
 import keri.ninetaillib.render.registry.IBaubleRenderingHandler;
 import keri.ninetaillib.render.registry.IItemRenderingHandler;
 import keri.ninetaillib.render.registry.IRenderingRegistry;
+import keri.ninetaillib.render.render.DefaultItemRenderer;
 import keri.ninetaillib.texture.IIconItem;
 import keri.ninetaillib.texture.IIconRegistrar;
 import keri.ninetaillib.util.*;

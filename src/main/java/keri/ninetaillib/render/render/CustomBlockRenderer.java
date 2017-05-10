@@ -1,7 +1,6 @@
-package keri.ninetaillib.render.model;
+package keri.ninetaillib.render.render;
 
 import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.block.BlockRenderingRegistry;
 import codechicken.lib.render.block.ICCBlockRenderer;
 import keri.ninetaillib.render.registry.IBlockRenderingHandler;
 import net.minecraft.block.state.IBlockState;
@@ -9,7 +8,6 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -19,12 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class CustomBlockRenderer implements ICCBlockRenderer {
 
-    /**
-     * MORE TODO IN HERE YA' LAZY FUCKTURD
-     */
-
     private IBlockRenderingHandler renderingHandler;
-    private EnumBlockRenderType renderType = BlockRenderingRegistry.createRenderType("ntl_block_rendering_handler");
 
     public CustomBlockRenderer(IBlockRenderingHandler handler){
         this.renderingHandler = handler;
@@ -35,6 +28,7 @@ public class CustomBlockRenderer implements ICCBlockRenderer {
         CCRenderState renderState = CCRenderState.instance();
         renderState.reset();
         renderState.bind(buffer);
+        renderState.pullLightmap();
         this.renderingHandler.renderBlockDamage(renderState, world, pos, sprite);
     }
 
@@ -44,6 +38,7 @@ public class CustomBlockRenderer implements ICCBlockRenderer {
         CCRenderState renderState = CCRenderState.instance();
         renderState.reset();
         renderState.bind(buffer);
+        renderState.lightMatrix.locate(world, pos);
         renderState.pullLightmap();
         return this.renderingHandler.renderBlock(renderState, world, pos, layer);
     }

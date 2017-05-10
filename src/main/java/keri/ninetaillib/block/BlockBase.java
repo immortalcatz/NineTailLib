@@ -1,9 +1,11 @@
 package keri.ninetaillib.block;
 
+import codechicken.lib.texture.TextureUtils;
+import keri.ninetaillib.internal.proxy.ClientProxy;
 import keri.ninetaillib.item.ItemBlockBase;
-import keri.ninetaillib.render.model.DefaultBlockRenderer;
 import keri.ninetaillib.render.registry.IBlockRenderingHandler;
 import keri.ninetaillib.render.registry.IRenderingRegistry;
+import keri.ninetaillib.render.render.DefaultBlockRenderer;
 import keri.ninetaillib.texture.IIconBlock;
 import keri.ninetaillib.texture.IIconRegistrar;
 import keri.ninetaillib.tile.TileEntityInventory;
@@ -23,6 +25,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
@@ -204,12 +207,22 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
         if(this.textureName != null){
             this.texture = registrar.registerIcon(this.modid + ":blocks/" + this.textureName);
         }
+        else{
+            this.texture = TextureUtils.getMissingSprite();
+        }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getIcon(int meta, int side) {
         return this.texture;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("deprecation")
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return ClientProxy.renderType;
     }
 
     public void setTextureName(String textureName){

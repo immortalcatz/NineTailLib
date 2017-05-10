@@ -10,6 +10,6 @@ public interface IIconBlock {
 
     TextureAtlasSprite getIcon(int meta, int side);
 
-    TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, int side);
+    default TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, int side){ return null; };
 
 }

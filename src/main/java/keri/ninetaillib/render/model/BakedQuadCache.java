@@ -1,4 +1,4 @@
-package keri.ninetaillib.render.util;
+package keri.ninetaillib.render.model;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
