@@ -10,7 +10,6 @@ import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.fluid.FluidBase;
 import keri.ninetaillib.item.ItemBase;
 import keri.ninetaillib.render.model.CustomItemRenderer;
-import keri.ninetaillib.render.model.DefaultItemRenderer;
 import keri.ninetaillib.render.player.PlayerRenderHandler;
 import keri.ninetaillib.texture.IIconItem;
 import keri.ninetaillib.texture.IIconRegistrar;

@@ -1,7 +1,6 @@
 package keri.ninetaillib.item;
 
 import codechicken.lib.util.TransformUtils;
-import keri.ninetaillib.render.model.DefaultItemRenderer;
 import keri.ninetaillib.render.registry.IBaubleRenderingHandler;
 import keri.ninetaillib.render.registry.IItemRenderingHandler;
 import keri.ninetaillib.render.registry.IRenderingRegistry;

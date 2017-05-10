@@ -44,6 +44,7 @@ public class CustomBlockRenderer implements ICCBlockRenderer {
         CCRenderState renderState = CCRenderState.instance();
         renderState.reset();
         renderState.bind(buffer);
+        renderState.pullLightmap();
         return this.renderingHandler.renderBlock(renderState, world, pos, layer);
     }
 
