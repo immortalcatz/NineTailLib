@@ -1,5 +1,7 @@
 package keri.ninetaillib.block;
 
+import codechicken.lib.render.particle.CustomParticleHandler;
+import codechicken.lib.texture.IWorldBlockTextureProvider;
 import codechicken.lib.texture.TextureUtils;
 import keri.ninetaillib.item.ItemBlockBase;
 import keri.ninetaillib.render.registry.IBlockRenderingHandler;
@@ -16,6 +18,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -24,10 +27,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,7 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class BlockBase<T extends TileEntity> extends Block implements ITileEntityProvider, IIconBlock {
+public abstract class BlockBase<T extends TileEntity> extends Block implements ITileEntityProvider, IIconBlock, IWorldBlockTextureProvider {
 
     private String internalName;
     private String modid;
@@ -219,9 +225,44 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
 
     @Override
     @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getTexture(EnumFacing side, IBlockState state, BlockRenderLayer layer, IBlockAccess world, BlockPos pos) {
+        TextureAtlasSprite texture = null;
+
+        if(this.getIcon(world, pos, side.getIndex()) != null){
+            texture = this.getIcon(world, pos, side.getIndex());
+        }
+        else{
+            texture = this.getIcon(state.getBlock().getMetaFromState(state), side.getIndex());
+        }
+
+        return texture;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getTexture(EnumFacing side, ItemStack stack){
+        return TextureUtils.getMissingSprite();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     @SuppressWarnings("deprecation")
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return this.getRenderingRegistry().getRenderType(this);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
+        CustomParticleHandler.addDestroyEffects(world, pos, manager, this);
+        return true;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
+        CustomParticleHandler.addHitEffects(state, world, target, manager, this);
+        return true;
     }
 
     public void setTextureName(String textureName){
