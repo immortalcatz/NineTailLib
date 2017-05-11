@@ -166,7 +166,15 @@ public abstract class SimpleRenderingRegistry implements IRenderingRegistry {
 
         new MLESupressor(block).supress(false, block instanceof IMetaBlock);
         ModelResourceLocation locationInventory = new ModelResourceLocation(block.getRegistryName(), "inventory");
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, locationInventory);
+
+        if(block instanceof IMetaBlock){
+            IMetaBlock metaBlock = (IMetaBlock)block;
+
+            for(int i = 0; i < metaBlock.getSubNames().length; i++){
+                ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, locationInventory);
+            }
+        }
+
         ModelRegistryHelper.register(locationInventory, new CustomItemRenderer(renderer));
     }
 
@@ -190,7 +198,13 @@ public abstract class SimpleRenderingRegistry implements IRenderingRegistry {
         }
 
         ModelResourceLocation location = new ModelResourceLocation(item.getRegistryName(), "inventory");
-        ModelLoader.setCustomModelResourceLocation(item, 0, location);
+
+        if(((ItemBase)item).getSubNames() != null){
+            for(int i = 0; i < ((ItemBase)item).getSubNames().length; i++){
+                ModelLoader.setCustomModelResourceLocation(item, i, location);
+            }
+        }
+
         ModelRegistryHelper.register(location, new CustomItemRenderer(renderer));
     }
 
