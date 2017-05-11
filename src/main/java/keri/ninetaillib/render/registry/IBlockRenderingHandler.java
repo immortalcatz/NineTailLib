@@ -15,4 +15,6 @@ public interface IBlockRenderingHandler {
 
     void renderItem(CCRenderState renderState, ItemStack stack);
 
+    default boolean useDefaultLighting(){ return true; };
+
 }

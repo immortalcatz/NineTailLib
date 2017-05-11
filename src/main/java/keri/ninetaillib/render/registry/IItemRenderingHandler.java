@@ -18,4 +18,6 @@ public interface IItemRenderingHandler {
         return IPerspectiveAwareModel.MapWrapper.handlePerspective(model, TransformUtils.DEFAULT_ITEM.getTransforms(), cameraTransformType);
     }
 
+    default boolean useDefaultLighting(){ return false; };
+
 }

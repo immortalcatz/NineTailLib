@@ -1,7 +1,6 @@
 package keri.ninetaillib.block;
 
 import codechicken.lib.texture.TextureUtils;
-import keri.ninetaillib.internal.proxy.ClientProxy;
 import keri.ninetaillib.item.ItemBlockBase;
 import keri.ninetaillib.render.registry.IBlockRenderingHandler;
 import keri.ninetaillib.render.registry.IRenderingRegistry;
@@ -222,7 +221,7 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("deprecation")
     public EnumBlockRenderType getRenderType(IBlockState state) {
-        return ClientProxy.renderType;
+        return this.getRenderingRegistry().getRenderType(this);
     }
 
     public void setTextureName(String textureName){

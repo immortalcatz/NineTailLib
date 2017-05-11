@@ -10,7 +10,6 @@ import com.google.common.collect.Maps;
 import keri.ninetaillib.block.BlockBase;
 import keri.ninetaillib.block.IMetaBlock;
 import keri.ninetaillib.fluid.FluidBase;
-import keri.ninetaillib.internal.proxy.ClientProxy;
 import keri.ninetaillib.item.ItemBase;
 import keri.ninetaillib.render.player.PlayerRenderHandler;
 import keri.ninetaillib.render.render.CustomBlockRenderer;
@@ -25,6 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.item.*;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,6 +41,7 @@ public abstract class SimpleRenderingRegistry implements IRenderingRegistry {
     private Map<String, List<FluidBase>> fluidsToHandle = Maps.newHashMap();
     private Map<String, List<Item>> specialItemToHandle = Maps.newHashMap();
     private Map<String, List<IBaubleRenderingHandler>> baubleRenderingHandlers = Maps.newHashMap();
+    private Map<String, Map<String, EnumBlockRenderType>> renderTypes = Maps.newHashMap();
 
     public void preInit(){
         if(this.blocksToHandle.containsKey(this.getModid())){
@@ -156,6 +157,11 @@ public abstract class SimpleRenderingRegistry implements IRenderingRegistry {
         }
     }
 
+    @Override
+    public EnumBlockRenderType getRenderType(Block block) {
+        return this.renderTypes.get(this.getModid()).get(block.getRegistryName().toString());
+    }
+
     private void registerRenderingHandler(Block block, IBlockRenderingHandler renderer){
         if(block == null || renderer == null){
             throw new IllegalArgumentException("Block or rendering handler can't be null !");
@@ -174,6 +180,9 @@ public abstract class SimpleRenderingRegistry implements IRenderingRegistry {
                 ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, locationInventory);
             }
         }
+        else{
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, locationInventory);
+        }
 
         ModelRegistryHelper.register(locationInventory, new CustomItemRenderer(renderer));
     }
@@ -186,7 +195,20 @@ public abstract class SimpleRenderingRegistry implements IRenderingRegistry {
             throw new IllegalArgumentException("Block must be an instance of BlockBase !");
         }
 
-        BlockRenderingRegistry.registerRenderer(ClientProxy.renderType, new CustomBlockRenderer(renderer));
+        String internalName = block.getRegistryName().toString();
+        EnumBlockRenderType renderType = BlockRenderingRegistry.createRenderType(internalName);
+
+        if(!this.renderTypes.containsKey(this.getModid())){
+            Map<String, EnumBlockRenderType> map = Maps.newHashMap();
+            map.put(internalName, renderType);
+            this.renderTypes.put(this.getModid(), map);
+        }
+        else{
+            Map<String, EnumBlockRenderType> map = this.renderTypes.get(this.getModid());
+            map.put(internalName, renderType);
+        }
+
+        BlockRenderingRegistry.registerRenderer(renderType, new CustomBlockRenderer(renderer));
     }
 
     private void registerRenderingHandler(Item item, IItemRenderingHandler renderer){
@@ -203,6 +225,9 @@ public abstract class SimpleRenderingRegistry implements IRenderingRegistry {
             for(int i = 0; i < ((ItemBase)item).getSubNames().length; i++){
                 ModelLoader.setCustomModelResourceLocation(item, i, location);
             }
+        }
+        else{
+            ModelLoader.setCustomModelResourceLocation(item, 0, location);
         }
 
         ModelRegistryHelper.register(location, new CustomItemRenderer(renderer));

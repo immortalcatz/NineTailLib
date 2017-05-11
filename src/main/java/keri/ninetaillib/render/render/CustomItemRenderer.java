@@ -9,6 +9,7 @@ import keri.ninetaillib.render.registry.IItemRenderingHandler;
 import keri.ninetaillib.render.util.VertexUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -55,9 +56,17 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
         renderState.pullLightmap();
 
         if(this.blockRenderer != null){
+            if(this.blockRenderer.useDefaultLighting()){
+                RenderHelper.enableStandardItemLighting();
+            }
+
             this.blockRenderer.renderItem(renderState, stack);
         }
         else{
+            if(this.itemRenderer.useDefaultLighting()){
+                RenderHelper.enableStandardItemLighting();
+            }
+
             this.itemRenderer.renderItem(renderState, stack);
         }
 

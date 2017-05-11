@@ -34,7 +34,7 @@ public class NineTailLib {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
-        //this.preInitTest(event);
+        this.preInitTest(event);
         PROXY.preInit(event);
         LOGGER.info("PreInitilization phase done !");
     }
