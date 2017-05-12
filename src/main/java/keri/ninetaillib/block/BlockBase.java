@@ -181,7 +181,6 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
 
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state){
-        super.breakBlock(world, pos, state);
         TileEntity tile = (TileEntity)world.getTileEntity(pos);
 
         if(tile != null){
@@ -189,6 +188,8 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
                 CommonUtils.dropInventory(tile);
             }
         }
+
+        super.breakBlock(world, pos, state);
     }
 
     @Override
@@ -229,10 +230,10 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
         TextureAtlasSprite texture = null;
 
         if(this.getIcon(world, pos, side.getIndex()) != null){
-            texture = this.getIcon(world, pos, side.getIndex());
+            texture = this.getIcon(world, pos, 0);
         }
         else{
-            texture = this.getIcon(state.getBlock().getMetaFromState(state), side.getIndex());
+            texture = this.getIcon(state.getBlock().getMetaFromState(state), 0);
         }
 
         return texture;
