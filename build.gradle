@@ -16,10 +16,11 @@ repositories {
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven'
 
-version = "0.4.107"
-group= "keri.ninetaillib" 
-archivesBaseName = "NineTailLib-[1.10.2]"
+version = "1.4.108"
+group = "keri.ninetaillib" 
+archivesBaseName = "NineTailLib"
 
 sourceCompatibility = targetCompatibility = "1.8" 
 compileJava {
@@ -27,17 +28,16 @@ compileJava {
 }
 
 minecraft {
-    version = "1.10.2-12.18.3.2185"
+    version = "1.11.2-13.20.0.2300"
     runDir = "run"
-    mappings = "snapshot_20161111"
+    mappings = "snapshot_20161220"
 }
 
 dependencies {
-    deobfCompile "codechicken:CodeChickenLib:1.10.2-2.5.8.255:deobf"
+    deobfCompile "codechicken:CodeChickenLib:1.11.2-2.6.0.254:deobf"
 }
 
-processResources
-{
+processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 

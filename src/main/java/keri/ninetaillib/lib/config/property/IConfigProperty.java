@@ -1,0 +1,17 @@
+/*
+ * Copyright (c) 2017 KitsuneAlex. All rights reserved!
+ * Do not distribute or redistribute in any way except you got
+ * the explicit permission from the developer of this software!
+ */
+
+package keri.ninetaillib.lib.config.property;
+
+import net.minecraftforge.common.config.Configuration;
+
+public interface IConfigProperty<T extends Object> {
+
+    void addProperty(Configuration config);
+
+    T getValue();
+
+}
