@@ -13,16 +13,13 @@ import codechicken.lib.render.buffer.BakingVertexBuffer;
 import codechicken.lib.util.Copyable;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Transformation;
-import codechicken.lib.vec.Vertex5;
-import codechicken.lib.vec.uv.MultiIconTransformation;
 import codechicken.lib.vec.uv.UVTransformation;
 import com.google.common.collect.Lists;
-import keri.ninetaillib.lib.util.RenderUtils;
 import keri.ninetaillib.lib.util.VectorUtils;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -32,12 +29,11 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class ModelPart implements Copyable<ModelPart> {
 
-    private Cuboid6 bounds;
+    private Cuboid6 bounds = new Cuboid6(0D, 0D, 0D, 16D, 16D, 16D);
     private TextureAtlasSprite[] texture = new TextureAtlasSprite[6];
     private List<Transformation> transformations = Lists.newArrayList();
     private List<UVTransformation> uvTransformations = Lists.newArrayList();
     private Colour[][] color = new Colour[6][4];
-    private int[][] brightness = new int[6][4];
 
     public ModelPart setBounds(Cuboid6 bounds){
         this.bounds = bounds;
@@ -79,98 +75,37 @@ public class ModelPart implements Copyable<ModelPart> {
         return this;
     }
 
-    public ModelPart setBrightness(int brightness){
-        for(int side = 0; side < 6; side++) {
-            for(int vertex = 0; vertex < 4; vertex++) {
-                this.brightness[side][vertex] = brightness;
+    public List<BakedQuad> bake(IQuadManipulator... manipulators){
+        List<BakedQuad> quads = Lists.newArrayList();
+
+        CCModel model = CCModel.quadModel(24).generateBlock(0, VectorUtils.divide(this.bounds, 16D)).computeNormals();
+        BakingVertexBuffer buffer = BakingVertexBuffer.create();
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+        CCRenderState renderState = GlobalRenderingConstants.renderState;
+        renderState.reset();
+        renderState.bind(buffer);
+
+        for(Transformation transformation : this.transformations){
+            model.apply(transformation);
+        }
+
+        for(UVTransformation transformation : this.uvTransformations){
+            model.apply(transformation);
+        }
+
+        for(EnumFacing side : EnumFacing.VALUES){
+            for(VertexPosition vertexPosition : VertexPosition.VALUES){
+                //do the baking hia :D
             }
         }
 
-        return this;
-    }
-
-    public ModelPart setBrightness(int side, int vert, int brightness){
-        this.brightness[side][vert] = brightness;
-        return this;
-    }
-
-    public List<BakedQuad> bake(){
-        CCModel model = CCModel.quadModel(24).generateBlock(0, VectorUtils.divide(this.bounds, 16D)).computeNormals();
-        BakingVertexBuffer buffer = BakingVertexBuffer.create();
-        buffer.begin(GL11.GL_QUADS, RenderUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
-        CCRenderState renderState = CCRenderState.instance();
-        renderState.reset();
-        renderState.bind(buffer);
-        model.apply(new MultiIconTransformation(this.texture));
-
-        for(int i = 0; i < this.transformations.size(); i++){
-            model.apply(this.transformations.get(i));
+        if(manipulators != null){
+            for(IQuadManipulator manipulator : manipulators){
+                quads = manipulator.manipulate(quads, null, null);
+            }
         }
 
-        for(int i = 0; i < this.uvTransformations.size(); i++){
-            model.apply(this.transformations.get(i));
-        }
-
-        Vertex5[] vertices = model.getVertices();
-
-        for(int sideIndex = 0; sideIndex < vertices.length / 4; sideIndex++){
-            int vertexIndex = sideIndex * 4;
-            this.addVertex(buffer, vertices[vertexIndex + 0],
-                    new int[]{
-                            this.color[sideIndex][0].r & 0xFF,
-                            this.color[sideIndex][0].g & 0xFF,
-                            this.color[sideIndex][0].b & 0xFF,
-                            this.color[sideIndex][0].a & 0xFF
-                    },
-                    new int[]{
-                            this.brightness[sideIndex][0] >> 0x10 & 0xFFFF,
-                            this.brightness[sideIndex][0] & 0xFFFF
-                    }
-            );
-            this.addVertex(buffer, vertices[vertexIndex + 1],
-                    new int[]{
-                            this.color[sideIndex][1].r & 0xFF,
-                            this.color[sideIndex][1].g & 0xFF,
-                            this.color[sideIndex][1].b & 0xFF,
-                            this.color[sideIndex][1].a & 0xFF
-                    },
-                    new int[]{
-                            this.brightness[sideIndex][1] >> 0x10 & 0xFFFF,
-                            this.brightness[sideIndex][1] & 0xFFFF
-                    }
-            );
-            this.addVertex(buffer, vertices[vertexIndex + 2],
-                    new int[]{
-                            this.color[sideIndex][2].r & 0xFF,
-                            this.color[sideIndex][2].g & 0xFF,
-                            this.color[sideIndex][2].b & 0xFF,
-                            this.color[sideIndex][2].a & 0xFF
-                    },
-                    new int[]{
-                            this.brightness[sideIndex][2] >> 0x10 & 0xFFFF,
-                            this.brightness[sideIndex][2] & 0xFFFF
-                    }
-            );
-            this.addVertex(buffer, vertices[vertexIndex + 3],
-                    new int[]{
-                            this.color[sideIndex][3].r & 0xFF,
-                            this.color[sideIndex][3].g & 0xFF,
-                            this.color[sideIndex][3].b & 0xFF,
-                            this.color[sideIndex][3].a & 0xFF
-                    },
-                    new int[]{
-                            this.brightness[sideIndex][3] >> 0x10 & 0xFFFF,
-                            this.brightness[sideIndex][3] & 0xFFFF
-                    }
-            );
-        }
-
-        buffer.finishDrawing();
-        return buffer.bake();
-    }
-
-    private void addVertex(VertexBuffer buffer, Vertex5 vertex, int[] color, int[] brightness){
-        buffer.pos(vertex.vec.x, vertex.vec.y, vertex.vec.z).tex(vertex.uv.u, vertex.uv.v).color(color[0], color[1], color[2], color[3]).lightmap(brightness[0], brightness[1]).endVertex();
+        return quads;
     }
 
     @Override
@@ -181,7 +116,6 @@ public class ModelPart implements Copyable<ModelPart> {
         part.transformations = this.transformations;
         part.uvTransformations = this.uvTransformations;
         part.color = this.color;
-        part.brightness = this.brightness;
         return part;
     }
 
