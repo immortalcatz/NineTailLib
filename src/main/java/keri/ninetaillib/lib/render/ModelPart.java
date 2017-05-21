@@ -92,6 +92,7 @@ public class ModelPart implements Copyable<ModelPart> {
         CCRenderState renderState = GlobalRenderingConstants.renderState;
         renderState.reset();
         renderState.bind(buffer);
+        renderState.pullLightmap();
 
         for(Transformation transformation : this.transformations){
             model.apply(transformation);
