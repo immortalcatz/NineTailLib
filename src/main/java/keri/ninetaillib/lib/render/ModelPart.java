@@ -13,6 +13,8 @@ import codechicken.lib.render.buffer.BakingVertexBuffer;
 import codechicken.lib.util.Copyable;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Transformation;
+import codechicken.lib.vec.Translation;
+import codechicken.lib.vec.Vector3;
 import codechicken.lib.vec.uv.IconTransformation;
 import codechicken.lib.vec.uv.UVTransformation;
 import com.google.common.collect.Lists;
@@ -106,8 +108,28 @@ public class ModelPart implements Copyable<ModelPart> {
         }
     }
 
+    public void renderDamage(VertexBuffer buffer, IBlockAccess world, BlockPos pos, TextureAtlasSprite texture){
+        CCModel model = CCModel.quadModel(24).generateBlock(0, VectorUtils.divide(this.bounds, 16D)).computeNormals();
+        model.apply(new Translation(Vector3.fromBlockPos(pos)));
+        CCRenderState renderState = GlobalRenderingConstants.renderState;
+        renderState.reset();
+        renderState.bind(buffer);
+        renderState.pullLightmap();
+
+        for(Transformation transformation : this.transformations){
+            model.apply(transformation);
+        }
+
+        for(UVTransformation transformation : this.uvTransformations){
+            model.apply(transformation);
+        }
+
+        model.render(renderState, new IconTransformation(texture));
+    }
+
     public void render(VertexBuffer buffer, IBlockAccess world, BlockPos pos){
         CCModel model = CCModel.quadModel(24).generateBlock(0, VectorUtils.divide(this.bounds, 16D)).computeNormals();
+        model.apply(new Translation(Vector3.fromBlockPos(pos)));
         CCRenderState renderState = GlobalRenderingConstants.renderState;
         renderState.reset();
         renderState.bind(buffer);
