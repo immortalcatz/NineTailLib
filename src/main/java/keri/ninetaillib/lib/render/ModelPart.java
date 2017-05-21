@@ -13,13 +13,17 @@ import codechicken.lib.render.buffer.BakingVertexBuffer;
 import codechicken.lib.util.Copyable;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Transformation;
+import codechicken.lib.vec.uv.IconTransformation;
 import codechicken.lib.vec.uv.UVTransformation;
 import com.google.common.collect.Lists;
 import keri.ninetaillib.lib.util.VectorUtils;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -45,8 +49,8 @@ public class ModelPart implements Copyable<ModelPart> {
         return this;
     }
 
-    public ModelPart setTexture(TextureAtlasSprite... textures){
-        this.texture = textures;
+    public ModelPart setTexture(TextureAtlasSprite texture, EnumFacing side){
+        this.texture[side.getIndex()] = texture;
         return this;
     }
 
@@ -61,23 +65,53 @@ public class ModelPart implements Copyable<ModelPart> {
     }
 
     public ModelPart setColor(Colour color){
-        for(int side = 0; side < 6; side++){
-            for(int vertex = 0; vertex < 4; vertex++){
-                this.color[side][vertex] = color;
+        for(EnumFacing side : EnumFacing.VALUES){
+            for(VertexPosition vertexPosition : VertexPosition.VALUES){
+                this.color[side.getIndex()][vertexPosition.getVertexIndex()] = color;
             }
         }
 
         return this;
     }
 
-    public ModelPart setColor(int side, int vert, Colour color){
-        this.color[side][vert] = color;
+    public ModelPart setColor(Colour color, EnumFacing side){
+        for(VertexPosition vertexPosition : VertexPosition.VALUES){
+            this.color[side.getIndex()][vertexPosition.getVertexIndex()] = color;
+        }
+
         return this;
+    }
+
+    public ModelPart setColor(Colour color, EnumFacing side, VertexPosition vertexPosition){
+        this.color[side.getIndex()][vertexPosition.getVertexIndex()] = color;
+        return this;
+    }
+
+    public void render(VertexBuffer buffer, IBlockAccess world, BlockPos pos){
+        CCModel model = CCModel.quadModel(24).generateBlock(0, VectorUtils.divide(this.bounds, 16D)).computeNormals();
+        CCRenderState renderState = GlobalRenderingConstants.renderState;
+        renderState.reset();
+        renderState.bind(buffer);
+
+        for(Transformation transformation : this.transformations){
+            model.apply(transformation);
+        }
+
+        for(UVTransformation transformation : this.uvTransformations){
+            model.apply(transformation);
+        }
+
+        for(EnumFacing side : EnumFacing.VALUES){
+            for(VertexPosition vertexPosition : VertexPosition.VALUES){
+                IconTransformation texture = new IconTransformation(this.texture[side.getIndex()]);
+                model.setColour(this.color[side.getIndex()][vertexPosition.getVertexIndex()].rgba());
+                model.render(renderState, vertexPosition.getVertexIndex(), vertexPosition.getVertexIndex() + 1, texture);
+            }
+        }
     }
 
     public List<BakedQuad> bake(IQuadManipulator... manipulators){
         List<BakedQuad> quads = Lists.newArrayList();
-
         CCModel model = CCModel.quadModel(24).generateBlock(0, VectorUtils.divide(this.bounds, 16D)).computeNormals();
         BakingVertexBuffer buffer = BakingVertexBuffer.create();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
@@ -95,7 +129,9 @@ public class ModelPart implements Copyable<ModelPart> {
 
         for(EnumFacing side : EnumFacing.VALUES){
             for(VertexPosition vertexPosition : VertexPosition.VALUES){
-                //do the baking hia :D
+                IconTransformation texture = new IconTransformation(this.texture[side.getIndex()]);
+                model.setColour(this.color[side.getIndex()][vertexPosition.getVertexIndex()].rgba());
+                model.render(renderState, vertexPosition.getVertexIndex(), vertexPosition.getVertexIndex() + 1, texture);
             }
         }
 

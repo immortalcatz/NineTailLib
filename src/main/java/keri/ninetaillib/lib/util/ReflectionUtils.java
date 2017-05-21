@@ -27,6 +27,16 @@ public class ReflectionUtils {
         return null;
     }
 
+    public static boolean fieldExists(Class<?> clazz, Class<?> type){
+        for(Field field : clazz.getFields()){
+            if(field.getType().equals(type)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static void invokeMethod(Method method, Object clazzInstance, Object... params){
         try{
             method.invoke(clazzInstance, params);
