@@ -12,7 +12,7 @@ import keri.ninetaillib.lib.config.ModConfigHandler;
 import keri.ninetaillib.lib.config.property.ConfigBoolean;
 import keri.ninetaillib.mod.util.ModPrefs;
 
-@ModConfigHandler(fileName = ModPrefs.NAME)
+@ModConfigHandler(modid = ModPrefs.MODID, fileName = ModPrefs.NAME)
 public class NTLConfig {
 
     @ModConfigHandler.ConfigCategories

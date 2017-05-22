@@ -31,8 +31,6 @@ import java.util.List;
 public class ModHandler {
 
     private Object modInstance;
-    private IModLogger logger;
-    private IModConfig config;
     private List<Class<?>> contentLoaders = Lists.newArrayList();
 
     public ModHandler(Object modInstance){
@@ -40,9 +38,8 @@ public class ModHandler {
     }
 
     public void handlePreInit(FMLPreInitializationEvent event){
-        this.logger = this.setupLogger(event, this.modInstance);
-        this.config = this.setupConfig(event, this.modInstance, this.logger);
-        this.discoverClasses(event);
+        this.setupLogger(event, this.modInstance);
+        this.setupConfig(event, this.modInstance);
         this.handleContentLoaderPreInit(event);
     }
 
@@ -54,7 +51,52 @@ public class ModHandler {
 
     }
 
-    private void discoverClasses(FMLPreInitializationEvent event){
+    private void setupConfig(FMLPreInitializationEvent event, Object modInstance){
+        if(ReflectionUtils.fieldExists(modInstance.getClass(), IModConfig.class)){
+            Field field = ReflectionUtils.getFieldForAnnotation(ModConfig.class, modInstance.getClass());
+            Class<?> configHandlerClass = null;
+
+            for(ASMDataTable.ASMData data : event.getAsmData().getAll(ModConfigHandler.class.getName())){
+                try{
+                    if(configHandlerClass == null){
+                        Class<?> clazz = Class.forName(data.getClassName());
+                        ModConfigHandler annotation = clazz.getAnnotation(ModConfigHandler.class);
+
+                        if(event.getModMetadata().modId.equals(annotation.modid())){
+                            configHandlerClass = clazz;
+                        }
+                    }
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            ModConfigHandler handlerAnnotation = configHandlerClass.getAnnotation(ModConfigHandler.class);
+            Object configHandlerInstance = ReflectionUtils.createInstance(configHandlerClass);
+            ConfigCategories categories = new ConfigCategories();
+            ConfigProperties properties = new ConfigProperties();
+            Method methodAddCategories = ReflectionUtils.getMethodForAnnotation(ModConfigHandler.ConfigCategories.class, configHandlerClass);
+            Method methodAddProperties = ReflectionUtils.getMethodForAnnotation(ModConfigHandler.ConfigProperties.class, configHandlerClass);
+            ReflectionUtils.invokeMethod(methodAddCategories, configHandlerInstance, categories);
+            ReflectionUtils.invokeMethod(methodAddProperties, configHandlerInstance, properties);
+            File file = null;
+
+            if(!handlerAnnotation.fileName().equals("")){
+                String fileName = handlerAnnotation.fileName() + ".cfg";
+                file = new File(event.getModConfigurationDirectory(), fileName);
+            }
+            else{
+                String fileName = event.getModMetadata().modId + ".cfg";
+                file = new File(event.getModConfigurationDirectory(), fileName);
+            }
+
+            SimpleModLogger logger = new SimpleModLogger(event);
+            ReflectionUtils.setField(field, IModConfig.class, new SimpleModConfig(file, categories, properties, logger));
+        }
+    }
+
+    private void handleContentLoaderPreInit(FMLPreInitializationEvent event){
         for(ASMDataTable.ASMData data : event.getAsmData().getAll(ContentLoader.class.getName())){
             try{
                 Class<?> initializerClass = Class.forName(data.getClassName());
@@ -70,9 +112,7 @@ public class ModHandler {
                 e.printStackTrace();
             }
         }
-    }
 
-    private void handleContentLoaderPreInit(FMLPreInitializationEvent event){
         for(Class<?> contentLoader : this.contentLoaders){
             for(Field field : contentLoader.getFields()){
                 Object fieldObject = ReflectionUtils.getField(field, contentLoader);
@@ -116,52 +156,12 @@ public class ModHandler {
         }
     }
 
-    private IModConfig setupConfig(FMLPreInitializationEvent event, Object modInstance, IModLogger logger){
-        if(ReflectionUtils.fieldExists(modInstance.getClass(), IModConfig.class)){
-            Field field = ReflectionUtils.getFieldForAnnotation(ModConfig.class, modInstance.getClass());
-            ModConfig configAnnotation = field.getAnnotation(ModConfig.class);
-            Class<?> configHandler = configAnnotation.config();
-            IModConfig config = null;
-
-            if(configHandler.isAnnotationPresent(ModConfigHandler.class)){
-                ModConfigHandler handlerAnnotation = configHandler.getAnnotation(ModConfigHandler.class);
-                Object configHandlerInstance = ReflectionUtils.createInstance(configHandler);
-                ConfigCategories categories = new ConfigCategories();
-                ConfigProperties properties = new ConfigProperties();
-                Method methodAddCategories = ReflectionUtils.getMethodForAnnotation(ModConfigHandler.ConfigCategories.class, configHandler);
-                Method methodAddProperties = ReflectionUtils.getMethodForAnnotation(ModConfigHandler.ConfigProperties.class, configHandler);
-                ReflectionUtils.invokeMethod(methodAddCategories, configHandlerInstance, categories);
-                ReflectionUtils.invokeMethod(methodAddProperties, configHandlerInstance, properties);
-                File file = null;
-
-                if(!handlerAnnotation.fileName().equals("")){
-                    String fileName = handlerAnnotation.fileName() + ".cfg";
-                    file = new File(event.getModConfigurationDirectory(), fileName);
-                }
-                else{
-                    String fileName = event.getModMetadata().modId + ".cfg";
-                    file = new File(event.getModConfigurationDirectory(), fileName);
-                }
-
-                config = new SimpleModConfig(file, categories, properties, logger);
-            }
-
-            ReflectionUtils.setField(field, IModConfig.class, config);
-            return config;
-        }
-
-        return null;
-    }
-
-    private IModLogger setupLogger(FMLPreInitializationEvent event, Object modInstance){
+    private void setupLogger(FMLPreInitializationEvent event, Object modInstance){
         if(ReflectionUtils.fieldExists(modInstance.getClass(), IModLogger.class)){
             Field field = ReflectionUtils.getFieldForAnnotation(ModLogger.class, modInstance.getClass());
             IModLogger logger = new SimpleModLogger(event);
             ReflectionUtils.setField(field, IModLogger.class, logger);
-            return logger;
         }
-
-        return null;
     }
 
 }

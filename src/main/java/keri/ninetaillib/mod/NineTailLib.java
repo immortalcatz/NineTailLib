@@ -8,10 +8,10 @@ package keri.ninetaillib.mod;
 
 import keri.ninetaillib.lib.config.IModConfig;
 import keri.ninetaillib.lib.config.ModConfig;
+import keri.ninetaillib.lib.experimental.NTLModLoader;
 import keri.ninetaillib.lib.logger.IModLogger;
 import keri.ninetaillib.lib.logger.ModLogger;
 import keri.ninetaillib.lib.mod.ModHandler;
-import keri.ninetaillib.mod.init.NTLConfig;
 import keri.ninetaillib.mod.proxy.INTLProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -31,23 +31,26 @@ public class NineTailLib {
     public static INTLProxy PROXY;
     @ModLogger
     public static IModLogger LOGGER;
-    @ModConfig(config = NTLConfig.class)
+    @ModConfig
     public static IModConfig CONFIG;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
+        NTLModLoader.INSTANCE.preInit(event);
         MOD_HANDLER.handlePreInit(event);
         PROXY.preInit(event);
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event){
+        NTLModLoader.INSTANCE.init(event);
         MOD_HANDLER.handleInit(event);
         PROXY.init(event);
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event){
+        NTLModLoader.INSTANCE.postInit(event);
         MOD_HANDLER.handlePostInit(event);
         PROXY.postInit(event);
     }

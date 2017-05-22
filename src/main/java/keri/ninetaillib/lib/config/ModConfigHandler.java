@@ -15,6 +15,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface ModConfigHandler {
 
+    String modid();
+
     String fileName() default "";
 
     @Retention(RetentionPolicy.RUNTIME)
