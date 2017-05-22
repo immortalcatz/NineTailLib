@@ -61,6 +61,20 @@ public class ReflectionUtils {
         }
     }
 
+    public static Object getField(Field field, Class<?> type){
+        try{
+            return field.get(type);
+        }
+        catch(IllegalAccessException e){
+            e.printStackTrace();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public static void setField(Field field, Class<?> type, Object value){
         try{
             field.set(type, value);
