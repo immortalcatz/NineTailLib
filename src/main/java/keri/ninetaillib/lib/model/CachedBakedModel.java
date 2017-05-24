@@ -6,7 +6,6 @@
 
 package keri.ninetaillib.lib.model;
 
-import com.google.common.collect.Lists;
 import keri.ninetaillib.lib.render.QuadCache;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -34,7 +33,7 @@ public abstract class CachedBakedModel implements IBakedModel {
             return quadCache.get(state);
         }
 
-        return Lists.newArrayList();
+        return this.getCachedQuads(state, side, rand);
     }
 
 }

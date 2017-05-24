@@ -120,6 +120,12 @@ public class ModHandler {
                 if(fieldObject != null){
                     if(fieldObject instanceof Block){
                         Block block = (Block)fieldObject;
+
+                        if(block instanceof BlockBase){
+                            BlockBase blockBase = (BlockBase)block;
+                            blockBase.setNames(event.getModMetadata().modId);
+                        }
+
                         GameRegistry.register(block);
 
                         if(block instanceof BlockBase){
@@ -145,11 +151,12 @@ public class ModHandler {
                 Object fieldObject = ReflectionUtils.getField(field, contentLoader);
 
                 if(fieldObject != null){
-                    if(fieldObject instanceof TileEntity){
-                        TileEntity tile = (TileEntity)fieldObject;
-                        String modid = tile.getBlockType().getRegistryName().getResourceDomain();
-                        String name = tile.getBlockType().getRegistryName().getResourcePath();
-                        GameRegistry.registerTileEntity(tile.getClass(), "tile." + modid + "." + name);
+                    if(fieldObject instanceof Block){
+                        Block block = (Block)fieldObject;
+                        String modid = block.getRegistryName().getResourceDomain();
+                        String name = block.getRegistryName().getResourcePath();
+                        Class<? extends TileEntity> tileClass = block.createTileEntity(null, block.getDefaultState()).getClass();
+                        GameRegistry.registerTileEntity(tileClass, "tile." + modid + "." + name);
                     }
                 }
             }

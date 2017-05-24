@@ -8,10 +8,6 @@ package keri.ninetaillib.lib.render;
 
 import codechicken.lib.util.Copyable;
 import com.google.common.collect.Lists;
-import keri.ninetaillib.lib.model.SimpleBakedModel;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockModelRenderer;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -29,21 +25,6 @@ public class CuboidModel implements Copyable<CuboidModel> {
 
     public void addModelPart(ModelPart part){
         this.modelParts.add(part);
-    }
-
-    public boolean renderBaked(VertexBuffer buffer, IBlockAccess world, BlockPos pos, boolean ao, IQuadManipulator... manipulators){
-        List<BakedQuad> quads = this.bake(manipulators);
-        BlockModelRenderer bmr = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer();
-        boolean useAmbientOcclusion = Minecraft.getMinecraft().gameSettings.ambientOcclusion > 0 && ao;
-        SimpleBakedModel bakedModel = new SimpleBakedModel(quads, null, useAmbientOcclusion);
-        IBlockState state = world.getBlockState(pos).getActualState(world, pos);
-
-        if(useAmbientOcclusion){
-            return bmr.renderModelSmooth(world, bakedModel, state, pos, buffer, true, 0);
-        }
-        else{
-            return bmr.renderModelFlat(world, bakedModel, state, pos, buffer, true, 0);
-        }
     }
 
     public void renderDamage(VertexBuffer buffer, IBlockAccess world, BlockPos pos, TextureAtlasSprite texture){

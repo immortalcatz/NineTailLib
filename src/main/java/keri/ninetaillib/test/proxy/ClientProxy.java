@@ -6,6 +6,9 @@
 
 package keri.ninetaillib.test.proxy;
 
+import keri.ninetaillib.lib.render.RenderingRegistry;
+import keri.ninetaillib.test.client.render.RenderItemPillar;
+import keri.ninetaillib.test.init.TestContent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -14,7 +17,7 @@ public class ClientProxy implements ITestProxy {
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
-
+        RenderingRegistry.registerRenderingHandler(RenderItemPillar.INSTANCE, TestContent.testBlock);
     }
 
     @Override

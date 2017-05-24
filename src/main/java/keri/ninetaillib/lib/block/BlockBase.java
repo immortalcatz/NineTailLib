@@ -6,14 +6,23 @@
 
 package keri.ninetaillib.lib.block;
 
+import keri.ninetaillib.lib.item.ItemBlockBase;
+import keri.ninetaillib.lib.util.BlockAccessUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -22,31 +31,82 @@ import javax.annotation.Nullable;
 
 public class BlockBase<T extends TileEntity> extends Block implements ITileEntityProvider {
 
-    private String modid;
+    public static final PropertyInteger META_DATA = PropertyInteger.create("meta", 0, 15);
     private String blockName;
+    private String[] subNames = null;
 
     public BlockBase(String blockName, Material material, MapColor mapColor) {
         super(material, mapColor);
         this.blockName = blockName;
-        this.setRegistryName(modid, blockName);
-        this.setUnlocalizedName(modid + "." + blockName);
         this.setCreativeTab(this.getCreativeTab());
         this.setSoundType(this.getSoundType(material));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(META_DATA, 0));
     }
 
     public BlockBase(String blockName, Material material) {
         super(material);
         this.blockName = blockName;
-        this.setRegistryName(modid, blockName);
-        this.setUnlocalizedName(modid + "." + blockName);
         this.setCreativeTab(this.getCreativeTab());
         this.setSoundType(this.getSoundType(material));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(META_DATA, 0));
+    }
+
+    public BlockBase(String blockName, Material material, MapColor mapColor, String... subNames) {
+        super(material, mapColor);
+        this.blockName = blockName;
+        this.subNames = subNames;
+        this.setCreativeTab(this.getCreativeTab());
+        this.setSoundType(this.getSoundType(material));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(META_DATA, 0));
+    }
+
+    public BlockBase(String blockName, Material material, String... subNames){
+        super(material);
+        this.blockName = blockName;
+        this.subNames = subNames;
+        this.setCreativeTab(this.getCreativeTab());
+        this.setSoundType(this.getSoundType(material));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(META_DATA, 0));
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, new IProperty[]{META_DATA});
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(META_DATA);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(META_DATA, meta);
     }
 
     @Nullable
     @Override
     public T createNewTileEntity(World world, int meta) {
         return null;
+    }
+
+    @Override
+    public int damageDropped(IBlockState state) {
+        return this.subNames != null ? BlockAccessUtils.getBlockMetadata(state) : super.damageDropped(state);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+        if(this.subNames != null){
+            for(int i = 0; i < this.subNames.length; i++){
+                list.add(new ItemStack(this, 1, i));
+            }
+        }
+        else{
+            list.add(new ItemStack(this, 1, 0));
+        }
     }
 
     private SoundType getSoundType(Material material){
@@ -86,11 +146,16 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     }
 
     public ItemBlock getItemBlock(){
-        return new ItemBlock(this);
+        return new ItemBlockBase(this);
     }
 
-    public void setModid(String modid){
-        this.modid = modid;
+    public String[] getSubNames(){
+        return this.subNames;
+    }
+
+    public void setNames(String modid){
+        this.setRegistryName(modid, this.blockName);
+        this.setUnlocalizedName(modid + "." + this.blockName);
     }
 
     @SideOnly(Side.CLIENT)

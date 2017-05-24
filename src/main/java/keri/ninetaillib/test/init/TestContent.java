@@ -8,8 +8,12 @@ package keri.ninetaillib.test.init;
 
 import keri.ninetaillib.lib.mod.ContentLoader;
 import keri.ninetaillib.test.TestMod;
+import keri.ninetaillib.test.block.BlockItemPillar;
+import net.minecraft.block.Block;
 
 @ContentLoader(modid = TestMod.MODID)
 public class TestContent {
+
+    public static Block testBlock = new BlockItemPillar();
 
 }

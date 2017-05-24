@@ -11,8 +11,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GlobalRenderingConstants {
+public class RenderingConstants {
 
-    public static CCRenderState renderState = CCRenderState.instance();
+    private static final CCRenderState renderState = CCRenderState.instance();
+
+    public static CCRenderState getRenderState(){
+        return renderState;
+    }
 
 }
