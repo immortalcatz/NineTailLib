@@ -8,7 +8,6 @@ package keri.ninetaillib.lib.hooks;
 
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
@@ -24,12 +23,8 @@ public class BlockHooks {
     //Needle        blockFence_n_canConnectTo
     //Replacement   blockFence_r_canConnectTo
     public static boolean canFenceConnectTo(IBlockAccess world, BlockPos pos){
-        for(EnumFacing side : EnumFacing.VALUES){
-            IBlockState state = world.getBlockState(pos.offset(side));
-
-            for(IBlockState allowedState : allowedFenceConnections){
-                return state == allowedState;
-            }
+        for(IBlockState allowedState : allowedFenceConnections){
+            return world.getBlockState(pos) == allowedState;
         }
 
         return false;
@@ -40,12 +35,8 @@ public class BlockHooks {
     //Needle        blockWall_n_canConnectTo
     //Replacement   blockWall_r_canConnectTo
     public static boolean canWallConnectTo(IBlockAccess world, BlockPos pos){
-        for(EnumFacing side : EnumFacing.VALUES){
-            IBlockState state = world.getBlockState(pos.offset(side));
-
-            for(IBlockState allowedState : allowedWallConnections){
-                return state == allowedState;
-            }
+        for(IBlockState allowedState : allowedWallConnections){
+            return world.getBlockState(pos) == allowedState;
         }
 
         return false;
