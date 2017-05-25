@@ -30,11 +30,11 @@ compileJava {
 minecraft {
     version = "1.11.2-13.20.0.2300"
     runDir = "run"
-    mappings = "snapshot_20161220"
+    mappings = "snapshot_20170524"
 }
 
 dependencies {
-    deobfCompile "codechicken:CodeChickenLib:1.11.2-2.6.0.254:deobf"
+    deobfCompile "codechicken:CodeChickenLib:1.11.2-2.6.0.265:deobf"
 }
 
 processResources {
