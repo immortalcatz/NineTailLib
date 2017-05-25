@@ -7,21 +7,16 @@
 package keri.ninetaillib.lib.mod;
 
 import com.google.common.collect.Lists;
-import keri.ninetaillib.lib.block.BlockBase;
 import keri.ninetaillib.lib.config.*;
 import keri.ninetaillib.lib.logger.IModLogger;
 import keri.ninetaillib.lib.logger.ModLogger;
 import keri.ninetaillib.lib.logger.SimpleModLogger;
+import keri.ninetaillib.lib.util.IContentRegister;
 import keri.ninetaillib.lib.util.ReflectionUtils;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -48,7 +43,7 @@ public class ModHandler {
     }
 
     public void handlePostInit(FMLPostInitializationEvent event){
-
+        this.handleContentLoaderPostInit(event);
     }
 
     private void setupConfig(FMLPreInitializationEvent event, Object modInstance){
@@ -118,27 +113,8 @@ public class ModHandler {
                 Object fieldObject = ReflectionUtils.getField(field, contentLoader);
 
                 if(fieldObject != null){
-                    if(fieldObject instanceof Block){
-                        Block block = (Block)fieldObject;
-
-                        if(block instanceof BlockBase){
-                            BlockBase blockBase = (BlockBase)block;
-                            blockBase.setNames(event.getModMetadata().modId);
-                        }
-
-                        GameRegistry.register(block);
-
-                        if(block instanceof BlockBase){
-                            BlockBase blockBase = (BlockBase)block;
-                            GameRegistry.register(blockBase.getItemBlock().setRegistryName(blockBase.getRegistryName()));
-                        }
-                        else{
-                            GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
-                        }
-                    }
-                    else if(fieldObject instanceof Item){
-                        Item item = (Item)fieldObject;
-                        GameRegistry.register(item);
+                    if(fieldObject instanceof IContentRegister){
+                        ((IContentRegister)fieldObject).handlePreInit(event);
                     }
                 }
             }
@@ -151,12 +127,22 @@ public class ModHandler {
                 Object fieldObject = ReflectionUtils.getField(field, contentLoader);
 
                 if(fieldObject != null){
-                    if(fieldObject instanceof Block){
-                        Block block = (Block)fieldObject;
-                        String modid = block.getRegistryName().getResourceDomain();
-                        String name = block.getRegistryName().getResourcePath();
-                        Class<? extends TileEntity> tileClass = block.createTileEntity(null, block.getDefaultState()).getClass();
-                        GameRegistry.registerTileEntity(tileClass, "tile." + modid + "." + name);
+                    if(fieldObject instanceof IContentRegister){
+                        ((IContentRegister)fieldObject).handleInit(event);
+                    }
+                }
+            }
+        }
+    }
+
+    private void handleContentLoaderPostInit(FMLPostInitializationEvent event){
+        for(Class<?> contentLoader : this.contentLoaders){
+            for(Field field : contentLoader.getFields()){
+                Object fieldObject = ReflectionUtils.getField(field, contentLoader);
+
+                if(fieldObject != null){
+                    if(fieldObject instanceof IContentRegister){
+                        ((IContentRegister)fieldObject).handlePostInit(event);
                     }
                 }
             }

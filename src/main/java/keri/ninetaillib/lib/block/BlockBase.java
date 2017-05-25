@@ -8,6 +8,7 @@ package keri.ninetaillib.lib.block;
 
 import keri.ninetaillib.lib.item.ItemBlockBase;
 import keri.ninetaillib.lib.util.BlockAccessUtils;
+import keri.ninetaillib.lib.util.IContentRegister;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -24,12 +25,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class BlockBase<T extends TileEntity> extends Block implements ITileEntityProvider {
+public class BlockBase<T extends TileEntity> extends Block implements ITileEntityProvider, IContentRegister {
 
     public static final PropertyInteger META_DATA = PropertyInteger.create("meta", 0, 15);
     private String blockName;
@@ -109,6 +114,25 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
         }
     }
 
+    @Override
+    public void handlePreInit(FMLPreInitializationEvent event) {
+        String modid = event.getModMetadata().modId;
+        this.setRegistryName(modid, this.blockName);
+        this.setUnlocalizedName(modid + "." + this.blockName);
+        GameRegistry.register(this);
+        GameRegistry.register(this.getItemBlock().setRegistryName(this.getRegistryName()));
+    }
+
+    @Override
+    public void handleInit(FMLInitializationEvent event) {
+        //implement tile entities
+    }
+
+    @Override
+    public void handlePostInit(FMLPostInitializationEvent event) {
+
+    }
+
     private SoundType getSoundType(Material material){
         if(material == Material.ANVIL){
             return SoundType.ANVIL;
@@ -151,11 +175,6 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     public String[] getSubNames(){
         return this.subNames;
-    }
-
-    public void setNames(String modid){
-        this.setRegistryName(modid, this.blockName);
-        this.setUnlocalizedName(modid + "." + this.blockName);
     }
 
     @SideOnly(Side.CLIENT)
