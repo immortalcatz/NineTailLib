@@ -6,7 +6,11 @@
 
 package keri.ninetaillib.mod.core;
 
+import com.google.common.eventbus.EventBus;
 import keri.ninetaillib.mod.util.ModPrefs;
+import net.minecraftforge.fml.common.DummyModContainer;
+import net.minecraftforge.fml.common.LoadController;
+import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 import javax.annotation.Nullable;
@@ -14,7 +18,16 @@ import java.util.Map;
 
 @IFMLLoadingPlugin.Name(ModPrefs.NAME)
 @IFMLLoadingPlugin.MCVersion(ModPrefs.ACC_MC)
-public class NineTailLibCore implements IFMLLoadingPlugin {
+public class NineTailLibCore extends DummyModContainer implements IFMLLoadingPlugin {
+
+    public NineTailLibCore(){
+        super(new ModMetadata());
+        ModMetadata modMetadata = this.getMetadata();
+        modMetadata.parent = ModPrefs.MODID;
+        modMetadata.modId = ModPrefs.MODID + "_core";
+        modMetadata.name = ModPrefs.NAME + " Core";
+        modMetadata.version = ModPrefs.VERSION_CORE;
+    }
 
     @Override
     public String[] getASMTransformerClass() {
@@ -25,7 +38,7 @@ public class NineTailLibCore implements IFMLLoadingPlugin {
 
     @Override
     public String getModContainerClass() {
-        return null;
+        return "keri.ninetaillib.mod.core.NineTailLibCore";
     }
 
     @Nullable
@@ -42,6 +55,12 @@ public class NineTailLibCore implements IFMLLoadingPlugin {
     @Override
     public String getAccessTransformerClass() {
         return null;
+    }
+
+    @Override
+    public boolean registerBus(EventBus bus, LoadController controller) {
+        bus.register(this);
+        return true;
     }
 
 }
