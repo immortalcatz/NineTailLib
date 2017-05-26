@@ -91,6 +91,14 @@ public class ModHandler {
         }
     }
 
+    private void setupLogger(FMLPreInitializationEvent event, Object modInstance){
+        if(ReflectionUtils.fieldExists(modInstance.getClass(), IModLogger.class)){
+            Field field = ReflectionUtils.getFieldForAnnotation(ModLogger.class, modInstance.getClass());
+            IModLogger logger = new SimpleModLogger(event);
+            ReflectionUtils.setField(field, IModLogger.class, logger);
+        }
+    }
+
     private void handleContentLoaderPreInit(FMLPreInitializationEvent event){
         for(ASMDataTable.ASMData data : event.getAsmData().getAll(ContentLoader.class.getName())){
             try{
@@ -146,14 +154,6 @@ public class ModHandler {
                     }
                 }
             }
-        }
-    }
-
-    private void setupLogger(FMLPreInitializationEvent event, Object modInstance){
-        if(ReflectionUtils.fieldExists(modInstance.getClass(), IModLogger.class)){
-            Field field = ReflectionUtils.getFieldForAnnotation(ModLogger.class, modInstance.getClass());
-            IModLogger logger = new SimpleModLogger(event);
-            ReflectionUtils.setField(field, IModLogger.class, logger);
         }
     }
 

@@ -125,7 +125,20 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     public void handleInit(FMLInitializationEvent event) {
-        //implement tile entities
+        String modid = this.getRegistryName().getResourceDomain();
+
+        if(this.hasMultipleTileEntities()){
+            for(int i = 0; i < this.subNames.length; i++){
+                Class<? extends TileEntity> tileClass = this.createNewTileEntity(null, i).getClass();
+                String name = "tile." + modid + "." + this.blockName + "." + this.subNames[i];
+                GameRegistry.registerTileEntity(tileClass, name);
+            }
+        }
+        else{
+            Class<? extends TileEntity> tileClass = this.createNewTileEntity(null, 0).getClass();
+            String name = "tile." + modid + "." + this.blockName;
+            GameRegistry.registerTileEntity(tileClass, name);
+        }
     }
 
     @Override
@@ -175,6 +188,10 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     public String[] getSubNames(){
         return this.subNames;
+    }
+
+    public boolean hasMultipleTileEntities(){
+        return false;
     }
 
     @SideOnly(Side.CLIENT)

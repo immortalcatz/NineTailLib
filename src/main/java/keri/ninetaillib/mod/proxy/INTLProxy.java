@@ -6,8 +6,16 @@
 
 package keri.ninetaillib.mod.proxy;
 
-import keri.ninetaillib.lib.mod.IModProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-public interface INTLProxy extends IModProxy {
+public interface INTLProxy {
+
+    void preInit(FMLPreInitializationEvent event);
+
+    void init(FMLInitializationEvent event);
+
+    void postInit(FMLPostInitializationEvent event);
 
 }

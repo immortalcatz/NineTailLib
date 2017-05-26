@@ -9,6 +9,7 @@ package keri.ninetaillib.test.client.render;
 import codechicken.lib.colour.Colour;
 import codechicken.lib.math.MathHelper;
 import codechicken.lib.texture.TextureUtils;
+import codechicken.lib.util.ClientUtils;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Rotation;
 import codechicken.lib.vec.Vector3;
@@ -19,9 +20,18 @@ import keri.ninetaillib.lib.render.RenderingRegistry;
 import keri.ninetaillib.lib.util.BlockAccessUtils;
 import keri.ninetaillib.lib.util.EnumDyeColor;
 import keri.ninetaillib.lib.util.RenderUtils;
+import keri.ninetaillib.test.tile.TileEntityItemPillar;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
@@ -31,7 +41,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class RenderItemPillar implements IBlockRenderingHandler {
+public class RenderItemPillar extends TileEntitySpecialRenderer<TileEntityItemPillar> implements IBlockRenderingHandler {
 
     public static final RenderItemPillar INSTANCE = new RenderItemPillar();
     public static EnumBlockRenderType RENDER_TYPE;
@@ -88,6 +98,40 @@ public class RenderItemPillar implements IBlockRenderingHandler {
     @Override
     public EnumBlockRenderType getRenderType() {
         return RENDER_TYPE;
+    }
+
+    @Override
+    public void renderTileEntityAt(TileEntityItemPillar tile, double x, double y, double z, float partialTicks, int destroyStage) {
+        if(!tile.getStackInSlot(0).isEmpty()){
+            double sin = MathHelper.sin(Minecraft.getMinecraft().player.ticksExisted / MathHelper.todeg * 4D) / 12D;
+            double floating = MathHelper.interpolate(sin, sin, partialTicks);
+            GlStateManager.pushMatrix();
+            GlStateManager.pushAttrib();
+            GlStateManager.translate(x + 0.5D, y + 0.9D + floating, z + 0.5D);
+            GlStateManager.rotate((float)ClientUtils.getRenderTime(), 0F, 1F, 0F);
+            Render<EntityItem> renderer = Minecraft.getMinecraft().getRenderManager().getEntityClassRenderObject(EntityItem.class);
+            EntityItem entity = new EntityItem(tile.getWorld(), 0D, 0D, 0D);
+            ItemStack stack = tile.getStackInSlot(0).copy();
+            stack.setCount(1);
+            entity.setEntityItemStack(stack);
+            entity.setNoDespawn();
+            entity.hoverStart = 0F;
+            renderer.doRender(entity, 0D, 0D, 0D, 0F, 0F);
+            GlStateManager.popAttrib();
+            GlStateManager.popMatrix();
+            GlStateManager.pushMatrix();
+            GlStateManager.pushAttrib();
+            GlStateManager.translate(x + 0.5D, y + 1.85D, z + 0.5D);
+            GlStateManager.scale(0.625D, 0.625D, 0.625D);
+            FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+            EntityPlayer player = Minecraft.getMinecraft().player;
+            float rotationYaw = player.rotationYaw;
+            float rotationPitch = player.rotationPitch;
+            boolean isSneaking = player.isSneaking();
+            EntityRenderer.drawNameplate(fontRenderer, stack.getDisplayName(), 0F, 0F, 0F, 0, rotationYaw, rotationPitch, false, isSneaking);
+            GlStateManager.popAttrib();
+            GlStateManager.popMatrix();
+        }
     }
 
 }

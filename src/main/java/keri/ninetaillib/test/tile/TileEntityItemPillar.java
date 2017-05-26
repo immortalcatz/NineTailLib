@@ -6,8 +6,12 @@
 
 package keri.ninetaillib.test.tile;
 
-import net.minecraft.tileentity.TileEntity;
+import keri.ninetaillib.lib.tile.TileEntityInventoryBase;
 
-public class TileEntityItemPillar extends TileEntity {
+public class TileEntityItemPillar extends TileEntityInventoryBase {
+
+    public TileEntityItemPillar() {
+        super(1);
+    }
 
 }
