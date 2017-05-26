@@ -7,6 +7,7 @@
 package keri.ninetaillib.lib.json.model;
 
 import codechicken.lib.texture.TextureUtils;
+import codechicken.lib.util.Copyable;
 import codechicken.lib.vec.Transformation;
 import codechicken.lib.vec.uv.UVTransformation;
 import com.google.common.collect.Lists;
@@ -20,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class ModelData {
+public class ModelData implements Copyable<ModelData> {
 
     private List<ModelPartData> partData = Lists.newArrayList();
 
@@ -54,6 +55,13 @@ public class ModelData {
         }
 
         return model;
+    }
+
+    @Override
+    public ModelData copy() {
+        ModelData data = new ModelData();
+        data.partData = this.partData;
+        return data;
     }
 
 }
