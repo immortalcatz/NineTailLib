@@ -18,8 +18,8 @@ repositories {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
-version = "1.4.108"
-group = "keri.ninetaillib" 
+version = "1.11.2-1.4.109"
+group = "keri.ninetaillib"
 archivesBaseName = "NineTailLib"
 
 sourceCompatibility = targetCompatibility = "1.8" 
