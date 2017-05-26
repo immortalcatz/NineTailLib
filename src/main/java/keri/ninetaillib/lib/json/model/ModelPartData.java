@@ -89,6 +89,26 @@ public class ModelPartData implements Copyable<ModelPartData> {
         return this;
     }
 
+    public Cuboid6 getBounds(){
+        return this.bounds;
+    }
+
+    public ResourceLocation[] getTexture(){
+        return this.texture;
+    }
+
+    public List<Transformation> getTransformations(){
+        return this.transformations;
+    }
+
+    public List<UVTransformation> getUVTransformations(){
+        return this.uvTransformations;
+    }
+
+    public Colour[][] getColor(){
+        return this.color;
+    }
+
     @Override
     public ModelPartData copy() {
         ModelPartData data = new ModelPartData();
