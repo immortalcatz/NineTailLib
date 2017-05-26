@@ -17,16 +17,16 @@ import java.util.Map;
 @SideOnly(Side.CLIENT)
 public class JsonModelLoader {
 
-    private JsonFileLoader fileLoader = new JsonFileLoader();
-    private Map<String, ModelData> modelData = Maps.newHashMap();
+    private static JsonFileLoader fileLoader = new JsonFileLoader();
+    private static Map<String, JsonModel> modelData = Maps.newHashMap();
 
     public void registerModel(String name, ResourceLocation location){
-        ModelData data = this.fileLoader.loadWithParser(location, new JsonModelParser());
-        this.modelData.put(name, data);
+        JsonModel data = fileLoader.loadWithParser(location, new JsonModelParser());
+        modelData.put(name, data);
     }
 
-    public ModelData getModelData(String name){
-        return this.modelData.get(name);
+    public JsonModel getModelData(String name){
+        return modelData.get(name);
     }
 
 }

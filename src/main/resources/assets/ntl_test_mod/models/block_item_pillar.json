@@ -1,14 +1,20 @@
 {
-
-  "cuboids": [{
-
-    "cuboid": {
-      "bounds": [0.0, 0.0, 0.0, 16.0, 16.0, 16.0],
-      "texture": "minecraft:blocks/stone",
-      "rotation": [45.0, 0.0, 1.0, 0.0, 8.0, 8.0, 8.0],
-      "color": [255, 0, 255, 255]
+  "cuboids": [
+    {
+      "name": "cuboid_1",
+      "bounds": [2.0, 0.0, 2.0, 14.0, 3.0, 14.0],
+      "texture": "minecraft:blocks/stone"
+    },
+    {
+      "name": "cuboid_2",
+      "bounds": [6.0, 3.0, 6.0, 10.0, 13.0, 10.0],
+      "texture": "minecraft:blocks/cobblestone",
+      "rotation": [45.0, 0.0, 1.0, 0.0, 8.0, 8.0, 8.0]
+    },
+    {
+      "name": "cuboid_3",
+      "bounds": [1.0, 13.0, 1.0, 15.0, 16.0, 15.0],
+      "texture": "minecraft:blocks/stone"
     }
-
-  }]
-
+  ]
 }

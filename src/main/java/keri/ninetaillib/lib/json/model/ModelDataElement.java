@@ -8,17 +8,19 @@ package keri.ninetaillib.lib.json.model;
 
 public enum ModelDataElement {
 
-    BOUNDS(0, "bounds"),
-    TEXTURE(1, "texture"),
-    TRANSLATION(2, "translation"),
-    ROTATION(3, "rotation"),
-    SCALE(4, "scale"),
-    COLOR(5, "color"),
-    UV_TRANSLATION(6, "uv_translation"),
-    UV_ROTATION(7, "uv_rotation"),
-    UV_SCALE(8, "uv_scale");
+    NAME(0, "name"),
+    BOUNDS(1, "bounds"),
+    TEXTURE(2, "texture"),
+    TRANSLATION(3, "translation"),
+    ROTATION(4, "rotation"),
+    SCALE(5, "scale"),
+    COLOR(6, "color"),
+    UV_TRANSLATION(7, "uv_translation"),
+    UV_ROTATION(8, "uv_rotation"),
+    UV_SCALE(9, "uv_scale");
 
     public static final ModelDataElement[] VALUES = new ModelDataElement[]{
+            NAME,
             BOUNDS,
             TEXTURE,
             TRANSLATION,

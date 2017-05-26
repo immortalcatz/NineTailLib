@@ -8,10 +8,10 @@ package keri.ninetaillib.lib.render;
 
 public enum VertexPosition {
 
-    TOP_LEFT(0, 0, "topleft"),
-    TOP_RIGHT(1, 1, "topright"),
-    BOTTOM_LEFT(2, 2, "bottomleft"),
-    BOTTOM_RIGHT(3, 3, "bottomright");
+    TOP_LEFT(0, 0, "top_left"),
+    TOP_RIGHT(1, 1, "top_right"),
+    BOTTOM_LEFT(2, 2, "bottom_left"),
+    BOTTOM_RIGHT(3, 3, "bottom_right");
 
     public static final VertexPosition[] VALUES = new VertexPosition[]{TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT};
     private int index;

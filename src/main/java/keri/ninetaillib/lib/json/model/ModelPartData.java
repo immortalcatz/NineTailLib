@@ -25,6 +25,7 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class ModelPartData implements Copyable<ModelPartData> {
 
+    private String name = "cuboid";
     private Cuboid6 bounds = new Cuboid6(0D, 0D, 0D, 16D, 16D, 16D);
     private ResourceLocation[] texture = new ResourceLocation[6];
     private List<Transformation> transformations = Lists.newArrayList();
@@ -36,6 +37,11 @@ public class ModelPartData implements Copyable<ModelPartData> {
         Colour[] color = new Colour[6];
         Arrays.fill(color, new ColourRGBA(255, 255, 255, 255));
         Arrays.fill(this.color, color);
+    }
+
+    public ModelPartData setName(String name){
+        this.name = name;
+        return this;
     }
 
     public ModelPartData setBounds(Cuboid6 bounds){
@@ -89,6 +95,10 @@ public class ModelPartData implements Copyable<ModelPartData> {
         return this;
     }
 
+    public String getName(){
+        return this.name;
+    }
+
     public Cuboid6 getBounds(){
         return this.bounds;
     }
@@ -118,6 +128,24 @@ public class ModelPartData implements Copyable<ModelPartData> {
         data.uvTransformations = this.uvTransformations;
         data.color = this.color;
         return data;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("------ ModelPartData ------\n");
+        builder.append("Bounds: " + this.bounds.toString() + "\n");
+
+        for(EnumFacing side : EnumFacing.VALUES){
+            builder.append("Texture (" + side.getName() + "): " + this.texture[side.getIndex()].toString() + "\n");
+
+            for(VertexPosition vertexPosition : VertexPosition.VALUES){
+                builder.append("Color (" + side.getName() + ", " + vertexPosition.getName() + "): " + this.color[side.getIndex()][vertexPosition.getIndex()].toString() + "\n");
+            }
+        }
+
+        builder.append("------ ModelPartData ------");
+        return builder.toString();
     }
 
 }
