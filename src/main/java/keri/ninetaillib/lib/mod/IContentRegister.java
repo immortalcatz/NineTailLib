@@ -18,4 +18,10 @@ public interface IContentRegister {
 
     void handlePostInit(FMLPostInitializationEvent event);
 
+    void handleClientPreInit(FMLPreInitializationEvent event);
+
+    void handleClientInit(FMLInitializationEvent event);
+
+    void handleClientPostInit(FMLPostInitializationEvent event);
+
 }

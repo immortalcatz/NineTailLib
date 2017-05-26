@@ -8,6 +8,7 @@ package keri.ninetaillib.lib.block;
 
 import keri.ninetaillib.lib.item.ItemBlockBase;
 import keri.ninetaillib.lib.mod.IContentRegister;
+import keri.ninetaillib.lib.render.RenderBlocks;
 import keri.ninetaillib.lib.texture.IIconBlock;
 import keri.ninetaillib.lib.texture.IIconRegister;
 import keri.ninetaillib.lib.util.BlockAccessUtils;
@@ -26,6 +27,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -151,6 +153,13 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("deprecation")
+    public EnumBlockRenderType getRenderType(IBlockState state){
+        return RenderBlocks.FULL_BLOCK;
+    }
+
+    @Override
     public void handlePreInit(FMLPreInitializationEvent event) {
         this.modid = event.getModMetadata().modId;
         this.setRegistryName(this.modid, this.blockName);
@@ -177,6 +186,24 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     public void handlePostInit(FMLPostInitializationEvent event) {
+
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void handleClientPreInit(FMLPreInitializationEvent event) {
+
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void handleClientInit(FMLInitializationEvent event) {
+
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void handleClientPostInit(FMLPostInitializationEvent event) {
 
     }
 

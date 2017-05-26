@@ -48,6 +48,7 @@ public class RenderItemPillar extends TileEntitySpecialRenderer<TileEntityItemPi
 
     static{
         RENDER_TYPE = RenderingRegistry.getNextAvailableType();
+        RenderingRegistry.registerRenderingHandler(INSTANCE);
     }
 
     @Override

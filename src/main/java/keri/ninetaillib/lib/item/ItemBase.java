@@ -134,4 +134,22 @@ public class ItemBase extends Item implements IContentRegister, IIconItem {
 
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void handleClientPreInit(FMLPreInitializationEvent event) {
+
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void handleClientInit(FMLInitializationEvent event) {
+
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void handleClientPostInit(FMLPostInitializationEvent event) {
+
+    }
+
 }

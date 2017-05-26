@@ -6,33 +6,30 @@
 
 package keri.ninetaillib.lib.render;
 
-import codechicken.lib.model.DummyBakedModel;
-import codechicken.lib.model.ModelRegistryHelper;
 import codechicken.lib.render.block.BlockRenderingRegistry;
-import keri.ninetaillib.lib.block.BlockBase;
+import com.google.common.collect.Maps;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.item.Item;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collection;
-import java.util.stream.IntStream;
+import java.util.EnumMap;
 
 @SideOnly(Side.CLIENT)
 public class RenderingRegistry {
 
     private static int renderId = 0;
+    private static EnumMap<EnumBlockRenderType, IBlockRenderingHandler> blockRenderingHandlers = Maps.newEnumMap(EnumBlockRenderType.class);
 
     public static EnumBlockRenderType getNextAvailableType(){
         return BlockRenderingRegistry.createRenderType("ibrh_" + renderId++);
     }
 
+    /**
     public static void registerRenderingHandler(IBlockRenderingHandler handler, Block block){
         BlockRenderingAdapter adapter = new BlockRenderingAdapter(handler);
         ModelResourceLocation location = new ModelResourceLocation(block.getRegistryName().toString());
@@ -56,6 +53,11 @@ public class RenderingRegistry {
         BlockRenderingRegistry.registerRenderer(handler.getRenderType(), adapter);
         ModelRegistryHelper.register(location, new DummyBakedModel());
         ModelRegistryHelper.registerItemRenderer(Item.getItemFromBlock(block), adapter);
+    }
+     */
+
+    public static void registerRenderingHandler(IBlockRenderingHandler handler){
+        blockRenderingHandlers.put(handler.getRenderType(), handler);
     }
 
     private static StateMap buildStateMap(Block block){
