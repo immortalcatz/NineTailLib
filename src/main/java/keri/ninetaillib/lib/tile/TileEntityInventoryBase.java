@@ -16,7 +16,7 @@ import net.minecraftforge.common.util.Constants;
 
 import java.util.Arrays;
 
-public abstract class TileEntityInventoryBase extends TileEntityBase implements ISidedInventory {
+public class TileEntityInventoryBase extends TileEntityBase implements ISidedInventory {
 
     private ItemStack[] inventory;
     private int stackLimit;
