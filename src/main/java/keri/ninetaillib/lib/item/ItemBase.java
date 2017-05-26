@@ -6,8 +6,11 @@
 
 package keri.ninetaillib.lib.item;
 
+import keri.ninetaillib.lib.texture.IIconItem;
+import keri.ninetaillib.lib.texture.IIconRegister;
 import keri.ninetaillib.lib.util.IContentRegister;
 import keri.ninetaillib.lib.util.ILocalization;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,10 +22,13 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemBase extends Item implements IContentRegister {
+public class ItemBase extends Item implements IContentRegister, IIconItem {
 
+    private String modid;
     private String itemName;
     private String[] subNames;
+    @SideOnly(Side.CLIENT)
+    private TextureAtlasSprite[] texture;
 
     public ItemBase(String itemName) {
         this.itemName = itemName;
@@ -83,10 +89,38 @@ public class ItemBase extends Item implements IContentRegister {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister register) {
+        if(this.subNames != null){
+            this.texture = new TextureAtlasSprite[this.subNames.length];
+
+            for(int i = 0; i < this.subNames.length; i++){
+                this.texture[i] = register.registerIcon(this.modid + ":items/" + this.itemName + "_" + this.subNames[i]);
+            }
+        }
+        else{
+            this.texture = new TextureAtlasSprite[1];
+            this.texture[0] = register.registerIcon(this.modid + ":items/" + this.itemName);
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getIcon(int meta) {
+        return this.texture[meta];
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getIcon(ItemStack stack) {
+        return null;
+    }
+
+    @Override
     public void handlePreInit(FMLPreInitializationEvent event) {
-        String modid = event.getModMetadata().modId;
-        this.setRegistryName(modid, this.itemName);
-        this.setUnlocalizedName(modid + "." + this.itemName);
+        this.modid = event.getModMetadata().modId;
+        this.setRegistryName(this.modid, this.itemName);
+        this.setUnlocalizedName(this.modid + "." + this.itemName);
         GameRegistry.register(this);
     }
 

@@ -7,6 +7,8 @@
 package keri.ninetaillib.lib.block;
 
 import keri.ninetaillib.lib.item.ItemBlockBase;
+import keri.ninetaillib.lib.texture.IIconBlock;
+import keri.ninetaillib.lib.texture.IIconRegister;
 import keri.ninetaillib.lib.util.BlockAccessUtils;
 import keri.ninetaillib.lib.util.IContentRegister;
 import net.minecraft.block.Block;
@@ -18,12 +20,15 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -34,11 +39,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class BlockBase<T extends TileEntity> extends Block implements ITileEntityProvider, IContentRegister {
+public class BlockBase<T extends TileEntity> extends Block implements ITileEntityProvider, IContentRegister, IIconBlock {
 
     public static final PropertyInteger META_DATA = PropertyInteger.create("meta", 0, 15);
+    private String modid;
     private String blockName;
     private String[] subNames = null;
+    @SideOnly(Side.CLIENT)
+    private TextureAtlasSprite[] texture;
 
     public BlockBase(String blockName, Material material, MapColor mapColor) {
         super(material, mapColor);
@@ -115,28 +123,54 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public void reigisterIcons(IIconRegister register){
+        if(this.subNames != null){
+            this.texture = new TextureAtlasSprite[this.subNames.length];
+
+            for(int i = 0; i < this.subNames.length; i++){
+                this.texture[i] = register.registerIcon(this.modid + ":blocks/" + this.blockName + "_" + this.subNames[i]);
+            }
+        }
+        else{
+            this.texture = new TextureAtlasSprite[1];
+            this.texture[0] = register.registerIcon(this.modid + ":blocks/" + this.blockName);
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getIcon(int meta, int side) {
+        return this.texture[meta];
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, int side) {
+        return null;
+    }
+
+    @Override
     public void handlePreInit(FMLPreInitializationEvent event) {
-        String modid = event.getModMetadata().modId;
-        this.setRegistryName(modid, this.blockName);
-        this.setUnlocalizedName(modid + "." + this.blockName);
+        this.modid = event.getModMetadata().modId;
+        this.setRegistryName(this.modid, this.blockName);
+        this.setUnlocalizedName(this.modid + "." + this.blockName);
         GameRegistry.register(this);
         GameRegistry.register(this.getItemBlock().setRegistryName(this.getRegistryName()));
     }
 
     @Override
     public void handleInit(FMLInitializationEvent event) {
-        String modid = this.getRegistryName().getResourceDomain();
-
         if(this.hasMultipleTileEntities()){
             for(int i = 0; i < this.subNames.length; i++){
                 Class<? extends TileEntity> tileClass = this.createNewTileEntity(null, i).getClass();
-                String name = "tile." + modid + "." + this.blockName + "." + this.subNames[i];
+                String name = "tile." + this.modid + "." + this.blockName + "." + this.subNames[i];
                 GameRegistry.registerTileEntity(tileClass, name);
             }
         }
         else{
             Class<? extends TileEntity> tileClass = this.createNewTileEntity(null, 0).getClass();
-            String name = "tile." + modid + "." + this.blockName;
+            String name = "tile." + this.modid + "." + this.blockName;
             GameRegistry.registerTileEntity(tileClass, name);
         }
     }
@@ -184,6 +218,14 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     public ItemBlock getItemBlock(){
         return new ItemBlockBase(this);
+    }
+
+    public String getModid(){
+        return this.modid;
+    }
+
+    public String getBlockName(){
+        return this.blockName;
     }
 
     public String[] getSubNames(){
