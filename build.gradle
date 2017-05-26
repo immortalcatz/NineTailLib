@@ -88,7 +88,7 @@ task("uploadJars", dependsOn: "reobf") {
                             description 'NineTailLib'
                             url 'http://github.com/TeamMD5/NineTailLib'
                             scm {
-                                url 'http://github.com/TeamMD5/NineTailLib'
+                                url 'http://github.com/TeamMD5/NineTailLib/tree/1.11.2'
                                 connection 'scm:git:git@github.com:TeamMD5/NineTailLib/NineTailLib.git'
                                 developerConnection 'scm:git:git@github.com:TeamMD5/NineTailLib/NineTailLib.git'
                             }
