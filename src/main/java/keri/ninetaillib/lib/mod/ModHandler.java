@@ -11,7 +11,6 @@ import keri.ninetaillib.lib.config.*;
 import keri.ninetaillib.lib.logger.IModLogger;
 import keri.ninetaillib.lib.logger.ModLogger;
 import keri.ninetaillib.lib.logger.SimpleModLogger;
-import keri.ninetaillib.lib.util.IContentRegister;
 import keri.ninetaillib.lib.util.ReflectionUtils;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;

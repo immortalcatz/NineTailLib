@@ -6,9 +6,9 @@
 
 package keri.ninetaillib.lib.item;
 
+import keri.ninetaillib.lib.mod.IContentRegister;
 import keri.ninetaillib.lib.texture.IIconItem;
 import keri.ninetaillib.lib.texture.IIconRegister;
-import keri.ninetaillib.lib.util.IContentRegister;
 import keri.ninetaillib.lib.util.ILocalization;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;

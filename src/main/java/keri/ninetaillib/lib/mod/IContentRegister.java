@@ -4,7 +4,7 @@
  * the explicit permission from the developer of this software!
  */
 
-package keri.ninetaillib.lib.util;
+package keri.ninetaillib.lib.mod;
 
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;

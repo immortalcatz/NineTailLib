@@ -7,10 +7,10 @@
 package keri.ninetaillib.lib.block;
 
 import keri.ninetaillib.lib.item.ItemBlockBase;
+import keri.ninetaillib.lib.mod.IContentRegister;
 import keri.ninetaillib.lib.texture.IIconBlock;
 import keri.ninetaillib.lib.texture.IIconRegister;
 import keri.ninetaillib.lib.util.BlockAccessUtils;
-import keri.ninetaillib.lib.util.IContentRegister;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
