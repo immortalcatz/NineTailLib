@@ -6,6 +6,7 @@
 
 package keri.ninetaillib.test.block;
 
+import codechicken.lib.util.ItemUtils;
 import keri.ninetaillib.lib.block.BlockBase;
 import keri.ninetaillib.lib.util.EnumDyeColor;
 import keri.ninetaillib.test.client.render.RenderItemPillar;
@@ -62,6 +63,17 @@ public class BlockItemPillar extends BlockBase<TileEntityItemPillar> {
         }
 
         return false;
+    }
+
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        TileEntityItemPillar tile = (TileEntityItemPillar)world.getTileEntity(pos);
+
+        if(tile != null && !world.isRemote){
+            ItemUtils.dropInventory(world, pos, tile);
+        }
+
+        super.breakBlock(world, pos, state);
     }
 
     @Override

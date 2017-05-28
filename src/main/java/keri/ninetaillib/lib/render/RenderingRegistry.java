@@ -23,14 +23,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collection;
-import java.util.EnumMap;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 @SideOnly(Side.CLIENT)
 public class RenderingRegistry {
 
     private static int renderId = 0;
-    private static EnumMap<EnumBlockRenderType, IBlockRenderingHandler> blockRenderingHandlers = Maps.newEnumMap(EnumBlockRenderType.class);
+    private static Map<EnumBlockRenderType, IBlockRenderingHandler> blockRenderingHandlers = Maps.newHashMap();
 
     public static EnumBlockRenderType getNextAvailableType(){
         return BlockRenderingRegistry.createRenderType("ibrh_" + renderId++);

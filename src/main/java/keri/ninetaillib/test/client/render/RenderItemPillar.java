@@ -42,13 +42,12 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class RenderItemPillar extends TileEntitySpecialRenderer<TileEntityItemPillar> implements IBlockRenderingHandler {
 
-    public static final RenderItemPillar INSTANCE = new RenderItemPillar();
     public static EnumBlockRenderType RENDER_TYPE;
     private static JsonModel jsonModel = ClientProxy.modelLoader.getModelData("item_pillar");
 
     static{
         RENDER_TYPE = RenderingRegistry.getNextAvailableType();
-        RenderingRegistry.registerRenderingHandler(INSTANCE);
+        RenderingRegistry.registerRenderingHandler(new RenderItemPillar());
     }
 
     @Override
