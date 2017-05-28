@@ -9,6 +9,7 @@ package keri.ninetaillib.lib.block;
 import keri.ninetaillib.lib.item.ItemBlockBase;
 import keri.ninetaillib.lib.mod.IContentRegister;
 import keri.ninetaillib.lib.render.RenderBlocks;
+import keri.ninetaillib.lib.render.RenderingRegistry;
 import keri.ninetaillib.lib.texture.IIconBlock;
 import keri.ninetaillib.lib.texture.IIconRegister;
 import keri.ninetaillib.lib.util.BlockAccessUtils;
@@ -192,7 +193,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     @Override
     @SideOnly(Side.CLIENT)
     public void handleClientPreInit(FMLPreInitializationEvent event) {
-
+        RenderingRegistry.registerBlock(this);
     }
 
     @Override

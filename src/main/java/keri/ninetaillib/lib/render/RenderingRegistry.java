@@ -6,18 +6,25 @@
 
 package keri.ninetaillib.lib.render;
 
+import codechicken.lib.model.DummyBakedModel;
+import codechicken.lib.model.ModelRegistryHelper;
 import codechicken.lib.render.block.BlockRenderingRegistry;
 import com.google.common.collect.Maps;
+import keri.ninetaillib.lib.block.BlockBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.item.Item;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collection;
 import java.util.EnumMap;
+import java.util.stream.IntStream;
 
 @SideOnly(Side.CLIENT)
 public class RenderingRegistry {
@@ -29,8 +36,12 @@ public class RenderingRegistry {
         return BlockRenderingRegistry.createRenderType("ibrh_" + renderId++);
     }
 
-    /**
-    public static void registerRenderingHandler(IBlockRenderingHandler handler, Block block){
+    public static void registerRenderingHandler(IBlockRenderingHandler handler){
+        blockRenderingHandlers.put(handler.getRenderType(), handler);
+    }
+
+    public static void registerBlock(Block block){
+        IBlockRenderingHandler handler = blockRenderingHandlers.get(block.getRenderType(block.getDefaultState()));
         BlockRenderingAdapter adapter = new BlockRenderingAdapter(handler);
         ModelResourceLocation location = new ModelResourceLocation(block.getRegistryName().toString());
         ModelResourceLocation locationInventory = new ModelResourceLocation(block.getRegistryName(), "inventory");
@@ -53,11 +64,6 @@ public class RenderingRegistry {
         BlockRenderingRegistry.registerRenderer(handler.getRenderType(), adapter);
         ModelRegistryHelper.register(location, new DummyBakedModel());
         ModelRegistryHelper.registerItemRenderer(Item.getItemFromBlock(block), adapter);
-    }
-     */
-
-    public static void registerRenderingHandler(IBlockRenderingHandler handler){
-        blockRenderingHandlers.put(handler.getRenderType(), handler);
     }
 
     private static StateMap buildStateMap(Block block){
