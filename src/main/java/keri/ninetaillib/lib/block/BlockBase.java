@@ -264,7 +264,6 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
         return false;
     }
 
-    @SideOnly(Side.CLIENT)
     public CreativeTabs getCreativeTab(){
         return CreativeTabs.BUILDING_BLOCKS;
     }

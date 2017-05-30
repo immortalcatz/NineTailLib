@@ -16,6 +16,8 @@ import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -26,6 +28,7 @@ public class ModHandler {
 
     private Object modInstance;
     private List<Class<?>> contentLoaders = Lists.newArrayList();
+    private List<IContentRegister> content = Lists.newArrayList();
 
     public ModHandler(Object modInstance){
         this.modInstance = modInstance;
@@ -34,15 +37,50 @@ public class ModHandler {
     public void handlePreInit(FMLPreInitializationEvent event){
         this.setupLogger(event, this.modInstance);
         this.setupConfig(event, this.modInstance);
-        this.handleContentLoaderPreInit(event);
+        this.setupContentLoaders(event);
+
+        for(IContentRegister object : this.content){
+            object.handlePreInit(event);
+        }
     }
 
     public void handleInit(FMLInitializationEvent event){
-        this.handleContentLoaderInit(event);
+        for(IContentRegister object : this.content){
+            object.handleInit(event);
+        }
     }
 
     public void handlePostInit(FMLPostInitializationEvent event){
-        this.handleContentLoaderPostInit(event);
+        for(IContentRegister object : this.content){
+            object.handlePostInit(event);
+        }
+    }
+
+    public void register(Object object){
+        if(object instanceof IContentRegister){
+            this.content.add((IContentRegister)object);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void handleClientPreInit(FMLPreInitializationEvent event){
+        for(IContentRegister object : this.content){
+            object.handleClientPreInit(event);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void handleClientInit(FMLInitializationEvent event){
+        for(IContentRegister object : this.content){
+            object.handleInit(event);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void handleClientPostInit(FMLPostInitializationEvent event){
+        for(IContentRegister object : this.content){
+            object.handleClientPostInit(event);
+        }
     }
 
     private void setupConfig(FMLPreInitializationEvent event, Object modInstance){
@@ -98,60 +136,24 @@ public class ModHandler {
         }
     }
 
-    private void handleContentLoaderPreInit(FMLPreInitializationEvent event){
+    private void setupContentLoaders(FMLPreInitializationEvent event){
         for(ASMDataTable.ASMData data : event.getAsmData().getAll(ContentLoader.class.getName())){
             try{
-                Class<?> initializerClass = Class.forName(data.getClassName());
-                ContentLoader annotation = initializerClass.getAnnotation(ContentLoader.class);
+                Class<?> contentLoaderClass = Class.forName(data.getClassName());
+                ContentLoader annotation = contentLoaderClass.getAnnotation(ContentLoader.class);
 
                 if(event.getModMetadata().modId.equals(annotation.modid())){
-                    if(initializerClass != null){
-                        this.contentLoaders.add(initializerClass);
+                    for(Field field : contentLoaderClass.getFields()){
+                        Object fieldInstance = ReflectionUtils.getField(field, contentLoaderClass);
+
+                        if(fieldInstance instanceof IContentRegister){
+                            this.content.add((IContentRegister)fieldInstance);
+                        }
                     }
                 }
             }
             catch(Exception e){
                 e.printStackTrace();
-            }
-        }
-
-        for(Class<?> contentLoader : this.contentLoaders){
-            for(Field field : contentLoader.getFields()){
-                Object fieldObject = ReflectionUtils.getField(field, contentLoader);
-
-                if(fieldObject != null){
-                    if(fieldObject instanceof IContentRegister){
-                        ((IContentRegister)fieldObject).handlePreInit(event);
-                    }
-                }
-            }
-        }
-    }
-
-    private void handleContentLoaderInit(FMLInitializationEvent event){
-        for(Class<?> contentLoader : this.contentLoaders){
-            for(Field field : contentLoader.getFields()){
-                Object fieldObject = ReflectionUtils.getField(field, contentLoader);
-
-                if(fieldObject != null){
-                    if(fieldObject instanceof IContentRegister){
-                        ((IContentRegister)fieldObject).handleInit(event);
-                    }
-                }
-            }
-        }
-    }
-
-    private void handleContentLoaderPostInit(FMLPostInitializationEvent event){
-        for(Class<?> contentLoader : this.contentLoaders){
-            for(Field field : contentLoader.getFields()){
-                Object fieldObject = ReflectionUtils.getField(field, contentLoader);
-
-                if(fieldObject != null){
-                    if(fieldObject instanceof IContentRegister){
-                        ((IContentRegister)fieldObject).handlePostInit(event);
-                    }
-                }
             }
         }
     }

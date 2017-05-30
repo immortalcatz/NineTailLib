@@ -18,7 +18,7 @@ repositories {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
-version = "1.11.2-1.4.110"
+version = "1.11.2-1.4.111"
 group = "keri.ninetaillib"
 archivesBaseName = "NineTailLib"
 
@@ -51,13 +51,20 @@ processResources {
     }
 }
 
+def commonManifest = {
+    attributes 'FMLCorePluginContainsFMLMod': 'true'
+    attributes 'FMLCorePlugin': 'keri.ninetaillib.mod.core.NineTailLibCore'
+}
+
 jar {
     classifier = 'universal'
+    manifest commonManifest
 }
 
 task deobfJar(type: Jar) {
     from sourceSets.main.output
     classifier = 'deobf'
+    manifest commonManifest
 }
 
 task srcJar(type: Jar) {

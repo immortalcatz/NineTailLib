@@ -31,6 +31,8 @@ public class ModelPartData implements Copyable<ModelPartData> {
     private List<Transformation> transformations = Lists.newArrayList();
     private List<UVTransformation> uvTransformations = Lists.newArrayList();
     private Colour[][] color = new Colour[6][4];
+    private boolean hasBrightnessOverride = false;
+    private int brightness = 0;
 
     public ModelPartData(){
         Arrays.fill(this.texture, new ResourceLocation("minecraft", "blocks/stone"));
@@ -95,6 +97,12 @@ public class ModelPartData implements Copyable<ModelPartData> {
         return this;
     }
 
+    public ModelPartData setBrightnessOverride(int brightness){
+        this.brightness = brightness;
+        this.hasBrightnessOverride = true;
+        return this;
+    }
+
     public String getName(){
         return this.name;
     }
@@ -119,6 +127,14 @@ public class ModelPartData implements Copyable<ModelPartData> {
         return this.color;
     }
 
+    public boolean getHasBrightnessOverride(){
+        return this.hasBrightnessOverride;
+    }
+
+    public int getBrightness(){
+        return this.brightness;
+    }
+
     @Override
     public ModelPartData copy() {
         ModelPartData data = new ModelPartData();
@@ -127,6 +143,8 @@ public class ModelPartData implements Copyable<ModelPartData> {
         data.transformations = this.transformations;
         data.uvTransformations = this.uvTransformations;
         data.color = this.color;
+        data.hasBrightnessOverride = this.hasBrightnessOverride;
+        data.brightness = this.brightness;
         return data;
     }
 

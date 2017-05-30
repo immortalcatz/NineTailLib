@@ -32,6 +32,7 @@ public class NineTailLibCore extends DummyModContainer implements IFMLLoadingPlu
     @Override
     public String[] getASMTransformerClass() {
         return new String[]{
+                "codechicken.lib.asm.ClassHierarchyManager",
                 "keri.ninetaillib.mod.core.BlockTransformer"
         };
     }

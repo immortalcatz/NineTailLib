@@ -23,7 +23,6 @@ import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -36,8 +35,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class RenderItemPillar extends TileEntitySpecialRenderer<TileEntityItemPillar> implements IBlockRenderingHandler {
@@ -55,8 +52,7 @@ public class RenderItemPillar extends TileEntitySpecialRenderer<TileEntityItemPi
         JsonModel model = jsonModel.copy();
         Colour color = EnumDyeColor.VALUES[BlockAccessUtils.getBlockMetadata(world, pos)].getColor();
         model.recolor(color, "cuboid_2");
-        List<BakedQuad> quads = model.generateModel().bake();
-        return RenderUtils.renderQuads(buffer, world, pos, quads);
+        return RenderUtils.renderQuads(buffer, world, pos, model.generateModel().bake());
     }
 
     @Override

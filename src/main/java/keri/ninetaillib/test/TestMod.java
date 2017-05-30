@@ -28,7 +28,7 @@ public class TestMod {
     public static final String SSIDE = "keri.ninetaillib.test.proxy.CommonProxy";
     @Mod.Instance(value = MODID)
     public static TestMod INSTANCE = new TestMod();
-    private static ModHandler MOD_HANDLER = new ModHandler(INSTANCE);
+    public static ModHandler MOD_HANDLER = new ModHandler(INSTANCE);
     @SidedProxy(clientSide = CSIDE, serverSide = SSIDE)
     public static ITestProxy PROXY;
     @ModLogger

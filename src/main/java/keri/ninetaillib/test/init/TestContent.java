@@ -14,6 +14,6 @@ import net.minecraft.block.Block;
 @ContentLoader(modid = TestMod.MODID)
 public class TestContent {
 
-    public static Block testBlock = new BlockItemPillar();
+    public static Block itemPillar = new BlockItemPillar();
 
 }

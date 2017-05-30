@@ -32,6 +32,16 @@ public class JsonModel implements Copyable<JsonModel> {
         return this;
     }
 
+    public JsonModel setBrightnessOverride(int brightness, String name){
+        ModelPartData partData = this.partData.get(name);
+
+        if(partData != null){
+            partData.setBrightnessOverride(brightness);
+        }
+
+        return this;
+    }
+
     public JsonModel retexture(ResourceLocation texture, String name){
         ModelPartData partData = this.partData.get(name);
 
@@ -89,6 +99,10 @@ public class JsonModel implements Copyable<JsonModel> {
             ModelPartData partData = entry.getValue();
             ModelPart modelPart = new ModelPart();
             modelPart.setBounds(partData.getBounds());
+
+            if(partData.getHasBrightnessOverride()){
+                modelPart.setBrightnessOverride(partData.getBrightness());
+            }
 
             for(EnumFacing side : EnumFacing.VALUES){
                 modelPart.setTexture(TextureUtils.getTexture(partData.getTexture()[side.getIndex()]), side);

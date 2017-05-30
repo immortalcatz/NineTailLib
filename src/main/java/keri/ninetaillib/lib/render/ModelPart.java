@@ -20,7 +20,9 @@ import codechicken.lib.vec.Vector3;
 import codechicken.lib.vec.uv.IconTransformation;
 import codechicken.lib.vec.uv.UVTransformation;
 import com.google.common.collect.Lists;
+import keri.ninetaillib.lib.util.RenderUtils;
 import keri.ninetaillib.lib.util.VectorUtils;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -43,6 +45,8 @@ public class ModelPart implements Copyable<ModelPart> {
     private List<Transformation> transformations = Lists.newArrayList();
     private List<UVTransformation> uvTransformations = Lists.newArrayList();
     private Colour[][] color = new Colour[6][4];
+    private boolean hasBrightnessOverride = false;
+    private int brightness = 0;
 
     public ModelPart(){
         Colour[] color = new Colour[4];
@@ -99,6 +103,12 @@ public class ModelPart implements Copyable<ModelPart> {
         return this;
     }
 
+    public ModelPart setBrightnessOverride(int brightness){
+        this.brightness = brightness;
+        this.hasBrightnessOverride = true;
+        return this;
+    }
+
     public void renderDamage(VertexBuffer buffer, IBlockAccess world, BlockPos pos, TextureAtlasSprite texture){
         CCModel model = CCModel.quadModel(24).generateBlock(0, VectorUtils.divide(this.bounds, 16D)).computeNormals();
         model.apply(new Translation(Vector3.fromBlockPos(pos)));
@@ -120,6 +130,7 @@ public class ModelPart implements Copyable<ModelPart> {
 
     public void render(VertexBuffer buffer, IBlockAccess world, BlockPos pos){
         CCModel model = CCModel.quadModel(24).generateBlock(0, VectorUtils.divide(this.bounds, 16D)).computeNormals();
+        int lastBrightness = (int)OpenGlHelper.lastBrightnessY << 16 | (int)OpenGlHelper.lastBrightnessX;
 
         if(pos != null){
             model.apply(new Translation(Vector3.fromBlockPos(pos)));
@@ -143,6 +154,14 @@ public class ModelPart implements Copyable<ModelPart> {
         for(EnumFacing side : EnumFacing.VALUES){
             for(VertexPosition vertexPosition : VertexPosition.VALUES){
                 IconTransformation texture = new IconTransformation(this.texture[side.getIndex()]);
+
+                if(this.hasBrightnessOverride){
+                    renderState.brightness = this.brightness;
+                }
+                else{
+                    renderState.brightness = lastBrightness;
+                }
+
                 model.setColour(this.color[side.getIndex()][vertexPosition.getVertexIndex()].rgba());
                 model.render(renderState, vertex, vertex + 1, texture);
                 vertex++;
@@ -152,8 +171,9 @@ public class ModelPart implements Copyable<ModelPart> {
 
     public List<BakedQuad> bake(IQuadManipulator... manipulators){
         CCModel model = CCModel.quadModel(24).generateBlock(0, VectorUtils.divide(this.bounds, 16D)).computeNormals();
+        int lastBrightness = (int)OpenGlHelper.lastBrightnessY << 16 | (int)OpenGlHelper.lastBrightnessX;
         BakingVertexBuffer buffer = BakingVertexBuffer.create();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+        buffer.begin(GL11.GL_QUADS, RenderUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
         CCRenderState renderState = RenderingConstants.getRenderState();
         renderState.reset();
         renderState.bind(buffer);
@@ -171,6 +191,14 @@ public class ModelPart implements Copyable<ModelPart> {
         for(EnumFacing side : EnumFacing.VALUES){
             for(VertexPosition vertexPosition : VertexPosition.VALUES){
                 IconTransformation texture = new IconTransformation(this.texture[side.getIndex()]);
+
+                if(this.hasBrightnessOverride){
+                    renderState.brightness = this.brightness;
+                }
+                else{
+                    renderState.brightness = lastBrightness;
+                }
+
                 model.setColour(this.color[side.getIndex()][vertexPosition.getVertexIndex()].rgba());
                 model.render(renderState, vertex, vertex + 1, texture);
                 vertex++;
