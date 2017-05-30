@@ -9,13 +9,18 @@ package keri.ninetaillib.lib.texture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface IIconBlock {
 
+    @SideOnly(Side.CLIENT)
     void reigisterIcons(IIconRegister register);
 
+    @SideOnly(Side.CLIENT)
     TextureAtlasSprite getIcon(int meta, int side);
 
+    @SideOnly(Side.CLIENT)
     TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, int side);
 
 }

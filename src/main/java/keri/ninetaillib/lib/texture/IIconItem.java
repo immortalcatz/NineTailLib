@@ -11,13 +11,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public interface IIconItem {
 
+    @SideOnly(Side.CLIENT)
     void registerIcons(IIconRegister register);
 
+    @SideOnly(Side.CLIENT)
     TextureAtlasSprite getIcon(int meta);
 
+    @SideOnly(Side.CLIENT)
     TextureAtlasSprite getIcon(ItemStack stack);
 
 }

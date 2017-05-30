@@ -128,23 +128,29 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     @Override
     @SideOnly(Side.CLIENT)
     public void reigisterIcons(IIconRegister register){
-        if(this.subNames != null){
-            this.texture = new TextureAtlasSprite[this.subNames.length];
+        if(this.getRenderType(this.getDefaultState()) == RenderBlocks.FULL_BLOCK){
+            if(this.subNames != null){
+                this.texture = new TextureAtlasSprite[this.subNames.length];
 
-            for(int i = 0; i < this.subNames.length; i++){
-                this.texture[i] = register.registerIcon(this.modid + ":blocks/" + this.blockName + "_" + this.subNames[i]);
+                for(int i = 0; i < this.subNames.length; i++){
+                    this.texture[i] = register.registerIcon(this.modid + ":blocks/" + this.blockName + "_" + this.subNames[i]);
+                }
             }
-        }
-        else{
-            this.texture = new TextureAtlasSprite[1];
-            this.texture[0] = register.registerIcon(this.modid + ":blocks/" + this.blockName);
+            else{
+                this.texture = new TextureAtlasSprite[1];
+                this.texture[0] = register.registerIcon(this.modid + ":blocks/" + this.blockName);
+            }
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getIcon(int meta, int side) {
-        return this.texture[meta];
+        if(this.getRenderType(this.getDefaultState()) == RenderBlocks.FULL_BLOCK){
+            return this.texture[meta];
+        }
+
+        return null;
     }
 
     @Override
