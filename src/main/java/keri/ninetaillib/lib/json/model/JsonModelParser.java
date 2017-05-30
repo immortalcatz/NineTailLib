@@ -134,6 +134,10 @@ public class JsonModelParser implements IJsonParser<JsonModel> {
                             }
 
                             break;
+                        case BRIGHTNESS:
+                            int brightness = (int)(long)cuboidElement;
+                            partData.setBrightnessOverride(brightness);
+                            break;
                         case UV_TRANSLATION:
                             JSONArray jsonUvTranslationArray = (JSONArray)cuboidElement;
                             double translationU = (double)jsonUvTranslationArray.get(0);

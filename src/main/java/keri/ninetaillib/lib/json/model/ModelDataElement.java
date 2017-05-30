@@ -15,9 +15,10 @@ public enum ModelDataElement {
     ROTATION(4, "rotation"),
     SCALE(5, "scale"),
     COLOR(6, "color"),
-    UV_TRANSLATION(7, "uv_translation"),
-    UV_ROTATION(8, "uv_rotation"),
-    UV_SCALE(9, "uv_scale");
+    BRIGHTNESS(7, "brightness"),
+    UV_TRANSLATION(8, "uv_translation"),
+    UV_ROTATION(9, "uv_rotation"),
+    UV_SCALE(10, "uv_scale");
 
     public static final ModelDataElement[] VALUES = new ModelDataElement[]{
             NAME,
@@ -27,6 +28,7 @@ public enum ModelDataElement {
             ROTATION,
             SCALE,
             COLOR,
+            BRIGHTNESS,
             UV_TRANSLATION,
             UV_ROTATION,
             UV_SCALE
