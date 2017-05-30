@@ -7,11 +7,15 @@
 package keri.ninetaillib.lib.mod;
 
 import com.google.common.collect.Lists;
+import keri.ninetaillib.lib.block.BlockBase;
 import keri.ninetaillib.lib.config.*;
+import keri.ninetaillib.lib.item.ItemBase;
 import keri.ninetaillib.lib.logger.IModLogger;
 import keri.ninetaillib.lib.logger.ModLogger;
 import keri.ninetaillib.lib.logger.SimpleModLogger;
+import keri.ninetaillib.lib.texture.IconRegister;
 import keri.ninetaillib.lib.util.ReflectionUtils;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -27,7 +31,6 @@ import java.util.List;
 public class ModHandler {
 
     private Object modInstance;
-    private List<Class<?>> contentLoaders = Lists.newArrayList();
     private List<IContentRegister> content = Lists.newArrayList();
 
     public ModHandler(Object modInstance){
@@ -64,8 +67,18 @@ public class ModHandler {
 
     @SideOnly(Side.CLIENT)
     public void handleClientPreInit(FMLPreInitializationEvent event){
+        IconRegister iconRegister = new IconRegister();
+        MinecraftForge.EVENT_BUS.register(iconRegister);
+
         for(IContentRegister object : this.content){
             object.handleClientPreInit(event);
+
+            if(object instanceof BlockBase){
+                iconRegister.registerBlock((BlockBase)object);
+            }
+            else if(object instanceof ItemBase){
+                iconRegister.registerItem((ItemBase)object);
+            }
         }
     }
 

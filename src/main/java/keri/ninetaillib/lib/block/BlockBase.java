@@ -192,7 +192,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void handleClientPreInit(FMLPreInitializationEvent event) {
+    public void handleClientPreInit(FMLPreInitializationEvent event){
         RenderingRegistry.registerBlock(this);
     }
 
