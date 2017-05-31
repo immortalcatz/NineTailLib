@@ -7,6 +7,7 @@
 package keri.ninetaillib.lib.item;
 
 import keri.ninetaillib.lib.mod.IContentRegister;
+import keri.ninetaillib.lib.render.EnumItemRenderType;
 import keri.ninetaillib.lib.texture.IIconItem;
 import keri.ninetaillib.lib.texture.IIconRegister;
 import keri.ninetaillib.lib.util.ILocalization;
@@ -150,6 +151,23 @@ public class ItemBase extends Item implements IContentRegister, IIconItem {
     @SideOnly(Side.CLIENT)
     public void handleClientPostInit(FMLPostInitializationEvent event) {
 
+    }
+
+    @SideOnly(Side.CLIENT)
+    public EnumItemRenderType getRenderType(){
+        return EnumItemRenderType.DEFAULT_ITEM;
+    }
+
+    public String getModid(){
+        return this.modid;
+    }
+
+    public String getItemName(){
+        return this.itemName;
+    }
+
+    public String[] getSubNames(){
+        return this.subNames;
     }
 
 }
