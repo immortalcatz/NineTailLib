@@ -12,7 +12,6 @@ import codechicken.lib.render.CCModel;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.buffer.BakingVertexBuffer;
 import codechicken.lib.texture.TextureUtils;
-import codechicken.lib.util.Copyable;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Transformation;
 import codechicken.lib.vec.Translation;
@@ -20,6 +19,7 @@ import codechicken.lib.vec.Vector3;
 import codechicken.lib.vec.uv.IconTransformation;
 import codechicken.lib.vec.uv.UVTransformation;
 import com.google.common.collect.Lists;
+import keri.ninetaillib.lib.util.ICopyable;
 import keri.ninetaillib.lib.util.RenderUtils;
 import keri.ninetaillib.lib.util.VectorUtils;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -38,7 +38,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class ModelPart implements Copyable<ModelPart> {
+public class ModelPart implements ICopyable<ModelPart> {
 
     private Cuboid6 bounds = new Cuboid6(0D, 0D, 0D, 16D, 16D, 16D);
     private TextureAtlasSprite[] texture = new TextureAtlasSprite[6];

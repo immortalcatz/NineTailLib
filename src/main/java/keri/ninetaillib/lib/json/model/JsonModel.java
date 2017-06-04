@@ -8,13 +8,13 @@ package keri.ninetaillib.lib.json.model;
 
 import codechicken.lib.colour.Colour;
 import codechicken.lib.texture.TextureUtils;
-import codechicken.lib.util.Copyable;
 import codechicken.lib.vec.Transformation;
 import codechicken.lib.vec.uv.UVTransformation;
 import com.google.common.collect.Maps;
 import keri.ninetaillib.lib.render.CuboidModel;
 import keri.ninetaillib.lib.render.ModelPart;
 import keri.ninetaillib.lib.render.VertexPosition;
+import keri.ninetaillib.lib.util.ICopyable;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Map;
 
 @SideOnly(Side.CLIENT)
-public class JsonModel implements Copyable<JsonModel> {
+public class JsonModel implements ICopyable<JsonModel> {
 
     private Map<String, ModelPartData> partData = Maps.newHashMap();
 

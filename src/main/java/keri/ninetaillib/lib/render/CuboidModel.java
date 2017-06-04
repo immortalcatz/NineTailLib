@@ -6,8 +6,8 @@
 
 package keri.ninetaillib.lib.render;
 
-import codechicken.lib.util.Copyable;
 import com.google.common.collect.Lists;
+import keri.ninetaillib.lib.util.ICopyable;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class CuboidModel implements Copyable<CuboidModel> {
+public class CuboidModel implements ICopyable<CuboidModel> {
 
     private List<ModelPart> modelParts = Lists.newArrayList();
 

@@ -7,6 +7,7 @@
 package keri.ninetaillib.lib.util;
 
 import keri.ninetaillib.lib.block.BlockBase;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -27,6 +28,10 @@ public class BlockAccessUtils {
         IBlockState oldState = world.getBlockState(pos).getActualState(world, pos);
         IBlockState newState = oldState.withProperty(BlockBase.META_DATA, meta);
         return world.setBlockState(pos, newState, flags);
+    }
+
+    public static IBlockState getMetaState(Block block, int meta){
+        return block.getDefaultState().withProperty(BlockBase.META_DATA, meta);
     }
 
 }

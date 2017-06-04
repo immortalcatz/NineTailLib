@@ -21,6 +21,7 @@ public class BlockTransformer extends TransformerBase {
     public void transform(ModularASMTransformer transformer, Map<String, ASMBlock> blocks) {
         this.transformBlockFence(transformer, blocks);
         this.transformBlockWall(transformer, blocks);
+        this.transformBlockPane(transformer, blocks);
     }
 
     @Override
@@ -38,6 +39,12 @@ public class BlockTransformer extends TransformerBase {
         final String owner = "net/minecraft/block/BlockWall";
         ObfMapping canConnectTo = new ObfMapping(owner, "func_176253_e", "(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;)Z");
         transformer.add(new MethodReplacer(canConnectTo, blocks.get("blockWall_n_canConnectTo"), blocks.get("blockWall_r_canConnectTo")));
+    }
+
+    private void transformBlockPane(ModularASMTransformer transformer, Map<String, ASMBlock> blocks){
+        final String owner = "net/minecraft/block/BlockPane";
+        ObfMapping canPaneConnectToBlock = new ObfMapping(owner, "func_150098_a", "(Lnet/minecraft/block/Block;)Z");
+        transformer.add(new MethodReplacer(canPaneConnectToBlock, blocks.get("blockPane_n_canPaneConnectToBlock"), blocks.get("blockPane_r_canPaneConnectToBlock")));
     }
 
 }

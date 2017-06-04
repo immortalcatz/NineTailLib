@@ -8,12 +8,12 @@ package keri.ninetaillib.lib.json.model;
 
 import codechicken.lib.colour.Colour;
 import codechicken.lib.colour.ColourRGBA;
-import codechicken.lib.util.Copyable;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Transformation;
 import codechicken.lib.vec.uv.UVTransformation;
 import com.google.common.collect.Lists;
 import keri.ninetaillib.lib.render.VertexPosition;
+import keri.ninetaillib.lib.util.ICopyable;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class ModelPartData implements Copyable<ModelPartData> {
+public class ModelPartData implements ICopyable<ModelPartData> {
 
     private String name = "cuboid";
     private Cuboid6 bounds = new Cuboid6(0D, 0D, 0D, 16D, 16D, 16D);
