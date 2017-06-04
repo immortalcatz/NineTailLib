@@ -34,7 +34,7 @@ minecraft {
 }
 
 dependencies {
-    deobfCompile "codechicken:CodeChickenLib:1.11.2-2.6.0.265:deobf"
+    deobfCompile "codechicken:CodeChickenLib:1.11.2-2.6.0.264:deobf"
 }
 
 processResources {

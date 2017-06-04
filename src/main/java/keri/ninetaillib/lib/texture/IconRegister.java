@@ -29,7 +29,7 @@ public class IconRegister implements IIconRegister {
     @SubscribeEvent
     public void onTextureStitchPre(TextureStitchEvent.Pre event){
         for(IIconBlock block : blocks){
-            block.reigisterIcons(this);
+            block.registerIcons(this);
         }
 
         for(IIconItem item : items){
@@ -45,7 +45,7 @@ public class IconRegister implements IIconRegister {
     @SubscribeEvent
     public void onTextureStitchPost(TextureStitchEvent.Post event){
         for(IIconBlock block : blocks){
-            block.reigisterIcons(this);
+            block.registerIcons(this);
         }
 
         for(IIconItem item : items){

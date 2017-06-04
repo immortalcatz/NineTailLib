@@ -8,6 +8,8 @@ package keri.ninetaillib.lib.item;
 
 import keri.ninetaillib.lib.mod.IContentRegister;
 import keri.ninetaillib.lib.render.EnumItemRenderType;
+import keri.ninetaillib.lib.render.RenderItems;
+import keri.ninetaillib.lib.render.RenderingRegistry;
 import keri.ninetaillib.lib.texture.IIconItem;
 import keri.ninetaillib.lib.texture.IIconRegister;
 import keri.ninetaillib.lib.util.ILocalization;
@@ -138,7 +140,7 @@ public class ItemBase extends Item implements IContentRegister, IIconItem {
     @Override
     @SideOnly(Side.CLIENT)
     public void handleClientPreInit(FMLPreInitializationEvent event) {
-
+        RenderingRegistry.registerItem(this);
     }
 
     @Override
@@ -155,7 +157,7 @@ public class ItemBase extends Item implements IContentRegister, IIconItem {
 
     @SideOnly(Side.CLIENT)
     public EnumItemRenderType getRenderType(){
-        return EnumItemRenderType.DEFAULT_ITEM;
+        return RenderItems.DEFAULT_ITEM;
     }
 
     public String getModid(){

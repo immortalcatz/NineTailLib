@@ -86,16 +86,7 @@ public class RenderingRegistry {
             IItemRenderingHandler handler = itemRenderingHandlers.get(itemBase.getRenderType());
             ItemRenderingAdapter adapter = new ItemRenderingAdapter(handler);
             ModelResourceLocation location = new ModelResourceLocation(itemBase.getRegistryName(), "inventory");
-
-            if(itemBase.getSubNames() != null){
-                for(int i = 0; i < itemBase.getSubNames().length; i++){
-                    ModelLoader.setCustomModelResourceLocation(itemBase, i, location);
-                }
-            }
-            else{
-                ModelLoader.setCustomModelResourceLocation(itemBase, 0, location);
-            }
-
+            ModelLoader.setCustomMeshDefinition(itemBase, stack -> location);
             ModelRegistryHelper.registerItemRenderer(itemBase, adapter);
         }
         else{

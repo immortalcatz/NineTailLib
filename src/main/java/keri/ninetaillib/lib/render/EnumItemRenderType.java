@@ -8,6 +8,4 @@ package keri.ninetaillib.lib.render;
 
 public enum EnumItemRenderType {
 
-    DEFAULT_ITEM;
-
 }

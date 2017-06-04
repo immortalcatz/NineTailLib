@@ -81,12 +81,12 @@ public class ItemRenderingAdapter implements IItemRenderer, IPerspectiveAwareMod
     @Override
     @SuppressWarnings("deprecation")
     public ItemCameraTransforms getItemCameraTransforms() {
-        return null;
+        return ItemCameraTransforms.DEFAULT;
     }
 
     @Override
     public ItemOverrideList getOverrides() {
-        return null;
+        return ItemOverrideList.NONE;
     }
 
     @Override
