@@ -6,21 +6,34 @@
 
 package keri.ninetaillib.lib.render;
 
+import keri.ninetaillib.lib.texture.IIconItem;
+import keri.ninetaillib.lib.util.RenderUtils;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class RenderItems {
 
-    public static class RenderDefaultItem implements IItemRenderingHandler {
+    static{
+        RenderingRegistry.registerRenderingHandler(new RenderDefaultItem());
+    }
 
-        //TODO: implement actually rendering something...
+    public static class RenderDefaultItem implements IItemRenderingHandler {
 
         @Override
         public void renderItem(ItemStack stack, VertexBuffer buffer) {
+            Tessellator.getInstance().draw();
 
+            if(stack.getItem() instanceof IIconItem){
+
+            }
+
+            Tessellator.getInstance().getBuffer().begin(GL11.GL_QUADS, RenderUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
         }
 
         @Override

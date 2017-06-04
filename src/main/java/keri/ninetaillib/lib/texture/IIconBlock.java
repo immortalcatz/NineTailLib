@@ -15,12 +15,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IIconBlock {
 
     @SideOnly(Side.CLIENT)
-    void reigisterIcons(IIconRegister register);
+    void registerIcons(IIconRegister register);
 
     @SideOnly(Side.CLIENT)
     TextureAtlasSprite getIcon(int meta, int side);
 
     @SideOnly(Side.CLIENT)
     TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, int side);
+
+    @SideOnly(Side.CLIENT)
+    int getColorMultiplier(int meta, int side);
 
 }

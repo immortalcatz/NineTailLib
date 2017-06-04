@@ -6,13 +6,19 @@
 
 package keri.ninetaillib.lib.render;
 
+import codechicken.lib.render.CCModel;
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.buffer.BakingVertexBuffer;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.uv.IconTransformation;
 import keri.ninetaillib.lib.texture.IIconBlock;
 import keri.ninetaillib.lib.util.BlockAccessUtils;
 import keri.ninetaillib.lib.util.RenderUtils;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
@@ -21,6 +27,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class RenderBlocks {
@@ -35,27 +42,41 @@ public class RenderBlocks {
     @SideOnly(Side.CLIENT)
     private static class RenderFullBlock implements IBlockRenderingHandler {
 
+        private static CCModel model = CCModel.quadModel(24).generateBlock(0, new Cuboid6(0D, 0D, 0D, 1D, 1D, 1D));
+
         @Override
-        public boolean renderWorld(IBlockAccess world, BlockPos pos, VertexBuffer buffer, BlockRenderLayer layer) {
-            Block block = world.getBlockState(pos).getBlock();
+        public boolean renderWorld(IBlockAccess world, BlockPos pos, VertexBuffer buffer, BlockRenderLayer layer){
+            IBlockState state = world.getBlockState(pos).getActualState(world, pos);
+            Block block = state.getBlock();
 
             if(block instanceof IIconBlock){
                 IIconBlock iconProvider = (IIconBlock)block;
-                int meta = BlockAccessUtils.getBlockMetadata(world, pos);
-                ModelPart model = new ModelPart();
+                BakingVertexBuffer parent = BakingVertexBuffer.create();
+                parent.begin(GL11.GL_QUADS, RenderUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
+                CCRenderState renderState = RenderingConstants.getRenderState();
+                renderState.reset();
+                renderState.bind(parent);
 
                 for(EnumFacing side : EnumFacing.VALUES){
+                    TextureAtlasSprite texture = null;
+                    int colorMultiplier = iconProvider.getColorMultiplier(BlockAccessUtils.getBlockMetadata(world, pos), side.getIndex());
+
                     if(iconProvider.getIcon(world, pos, side.getIndex()) != null){
-                        TextureAtlasSprite texture = iconProvider.getIcon(world, pos, side.getIndex());
-                        model.setTexture(texture, side);
+                        texture = iconProvider.getIcon(world, pos, side.getIndex());
                     }
-                    else{
-                        TextureAtlasSprite texture = iconProvider.getIcon(meta, side.getIndex());
-                        model.setTexture(texture, side);
+                    else {
+                        texture = iconProvider.getIcon(BlockAccessUtils.getBlockMetadata(world, pos), side.getIndex());
+                    }
+
+                    model.setColour(colorMultiplier);
+
+                    if(state.shouldSideBeRendered(world, pos, side)){
+                        model.render(renderState, 0 + (4 * side.getIndex()), 4 + (4 * side.getIndex()), new IconTransformation(texture));
                     }
                 }
 
-                return RenderUtils.renderQuads(buffer, world, pos, model.bake());
+                parent.finishDrawing();
+                return RenderUtils.renderQuads(buffer, world, pos, parent.bake());
             }
 
             return false;
@@ -63,25 +84,29 @@ public class RenderBlocks {
 
         @Override
         public void renderDamage(IBlockAccess world, BlockPos pos, VertexBuffer buffer, TextureAtlasSprite texture) {
-            new ModelPart().renderDamage(buffer, world, pos, texture);
+            CCRenderState renderState = RenderingConstants.getRenderState();
+            renderState.reset();
+            renderState.bind(buffer);
+            model.setColour(0xFFFFFFFF);
+            model.render(renderState, new IconTransformation(texture));
         }
 
         @Override
         public void renderInventory(ItemStack stack, VertexBuffer buffer) {
             Block block = Block.getBlockFromItem(stack.getItem());
+            CCRenderState renderState = RenderingConstants.getRenderState();
+            renderState.reset();
+            renderState.bind(buffer);
 
             if(block instanceof IIconBlock){
                 IIconBlock iconProvider = (IIconBlock)block;
-                int meta = stack.getMetadata();
-                ModelPart model = new ModelPart();
 
                 for(EnumFacing side : EnumFacing.VALUES){
-                    TextureAtlasSprite texture = iconProvider.getIcon(meta, side.getIndex());
-                    model.setTexture(texture, side);
+                    TextureAtlasSprite texture = iconProvider.getIcon(stack.getMetadata(), side.getIndex());
+                    int colorMultiplier = iconProvider.getColorMultiplier(stack.getMetadata(), side.getIndex());
+                    model.setColour(colorMultiplier);
+                    model.render(renderState, 0 + (4 * side.getIndex()), 4 + (4 * side.getIndex()), new IconTransformation(texture));
                 }
-
-                RenderHelper.enableStandardItemLighting();
-                model.render(buffer, null, null);
             }
         }
 
