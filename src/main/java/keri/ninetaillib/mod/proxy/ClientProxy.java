@@ -6,6 +6,8 @@
 
 package keri.ninetaillib.mod.proxy;
 
+import keri.ninetaillib.lib.util.WorldJoinMessage;
+import keri.ninetaillib.mod.util.ModPrefs;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -14,7 +16,9 @@ public class ClientProxy implements INTLProxy {
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
-
+        if(ModPrefs.IS_ALPHA){
+            new WorldJoinMessage(ModPrefs.ALPHA_MESSAGE);
+        }
     }
 
     @Override

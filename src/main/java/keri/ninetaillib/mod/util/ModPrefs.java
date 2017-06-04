@@ -6,6 +6,11 @@
 
 package keri.ninetaillib.mod.util;
 
+import com.google.common.collect.Lists;
+import net.minecraft.util.text.TextFormatting;
+
+import java.util.List;
+
 public class ModPrefs {
 
     public static final String MODID = "ninetaillib";
@@ -16,5 +21,7 @@ public class ModPrefs {
     public static final String ACC_MC = "1.11.2";
     public static final String CSIDE = "keri.ninetaillib.mod.proxy.ClientProxy";
     public static final String SSIDE = "keri.ninetaillib.mod.proxy.CommonProxy";
+    public static final boolean IS_ALPHA = true;
+    public static final String ALPHA_MESSAGE = String.format("[%s] Alpha version detected! Version %s", NAME, NAME, VERSION);
 
 }

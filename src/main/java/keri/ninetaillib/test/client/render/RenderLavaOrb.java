@@ -20,7 +20,6 @@ import keri.ninetaillib.lib.render.RenderingConstants;
 import keri.ninetaillib.lib.render.RenderingRegistry;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -28,7 +27,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class RenderLavaOrb implements IItemRenderingHandler {
 
     public static EnumItemRenderType RENDER_TYPE;
-    private static CCModel model = CCModelLibrary.icosahedron7.copy().computeNormals();
 
     static{
         RENDER_TYPE = RenderingRegistry.getNextAvailableItemType();

@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = TestMod.MODID, name = TestMod.NAME, version = TestMod.VERSION, dependencies = TestMod.DEPS, acceptedMinecraftVersions = TestMod.ACC_MC)
+//@Mod(modid = TestMod.MODID, name = TestMod.NAME, version = TestMod.VERSION, dependencies = TestMod.DEPS, acceptedMinecraftVersions = TestMod.ACC_MC)
 public class TestMod {
 
     public static final String MODID = "ntl_test_mod";
