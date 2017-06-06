@@ -10,8 +10,8 @@ import codechicken.lib.asm.ASMBlock;
 import codechicken.lib.asm.ModularASMTransformer;
 import codechicken.lib.asm.ModularASMTransformer.MethodReplacer;
 import codechicken.lib.asm.ObfMapping;
+import keri.ninetaillib.lib.util.FileLocation;
 import keri.ninetaillib.mod.util.ModPrefs;
-import net.minecraft.util.ResourceLocation;
 
 import java.util.Map;
 
@@ -25,8 +25,8 @@ public class BlockTransformer extends TransformerBase {
     }
 
     @Override
-    public ResourceLocation getASMFile() {
-        return new ResourceLocation(ModPrefs.MODID, "asm/block_hooks");
+    public FileLocation getASMFile() {
+        return new FileLocation(ModPrefs.MODID, "asm/block_hooks");
     }
 
     private void transformBlockFence(ModularASMTransformer transformer, Map<String, ASMBlock> blocks){
