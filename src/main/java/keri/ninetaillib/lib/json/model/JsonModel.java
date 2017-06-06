@@ -7,6 +7,7 @@
 package keri.ninetaillib.lib.json.model;
 
 import codechicken.lib.colour.Colour;
+import codechicken.lib.render.CCModel;
 import codechicken.lib.texture.TextureUtils;
 import codechicken.lib.vec.Transformation;
 import codechicken.lib.vec.uv.UVTransformation;
@@ -15,6 +16,7 @@ import keri.ninetaillib.lib.render.CuboidModel;
 import keri.ninetaillib.lib.render.ModelPart;
 import keri.ninetaillib.lib.render.VertexPosition;
 import keri.ninetaillib.lib.util.ICopyable;
+import keri.ninetaillib.lib.util.VectorUtils;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -90,6 +92,27 @@ public class JsonModel implements ICopyable<JsonModel> {
         }
 
         return this;
+    }
+
+    public Map<String, CCModel> generateModelSimple(){
+        Map<String, CCModel> model = Maps.newHashMap();
+
+        for(Map.Entry<String, ModelPartData> entry : this.partData.entrySet()){
+            ModelPartData partData = entry.getValue();
+            CCModel part = CCModel.quadModel(24).generateBlock(0, VectorUtils.divide(partData.getBounds(), 16D)).computeNormals();
+
+            for(Transformation transformation : partData.getTransformations()){
+                part.apply(transformation);
+            }
+
+            for(UVTransformation transformation : partData.getUVTransformations()){
+                part.apply(transformation);
+            }
+
+            model.put(entry.getKey(), part);
+        }
+
+        return model;
     }
 
     public CuboidModel generateModel(){

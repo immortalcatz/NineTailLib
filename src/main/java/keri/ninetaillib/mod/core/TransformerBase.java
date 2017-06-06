@@ -9,8 +9,8 @@ package keri.ninetaillib.mod.core;
 import codechicken.lib.asm.ASMBlock;
 import codechicken.lib.asm.ModularASMTransformer;
 import keri.ninetaillib.lib.util.ASMUtils;
+import keri.ninetaillib.lib.util.FileLocation;
 import net.minecraft.launchwrapper.IClassTransformer;
-import net.minecraft.util.ResourceLocation;
 
 import java.util.Map;
 
@@ -30,6 +30,6 @@ public abstract class TransformerBase implements IClassTransformer {
 
     public abstract void transform(ModularASMTransformer transformer, Map<String, ASMBlock> blocks);
 
-    public abstract ResourceLocation getASMFile();
+    public abstract FileLocation getASMFile();
 
 }

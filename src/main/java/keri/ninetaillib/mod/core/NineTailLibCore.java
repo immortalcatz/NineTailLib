@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-@IFMLLoadingPlugin.Name(ModPrefs.NAME)
+@IFMLLoadingPlugin.Name(ModPrefs.NAME + " Core")
 @IFMLLoadingPlugin.MCVersion(ModPrefs.ACC_MC)
 public class NineTailLibCore extends DummyModContainer implements IFMLLoadingPlugin {
 
