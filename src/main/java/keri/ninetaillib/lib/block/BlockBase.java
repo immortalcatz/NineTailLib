@@ -6,6 +6,9 @@
 
 package keri.ninetaillib.lib.block;
 
+import codechicken.lib.render.particle.CustomParticleHandler;
+import codechicken.lib.texture.IWorldBlockTextureProvider;
+import codechicken.lib.texture.TextureUtils;
 import keri.ninetaillib.lib.item.ItemBlockBase;
 import keri.ninetaillib.lib.mod.IContentRegister;
 import keri.ninetaillib.lib.render.RenderBlocks;
@@ -22,15 +25,20 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -42,7 +50,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class BlockBase<T extends TileEntity> extends Block implements ITileEntityProvider, IContentRegister, IIconBlock {
+public class BlockBase<T extends TileEntity> extends Block implements ITileEntityProvider, IContentRegister, IIconBlock, IWorldBlockTextureProvider {
 
     public static final PropertyInteger META_DATA = PropertyInteger.create("meta", 0, 15);
     private String modid;
@@ -113,6 +121,16 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     }
 
     @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        if(this.subNames != null){
+            return new ItemStack(this, 1, BlockAccessUtils.getBlockMetadata(world, pos));
+        }
+        else{
+            return new ItemStack(this, 1, 0);
+        }
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         if(this.subNames != null){
@@ -159,6 +177,41 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getTexture(EnumFacing side, IBlockState state, BlockRenderLayer layer, IBlockAccess world, BlockPos pos) {
+        TextureAtlasSprite texture = null;
+
+        if(this.getIcon(world, pos, 0) != null){
+            texture = this.getIcon(world, pos, 0);
+        }
+        else{
+            texture = this.getIcon(BlockAccessUtils.getBlockMetadata(world, pos), 0);
+        }
+
+        return texture;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
+        CustomParticleHandler.addDestroyEffects(world, pos, manager, this);
+        return true;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
+        CustomParticleHandler.addHitEffects(state, world, target, manager, this);
+        return true;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getTexture(EnumFacing side, ItemStack stack) {
+        return TextureUtils.getMissingSprite();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public int getColorMultiplier(int meta, int side) {
         return 0xFFFFFFFF;
     }
@@ -181,18 +234,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     public void handleInit(FMLInitializationEvent event) {
-        if(this.hasMultipleTileEntities()){
-            for(int i = 0; i < this.subNames.length; i++){
-                Class<? extends TileEntity> tileClass = this.createNewTileEntity(null, i).getClass();
-                String name = "tile." + this.modid + "." + this.blockName + "." + this.subNames[i];
-                GameRegistry.registerTileEntity(tileClass, name);
-            }
-        }
-        else{
-            Class<? extends TileEntity> tileClass = this.createNewTileEntity(null, 0).getClass();
-            String name = "tile." + this.modid + "." + this.blockName;
-            GameRegistry.registerTileEntity(tileClass, name);
-        }
+        this.registerTileEntities();
     }
 
     @Override
@@ -270,12 +312,10 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
         return this.subNames;
     }
 
-    public boolean hasMultipleTileEntities(){
-        return false;
-    }
-
     public CreativeTabs getCreativeTab(){
         return CreativeTabs.BUILDING_BLOCKS;
     }
+
+    public void registerTileEntities(){}
 
 }
