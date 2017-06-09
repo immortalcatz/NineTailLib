@@ -9,7 +9,7 @@
   "updateUrl": "",
   "authorList": ["KitsuneAlex"],
   "credits": "",
-  "logoFile": "/assets/ninetaillib/textures/logo.png",
+  "logoFile": "assets/ninetaillib/textures/logo.png",
   "screenshots": [],
   "dependencies": []
 }

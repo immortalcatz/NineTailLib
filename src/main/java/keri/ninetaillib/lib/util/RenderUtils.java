@@ -6,14 +6,18 @@
 
 package keri.ninetaillib.lib.util;
 
-import keri.ninetaillib.lib.model.SimpleBakedModel;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelRenderer;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3i;
@@ -23,6 +27,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
@@ -55,18 +60,63 @@ public class RenderUtils {
     }
 
     public static boolean renderQuads(VertexBuffer buffer, IBlockAccess world, BlockPos pos, List<BakedQuad> quads){
-        BlockModelRenderer bmr = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer();
+        boolean useAo = Minecraft.isAmbientOcclusionEnabled();
         IBlockState state = world.getBlockState(pos).getActualState(world, pos);
-        boolean useAmbientOcclusion = Minecraft.isAmbientOcclusionEnabled();
-        SimpleBakedModel model = new SimpleBakedModel(quads);
+        BakedModelAdapter model = new BakedModelAdapter(quads);
+        BlockModelRenderer bmr = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer();
         long random = MathHelper.getPositionRandom(new Vec3i(pos.getX(), pos.getY(), pos.getZ()));
 
-        if(useAmbientOcclusion){
+        if(useAo){
             return bmr.renderModelSmooth(world, model, state, pos, buffer, true, random);
         }
         else{
             return bmr.renderModelFlat(world, model, state, pos, buffer, true, random);
         }
+    }
+
+    private static class BakedModelAdapter implements IBakedModel {
+
+        private List<BakedQuad> quads;
+
+        public BakedModelAdapter(List<BakedQuad> quads){
+            this.quads = quads;
+        }
+
+        @Override
+        public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+            return this.quads;
+        }
+
+        @Override
+        public boolean isAmbientOcclusion() {
+            return false;
+        }
+
+        @Override
+        public boolean isGui3d() {
+            return false;
+        }
+
+        @Override
+        public boolean isBuiltInRenderer() {
+            return false;
+        }
+
+        @Override
+        public TextureAtlasSprite getParticleTexture() {
+            return null;
+        }
+
+        @Override
+        public ItemCameraTransforms getItemCameraTransforms() {
+            return ItemCameraTransforms.DEFAULT;
+        }
+
+        @Override
+        public ItemOverrideList getOverrides() {
+            return ItemOverrideList.NONE;
+        }
+
     }
 
 }
