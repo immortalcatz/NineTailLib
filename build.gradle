@@ -22,7 +22,7 @@ repositories {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
-version = "1.11.2-1.4.121"
+version = "1.11.2-1.5.122"
 group = "keri.ninetaillib"
 archivesBaseName = "NineTailLib"
 
