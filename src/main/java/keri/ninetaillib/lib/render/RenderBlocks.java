@@ -10,6 +10,8 @@ import codechicken.lib.render.CCModel;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.buffer.BakingVertexBuffer;
 import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Translation;
+import codechicken.lib.vec.Vector3;
 import codechicken.lib.vec.uv.IconTransformation;
 import keri.ninetaillib.lib.texture.IIconBlock;
 import keri.ninetaillib.lib.util.BlockAccessUtils;
@@ -42,10 +44,11 @@ public class RenderBlocks {
     @SideOnly(Side.CLIENT)
     private static class RenderFullBlock implements IBlockRenderingHandler {
 
-        private static CCModel model = CCModel.quadModel(24).generateBlock(0, new Cuboid6(0D, 0D, 0D, 1D, 1D, 1D));
+        private static CCModel BLOCK_MODEL = CCModel.quadModel(24).generateBlock(0, new Cuboid6(0D, 0D, 0D, 1D, 1D, 1D)).computeNormals();
 
         @Override
         public boolean renderWorld(IBlockAccess world, BlockPos pos, VertexBuffer buffer, BlockRenderLayer layer){
+            CCModel model = BLOCK_MODEL.copy();
             IBlockState state = world.getBlockState(pos).getActualState(world, pos);
             Block block = state.getBlock();
 
@@ -84,15 +87,17 @@ public class RenderBlocks {
 
         @Override
         public void renderDamage(IBlockAccess world, BlockPos pos, VertexBuffer buffer, TextureAtlasSprite texture) {
+            CCModel model = BLOCK_MODEL.copy();
             CCRenderState renderState = RenderingConstants.getRenderState();
             renderState.reset();
             renderState.bind(buffer);
-            model.setColour(0xFFFFFFFF);
+            model.apply(new Translation(Vector3.fromBlockPos(pos)));
             model.render(renderState, new IconTransformation(texture));
         }
 
         @Override
         public void renderInventory(ItemStack stack, VertexBuffer buffer) {
+            CCModel model = BLOCK_MODEL.copy();
             Block block = Block.getBlockFromItem(stack.getItem());
             CCRenderState renderState = RenderingConstants.getRenderState();
             renderState.reset();
