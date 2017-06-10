@@ -108,6 +108,7 @@ public class RenderUtils {
         }
 
         @Override
+        @SuppressWarnings("deprecation")
         public ItemCameraTransforms getItemCameraTransforms() {
             return ItemCameraTransforms.DEFAULT;
         }

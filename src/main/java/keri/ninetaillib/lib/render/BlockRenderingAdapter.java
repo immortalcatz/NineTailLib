@@ -105,6 +105,7 @@ public class BlockRenderingAdapter implements ICCBlockRenderer, IItemRenderer, I
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ItemCameraTransforms getItemCameraTransforms() {
         return ItemCameraTransforms.DEFAULT;
     }

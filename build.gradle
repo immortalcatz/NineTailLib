@@ -13,12 +13,16 @@ repositories {
         name "CB's Maven"
         url "http://chickenbones.net/maven"
     }
+    maven {
+        name "Project Lombok"
+        url "https://projectlombok.org/mavenrepo"
+    }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
-version = "1.11.2-1.4.120"
+version = "1.11.2-1.4.121"
 group = "keri.ninetaillib"
 archivesBaseName = "NineTailLib"
 
@@ -35,6 +39,7 @@ minecraft {
 
 dependencies {
     deobfCompile "codechicken:CodeChickenLib:1.11.2-2.6.0.264:deobf"
+    compile "org.projectlombok:lombok:1.16.16"
 }
 
 processResources {

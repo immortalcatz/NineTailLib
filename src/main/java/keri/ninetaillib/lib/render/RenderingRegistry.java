@@ -34,6 +34,7 @@ public class RenderingRegistry {
     private static int itemRenderId = 0;
     private static Map<EnumBlockRenderType, IBlockRenderingHandler> blockRenderingHandlers = Maps.newHashMap();
     private static Map<EnumItemRenderType, IItemRenderingHandler> itemRenderingHandlers = Maps.newHashMap();
+    private static Map<EnumBlockRenderType, BlockRenderingAdapter> blockRenderingAdapters = Maps.newHashMap();
 
     public static EnumBlockRenderType getNextAvailableType(){
         return BlockRenderingRegistry.createRenderType("ibrh_" + blockRenderId++);
@@ -75,7 +76,11 @@ public class RenderingRegistry {
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, locationInventory);
         }
 
-        BlockRenderingRegistry.registerRenderer(handler.getRenderType(), adapter);
+        if(!blockRenderingAdapters.containsKey(handler.getRenderType())){
+            BlockRenderingRegistry.registerRenderer(handler.getRenderType(), adapter);
+        }
+
+        blockRenderingAdapters.put(handler.getRenderType(), adapter);
         ModelRegistryHelper.register(location, new DummyBakedModel());
         ModelRegistryHelper.registerItemRenderer(Item.getItemFromBlock(block), adapter);
     }
