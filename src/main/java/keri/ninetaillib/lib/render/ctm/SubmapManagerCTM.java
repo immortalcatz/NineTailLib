@@ -6,11 +6,12 @@
 
 package keri.ninetaillib.lib.render.ctm;
 
-import keri.ninetaillib.lib.hooks.IIcon;
+import keri.ninetaillib.lib.texture.IIcon;
 import keri.ninetaillib.lib.texture.IIconRegister;
 import keri.ninetaillib.lib.util.BlockAccessUtils;
 import lombok.Getter;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -22,7 +23,9 @@ public class SubmapManagerCTM implements ISubmapManager {
     @SideOnly(Side.CLIENT)
     private static BlockRendererCTM rb;
     @Getter
-    private TextureSubmap submap, submapSmall;
+    private TextureSubmap submap;
+    @Getter
+    private TextureSubmap submapSmall;
     @Getter
     private final String textureName;
 
@@ -49,9 +52,9 @@ public class SubmapManagerCTM implements ISubmapManager {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IBlockRenderer createRenderContext(IBlockRenderer rendererOld, Block block, IBlockAccess world) {
+    public IBlockRenderer createRenderContext(VertexBuffer buffer, IBlockRenderer rendererOld, Block block, IBlockAccess world) {
         if (rb == null) {
-            rb = new BlockRendererCTM();
+            rb = new BlockRendererCTM(buffer);
         }
 
         //rb.setRenderBoundsFromBlock(block);

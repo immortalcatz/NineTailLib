@@ -6,9 +6,10 @@
 
 package keri.ninetaillib.lib.render.ctm;
 
-import keri.ninetaillib.lib.hooks.IIcon;
+import keri.ninetaillib.lib.texture.IIcon;
 import keri.ninetaillib.lib.texture.IIconRegister;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,7 +25,7 @@ public interface ISubmapManager {
     void registerIcons(String modName, Block block, IIconRegister register);
 
     @SideOnly(Side.CLIENT)
-    IBlockRenderer createRenderContext(IBlockRenderer rendererOld, Block block, IBlockAccess world);
+    IBlockRenderer createRenderContext(VertexBuffer buffer, IBlockRenderer rendererOld, Block block, IBlockAccess world);
 
     @SideOnly(Side.CLIENT)
     void preRenderSide(IBlockRenderer renderer, IBlockAccess world, int x, int y, int z, EnumFacing side);

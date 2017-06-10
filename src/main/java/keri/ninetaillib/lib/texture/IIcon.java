@@ -4,7 +4,7 @@
  * the explicit permission from the developer of this software!
  */
 
-package keri.ninetaillib.lib.hooks;
+package keri.ninetaillib.lib.texture;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

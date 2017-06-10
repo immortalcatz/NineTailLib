@@ -7,7 +7,7 @@
 package keri.ninetaillib.lib.render.ctm;
 
 import com.google.common.collect.Lists;
-import keri.ninetaillib.lib.hooks.IIcon;
+import keri.ninetaillib.lib.texture.IIcon;
 import lombok.experimental.Delegate;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;

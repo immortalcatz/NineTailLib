@@ -6,7 +6,7 @@
 
 package keri.ninetaillib.lib.render.ctm;
 
-import keri.ninetaillib.lib.hooks.IIcon;
+import keri.ninetaillib.lib.texture.IIcon;
 
 public interface ISubmap {
 

@@ -32,7 +32,7 @@ public class TASTransformer implements IClassTransformer {
                 ClassNode classNode = new ClassNode();
                 ClassReader classReader = new ClassReader(basicClass);
                 classReader.accept(classNode, 0);
-                classNode.interfaces.add("keri/ninetaillib/lib/hooks/IIcon");
+                classNode.interfaces.add("keri/ninetaillib/lib/texture/IIcon");
                 ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
                 classNode.accept(classWriter);
                 return classWriter.toByteArray();
