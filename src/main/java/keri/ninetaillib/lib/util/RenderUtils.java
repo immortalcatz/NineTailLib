@@ -26,6 +26,7 @@ import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -57,6 +58,22 @@ public class RenderUtils {
         }
 
         return result;
+    }
+
+    public static MipmapFilterData disableMipmap(){
+        int minFilter = GL11.glGetTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER);
+        int magFilter = GL11.glGetTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+        MipmapFilterData data = new MipmapFilterData();
+        data.minFilter = minFilter;
+        data.magFilter = magFilter;
+        return data;
+    }
+
+    public static void enableMipmap(MipmapFilterData data){
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, data.minFilter);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, data.magFilter);
     }
 
     public static boolean renderQuads(VertexBuffer buffer, IBlockAccess world, BlockPos pos, List<BakedQuad> quads){
@@ -117,6 +134,13 @@ public class RenderUtils {
         public ItemOverrideList getOverrides() {
             return ItemOverrideList.NONE;
         }
+
+    }
+
+    public static class MipmapFilterData {
+
+        public int minFilter;
+        public int magFilter;
 
     }
 

@@ -10,6 +10,7 @@ import codechicken.lib.render.block.ICCBlockRenderer;
 import codechicken.lib.render.item.IItemRenderer;
 import codechicken.lib.util.TransformUtils;
 import com.google.common.collect.Lists;
+import keri.ninetaillib.lib.util.RenderUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -68,14 +69,12 @@ public class BlockRenderingAdapter implements ICCBlockRenderer, IItemRenderer, I
     }
 
     @Override
-    public void renderItem(ItemStack stack) {
+    public void renderItem(ItemStack stack, ItemCameraTransforms.TransformType transformType) {
         GlStateManager.pushMatrix();
-        GlStateManager.pushAttrib();
         VertexBuffer buffer = Tessellator.getInstance().getBuffer();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+        buffer.begin(GL11.GL_QUADS, RenderUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
         this.handler.renderInventory(stack, buffer);
         Tessellator.getInstance().draw();
-        GlStateManager.popAttrib();
         GlStateManager.popMatrix();
     }
 

@@ -22,7 +22,7 @@ repositories {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
-version = "1.11.2-1.5.123"
+version = "1.11.2-1.5.124"
 group = "keri.ninetaillib"
 archivesBaseName = "NineTailLib"
 
@@ -38,7 +38,7 @@ minecraft {
 }
 
 dependencies {
-    deobfCompile "codechicken:CodeChickenLib:1.11.2-2.6.0.264:deobf"
+    deobfCompile "codechicken:CodeChickenLib:1.11.2-2.7.0.268:deobf"
     compile "org.projectlombok:lombok:1.16.16"
 }
 
