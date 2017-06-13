@@ -22,7 +22,7 @@ repositories {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
-version = "1.11.2-1.5.124"
+version = "1.11.2-1.5.125"
 group = "keri.ninetaillib"
 archivesBaseName = "NineTailLib"
 
@@ -59,6 +59,7 @@ processResources {
 def commonManifest = {
     attributes 'FMLCorePluginContainsFMLMod': 'true'
     attributes 'FMLCorePlugin': 'keri.ninetaillib.mod.core.NineTailLibCore'
+    attributes 'FMLAT': 'ninetaillib_at.cfg'
 }
 
 jar {

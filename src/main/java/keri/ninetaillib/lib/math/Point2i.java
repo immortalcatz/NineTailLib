@@ -6,9 +6,9 @@
 
 package keri.ninetaillib.lib.math;
 
-import keri.ninetaillib.lib.util.ICopyable;
+import codechicken.lib.util.Copyable;
 
-public class Point2i implements ICopyable<Point2i> {
+public class Point2i implements Copyable<Point2i> {
 
     private int x;
     private int y;
