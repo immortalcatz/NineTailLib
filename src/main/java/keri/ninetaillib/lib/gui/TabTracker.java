@@ -4,7 +4,9 @@
  * the explicit permission from the developer of this software!
  */
 
-package keri.ninetaillib.lib.gui.element;
+package keri.ninetaillib.lib.gui;
+
+import keri.ninetaillib.lib.gui.element.TabBase;
 
 public class TabTracker {
 

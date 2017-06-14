@@ -12,7 +12,6 @@ import codechicken.lib.texture.TextureUtils;
 import com.google.common.collect.Lists;
 import keri.ninetaillib.lib.gui.element.ElementBase;
 import keri.ninetaillib.lib.gui.element.TabBase;
-import keri.ninetaillib.lib.gui.element.TabTracker;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -225,11 +224,11 @@ public class GuiContainerBase extends GuiContainer {
         mX -= guiLeft;
         mY -= guiTop;
 
-        if (mouseButton >= 0 && mouseButton <= 2) { // 0:left, 1:right, 2: middle
+        if (mouseButton >= 0 && mouseButton <= 2) {
             for (int i = elements.size(); i-- > 0; ) {
                 ElementBase c = elements.get(i);
 
-                if (!c.isVisible() || !c.isEnabled()) { // no bounds checking on mouseUp events
+                if (!c.isVisible() || !c.isEnabled()) {
                     continue;
                 }
 

@@ -10,6 +10,7 @@ import codechicken.lib.texture.TextureUtils;
 import codechicken.lib.vec.Rectangle4i;
 import com.google.common.collect.Lists;
 import keri.ninetaillib.lib.gui.GuiContainerBase;
+import keri.ninetaillib.lib.gui.TabTracker;
 import keri.ninetaillib.mod.util.ModPrefs;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
