@@ -14,6 +14,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import java.util.List;
+
 public abstract class ContainerBase extends Container {
 
     protected void bindPlayerInventory(InventoryPlayer inventoryPlayer, int x, int y) {
@@ -79,6 +81,87 @@ public abstract class ContainerBase extends Container {
         }
 
         return stack;
+    }
+
+    @Override
+    protected boolean mergeItemStack(ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
+        return this.mergeItemStack(this.inventorySlots, stack, startIndex, endIndex, reverseDirection);
+    }
+
+    private boolean mergeItemStack(List<Slot> slots, ItemStack stack, int start, int length, boolean reverse) {
+        return mergeItemStack(slots, stack, start, length, reverse, true);
+    }
+
+    private boolean mergeItemStack(List<Slot> slots, ItemStack stack, int start, int length, boolean r, boolean limit) {
+        boolean successful = false;
+        int i = !r ? start : length - 1;
+        int iterOrder = !r ? 1 : -1;
+        Slot slot;
+        ItemStack existingStack;
+
+        if(stack.isStackable()) {
+            while (stack.getCount() > 0 && (!r && i < length || r && i >= start)) {
+                slot = slots.get(i);
+                existingStack = slot.getStack();
+
+                if (!existingStack.isEmpty()) {
+                    int maxStack = Math.min(stack.getMaxStackSize(), slot.getSlotStackLimit());
+                    int rmv = Math.min(maxStack, stack.getCount());
+
+                    if (slot.isItemValid(this.cloneStack(stack, rmv)) && existingStack.getItem().equals(stack.getItem()) && (!stack.getHasSubtypes() || stack.getItemDamage() == existingStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(stack, existingStack)) {
+                        int existingSize = existingStack.getCount() + stack.getCount();
+
+                        if (existingSize <= maxStack) {
+                            stack.setCount(0);
+                            existingStack.setCount(existingSize);
+                            slot.putStack(existingStack);
+                            successful = true;
+                        } else if (existingStack.getCount() < maxStack) {
+                            stack.shrink(maxStack - existingStack.getCount());
+                            existingStack.setCount(maxStack);
+                            slot.putStack(existingStack);
+                            successful = true;
+                        }
+                    }
+                }
+
+                i += iterOrder;
+            }
+        }
+
+        if (stack.getCount() > 0) {
+            i = !r ? start : length - 1;
+
+            while (stack.getCount() > 0 && (!r && i < length || r && i >= start)) {
+                slot = slots.get(i);
+                existingStack = slot.getStack();
+
+                if (existingStack.isEmpty()) {
+                    int maxStack = Math.min(stack.getMaxStackSize(), slot.getSlotStackLimit());
+                    int rmv = Math.min(maxStack, stack.getCount());
+
+                    if (slot.isItemValid(this.cloneStack(stack, rmv))) {
+                        existingStack = stack.splitStack(rmv);
+                        slot.putStack(existingStack);
+                        successful = true;
+                    }
+                }
+
+                i += iterOrder;
+            }
+        }
+
+        return successful;
+    }
+
+    private ItemStack cloneStack(ItemStack stack, int stackSize) {
+        if (stack.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+
+        ItemStack retStack = stack.copy();
+        retStack.setCount(stackSize);
+        return retStack;
     }
 
     protected boolean performMerge(EntityPlayer player, int slotIndex, ItemStack stack) {

@@ -6,6 +6,12 @@
 
 package keri.ninetaillib.lib.util;
 
+import codechicken.lib.render.CCModel;
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.vec.Translation;
+import codechicken.lib.vec.Vector3;
+import codechicken.lib.vec.uv.IconTransformation;
+import keri.ninetaillib.lib.render.RenderingConstants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelRenderer;
@@ -58,6 +64,39 @@ public class RenderUtils {
         }
 
         return result;
+    }
+
+    public static void renderModel(CCModel[] parts, VertexBuffer buffer, TextureAtlasSprite texture, int color){
+        renderModel(parts, buffer, BlockPos.ORIGIN, texture, color);
+    }
+
+    public static void renderModel(CCModel model, VertexBuffer buffer, EnumFacing side, TextureAtlasSprite texture, int color){
+        renderModel(model, buffer, BlockPos.ORIGIN, side, texture, color);
+    }
+
+    public static void renderModel(CCModel[] parts, VertexBuffer buffer, BlockPos pos, TextureAtlasSprite texture, int color){
+        CCRenderState rs = RenderingConstants.getRenderState();
+        rs.reset();
+        rs.bind(buffer);
+
+        for(int i = 0; i < parts.length; i++){
+            CCModel m = parts[i].copy();
+            m.apply(new Translation(Vector3.fromBlockPos(pos)));
+            m.setColour(color);
+            m.render(rs, new IconTransformation(texture));
+        }
+    }
+
+    public static void renderModel(CCModel model, VertexBuffer buffer, BlockPos pos, EnumFacing side, TextureAtlasSprite texture, int color){
+        CCModel m = model.copy();
+        int s = 4 * side.getIndex();
+        int e = 4 + (4 * side.getIndex());
+        CCRenderState rs = RenderingConstants.getRenderState();
+        rs.reset();
+        rs.bind(buffer);
+        m.setColour(color);
+        m.apply(new Translation(Vector3.fromBlockPos(pos)));
+        m.render(rs, s, e, new IconTransformation(texture));
     }
 
     public static MipmapFilterData disableMipmap(){

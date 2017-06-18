@@ -18,6 +18,7 @@ import keri.ninetaillib.lib.util.BlockAccessUtils;
 import keri.ninetaillib.lib.util.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -97,6 +98,8 @@ public class RenderBlocks {
 
         @Override
         public void renderInventory(ItemStack stack, VertexBuffer buffer) {
+            GlStateManager.pushMatrix();
+            GlStateManager.enableLighting();
             CCModel model = BLOCK_MODEL.copy();
             Block block = Block.getBlockFromItem(stack.getItem());
             CCRenderState renderState = RenderingConstants.getRenderState();
@@ -113,6 +116,9 @@ public class RenderBlocks {
                     model.render(renderState, 0 + (4 * side.getIndex()), 4 + (4 * side.getIndex()), new IconTransformation(texture));
                 }
             }
+
+            GlStateManager.disableLighting();
+            GlStateManager.popMatrix();
         }
 
         @Override
