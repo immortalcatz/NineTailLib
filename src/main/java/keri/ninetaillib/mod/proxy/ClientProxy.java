@@ -9,10 +9,16 @@ package keri.ninetaillib.mod.proxy;
 import keri.ninetaillib.lib.render.RenderBlocks;
 import keri.ninetaillib.lib.render.RenderItems;
 import keri.ninetaillib.lib.util.WorldJoinMessage;
+import keri.ninetaillib.mod.playereffect.PlayerEffectHandler;
+import keri.ninetaillib.mod.playereffect.PlayerEffects;
 import keri.ninetaillib.mod.util.ModPrefs;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+
+import java.util.Map;
 
 public class ClientProxy implements INTLProxy {
 
@@ -24,11 +30,18 @@ public class ClientProxy implements INTLProxy {
         if(ModPrefs.IS_ALPHA){
             new WorldJoinMessage(ModPrefs.ALPHA_MESSAGE);
         }
+
+        PlayerEffects.preInit();
     }
 
     @Override
     public void init(FMLInitializationEvent event) {
-
+        Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
+        RenderPlayer renderer = null;
+        renderer = skinMap.get("default");
+        renderer.addLayer(PlayerEffectHandler.INSTANCE);
+        renderer = skinMap.get("slim");
+        renderer.addLayer(PlayerEffectHandler.INSTANCE);
     }
 
     @Override

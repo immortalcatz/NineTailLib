@@ -22,7 +22,7 @@ public class NTLConfig {
 
     @ModConfigHandler.ConfigProperties
     public void addProperties(ConfigProperties properties){
-        properties.addProperty("enable_debug", new ConfigBoolean("enableDebug", "general", false));
+        properties.addProperty("player_effects", new ConfigBoolean("playerEffects", "Enable or disable player effects", "general", true));
     }
 
 }
