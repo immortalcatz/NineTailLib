@@ -8,14 +8,22 @@ package keri.ninetaillib.lib.item;
 
 import keri.ninetaillib.lib.block.BlockBase;
 import keri.ninetaillib.lib.util.ILocalization;
+import keri.ninetaillib.lib.util.IShiftDescription;
+import keri.ninetaillib.lib.util.TranslationUtils;
+import keri.ninetaillib.mod.util.ModPrefs;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
+
+import java.util.List;
 
 public class ItemBlockBase extends ItemBlock {
 
@@ -60,6 +68,22 @@ public class ItemBlockBase extends ItemBlock {
             }
             else{
                 return super.getUnlocalizedName(stack);
+            }
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+        if(this.block instanceof IShiftDescription){
+            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)){
+                ((IShiftDescription)this.block).addShiftDescription(stack, player, tooltip);
+            }
+            else{
+                String press = TextFormatting.GRAY + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "press");
+                String shift = TextFormatting.YELLOW + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "shift");
+                String info = TextFormatting.GRAY + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "info");
+                tooltip.add(press + " " + shift + " " + info);
             }
         }
     }
