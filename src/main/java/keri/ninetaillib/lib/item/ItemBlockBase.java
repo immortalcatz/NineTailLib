@@ -76,14 +76,16 @@ public class ItemBlockBase extends ItemBlock {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
         if(this.block instanceof IShiftDescription){
-            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)){
-                ((IShiftDescription)this.block).addShiftDescription(stack, player, tooltip);
-            }
-            else{
-                String press = TextFormatting.GRAY + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "press");
-                String shift = TextFormatting.YELLOW + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "shift");
-                String info = TextFormatting.GRAY + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "info");
-                tooltip.add(press + " " + shift + " " + info);
+            if(((IShiftDescription)this.block).shouldAddDescription(stack, player)){
+                if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)){
+                    ((IShiftDescription)this.block).addDescription(stack, player, tooltip);
+                }
+                else{
+                    String press = TextFormatting.GRAY + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "press");
+                    String shift = TextFormatting.YELLOW + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "shift");
+                    String info = TextFormatting.GRAY + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "info");
+                    tooltip.add(press + " " + shift + " " + info);
+                }
             }
         }
     }

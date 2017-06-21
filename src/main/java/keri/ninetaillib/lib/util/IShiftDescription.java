@@ -13,6 +13,8 @@ import java.util.List;
 
 public interface IShiftDescription {
 
-    void addShiftDescription(ItemStack stack, EntityPlayer player, List<String> tooltip);
+    boolean shouldAddDescription(ItemStack stack, EntityPlayer player);
+
+    void addDescription(ItemStack stack, EntityPlayer player, List<String> tooltip);
 
 }
