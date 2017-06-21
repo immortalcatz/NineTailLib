@@ -4,44 +4,39 @@
  * the explicit permission from the developer of this software!
  */
 
-package keri.ninetaillib.lib.util;
+package keri.ninetaillib.lib.gui;
 
 import codechicken.lib.colour.Colour;
 import codechicken.lib.colour.ColourRGBA;
+import codechicken.lib.render.RenderUtils;
 import codechicken.lib.vec.Rectangle4i;
 import com.google.common.collect.Lists;
 import keri.ninetaillib.lib.math.IPositionProvider;
 import keri.ninetaillib.lib.math.Point2i;
+import keri.ninetaillib.lib.util.TranslationUtils;
 import keri.ninetaillib.mod.util.ModPrefs;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class GuiUtils {
+public abstract class GuiContainerBase extends GuiContainer {
 
-    private static TextureManager TEXTURE_MANAGER = Minecraft.getMinecraft().getTextureManager();
-    private static FontRenderer FONT_RENDERER = Minecraft.getMinecraft().fontRendererObj;
-    private static final ResourceLocation TEXTURE_BACKGROUND = new ResourceLocation(ModPrefs.MODID, "textures/gui/background.png");
-    private static final ResourceLocation TEXTURE_ELEMENTS = new ResourceLocation(ModPrefs.MODID, "textures/gui/elements.png");
-    private static final float Z_LEVEL = 100F;
-    private static final String TOOLTIP_EMPTY = TextFormatting.GRAY + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "empty");
+    private final ResourceLocation textureBackground = new ResourceLocation(ModPrefs.MODID, "textures/gui/background.png");
+    private final ResourceLocation textureElements = new ResourceLocation(ModPrefs.MODID, "textures/gui/elements.png");
+    private final String tooltipEmpty = TranslationUtils.translate(ModPrefs.MODID, "tooltip", "empty");
     public static final int ALIGNMENT_LEFT = 0;
     public static final int ALIGNMENT_RIGHT = 1;
     public static final int ALIGNMENT_TOP = 2;
@@ -54,31 +49,35 @@ public class GuiUtils {
     public static final int POWER_FORGE = 2;
     public static final int POWER_EU = 3;
 
-    public static void drawFluidGauge(Point2i pos, int backgroundType, Fluid fluid, int amount, int maxAmount){
-        drawFluidGauge(pos, backgroundType, new FluidTank(fluid, amount, maxAmount), null);
+    public GuiContainerBase(Container container) {
+        super(container);
     }
 
-    public static void drawFluidGauge(Point2i pos, int backgroundType, Fluid fluid, int amount, int maxAmount, IPositionProvider mousePosition){
-        drawFluidGauge(pos, backgroundType, new FluidTank(fluid, amount, maxAmount), mousePosition);
+    protected void drawFluidGauge(Point2i pos, int backgroundType, Fluid fluid, int amount, int maxAmount){
+        this.drawFluidGauge(pos, backgroundType, new FluidTank(fluid, amount, maxAmount), null);
     }
 
-    public static void drawFluidGauge(Point2i pos, int backgroundType, FluidTank fluidTank){
-        drawFluidGauge(pos, backgroundType, fluidTank, null);
+    protected void drawFluidGauge(Point2i pos, int backgroundType, Fluid fluid, int amount, int maxAmount, IPositionProvider mousePosition){
+        this.drawFluidGauge(pos, backgroundType, new FluidTank(fluid, amount, maxAmount), mousePosition);
     }
 
-    public static void drawFluidGauge(Point2i pos, int backgroundType, FluidTank fluidTank, IPositionProvider mousePosition){
+    protected void drawFluidGauge(Point2i pos, int backgroundType, FluidTank fluidTank){
+        this.drawFluidGauge(pos, backgroundType, fluidTank, null);
+    }
+
+    protected void drawFluidGauge(Point2i pos, int backgroundType, FluidTank fluidTank, IPositionProvider mousePosition){
         final int width = 20;
         final int height = 68;
-        TEXTURE_MANAGER.bindTexture(TEXTURE_ELEMENTS);
+        this.mc.getTextureManager().bindTexture(this.textureElements);
         GlStateManager.pushMatrix();
         GlStateManager.color(1F, 1F, 1F, 1F);
 
         switch(backgroundType){
             case BACKGROUND_LIGHT:
-                drawTexturedModalRect(pos.getX(), pos.getY(), 3, 106, width, height);
+                this.drawTexturedModalRect(pos.getX(), pos.getY(), 3, 106, width, height);
                 break;
             case BACKGROUND_DARK:
-                drawTexturedModalRect(pos.getX(), pos.getY(), 3, 176, width, height);
+                this.drawTexturedModalRect(pos.getX(), pos.getY(), 3, 176, width, height);
                 break;
         }
 
@@ -88,9 +87,9 @@ public class GuiUtils {
 
         if(fluidTank != null && fluidTank.getFluid() != null){
             double density = ((fluidTank.getFluidAmount() * 64D) / fluidTank.getCapacity() * 64D) / 1000D;
-            codechicken.lib.render.RenderUtils.preFluidRender();
-            codechicken.lib.render.RenderUtils.renderFluidGauge(fluidTank.getFluid(), dimension, density, 16D);
-            codechicken.lib.render.RenderUtils.postFluidRender();
+            RenderUtils.preFluidRender();
+            RenderUtils.renderFluidGauge(fluidTank.getFluid(), dimension, density, 16D);
+            RenderUtils.postFluidRender();
         }
 
         GlStateManager.popMatrix();
@@ -98,10 +97,10 @@ public class GuiUtils {
 
         switch(backgroundType){
             case BACKGROUND_LIGHT:
-                drawTexturedModalRect(pos.getX() + 1, pos.getY() + 1, 24, 107, width - 2, height - 2);
+                this.drawTexturedModalRect(pos.getX() + 1, pos.getY() + 1, 24, 107, width - 2, height - 2);
                 break;
             case BACKGROUND_DARK:
-                drawTexturedModalRect(pos.getX() + 1, pos.getY() + 1, 24, 177, width - 2, height - 2);
+                this.drawTexturedModalRect(pos.getX() + 1, pos.getY() + 1, 24, 177, width - 2, height - 2);
                 break;
         }
 
@@ -115,25 +114,25 @@ public class GuiUtils {
                 GlStateManager.color(1F, 1F, 1F, 1F);
                 List<String> text = Lists.newArrayList();
                 text.add((fluidTank.getFluidAmount() > 0 ? Integer.toString(fluidTank.getFluidAmount()) : "0") + " mB");
-                text.add(TextFormatting.YELLOW + (fluidTank.getFluidAmount() > 0 ? fluidTank.getFluid().getLocalizedName() : TOOLTIP_EMPTY));
+                text.add(TextFormatting.YELLOW + (fluidTank.getFluidAmount() > 0 ? fluidTank.getFluid().getLocalizedName() : this.tooltipEmpty));
                 int screenWidth = Minecraft.getMinecraft().displayWidth;
                 int screenHeight = Minecraft.getMinecraft().displayHeight;
-                net.minecraftforge.fml.client.config.GuiUtils.drawHoveringText(text, mousePosition.getPosition().getX(), mousePosition.getPosition().getY(), screenWidth, screenHeight, 200, FONT_RENDERER);
+                GuiUtils.drawHoveringText(text, mousePosition.getPosition().getX(), mousePosition.getPosition().getY(), screenWidth, screenHeight, 200, this.fontRendererObj);
                 GlStateManager.popMatrix();
             }
         }
     }
 
-    public static void drawPowerBar(Point2i pos, int backgroundType, int powerType, int power, int capacity){
-        drawPowerBar(pos, backgroundType, powerType, power, capacity, null);
+    protected void drawPowerBar(Point2i pos, int backgroundType, int powerType, int power, int capacity){
+        this.drawPowerBar(pos, backgroundType, powerType, power, capacity, null);
     }
 
-    public static void drawPowerBar(Point2i pos, int backgroundType, int powerType, int power, int capacity, IPositionProvider mousePosition){
+    protected void drawPowerBar(Point2i pos, int backgroundType, int powerType, int power, int capacity, IPositionProvider mousePosition){
         final int width = 14;
         final int height = 50;
         int powerOffset = (power * (height + 1)) / capacity;
         Colour color = null;
-        TEXTURE_MANAGER.bindTexture(TEXTURE_ELEMENTS);
+        this.mc.getTextureManager().bindTexture(this.textureElements);
 
         switch(backgroundType){
             case BACKGROUND_LIGHT:
@@ -198,57 +197,57 @@ public class GuiUtils {
 
                 int screenwidth = Minecraft.getMinecraft().displayWidth;
                 int screenHeight = Minecraft.getMinecraft().displayHeight;
-                net.minecraftforge.fml.client.config.GuiUtils.drawHoveringText(text, mousePosition.getPosition().getX(), mousePosition.getPosition().getY(), screenwidth, screenHeight, 200, FONT_RENDERER);
+                GuiUtils.drawHoveringText(text, mousePosition.getPosition().getX(), mousePosition.getPosition().getY(), screenwidth, screenHeight, 200, this.fontRendererObj);
                 GlStateManager.popMatrix();
             }
         }
     }
 
-    public static void drawRectangleWithBorder(Point2i pos, Point2i size, Colour color, Colour colorBorder){
-        drawRectangleWithBorder(pos, size, color, color, colorBorder);
+    protected void drawRectangleWithBorder(Point2i pos, Point2i size, Colour color, Colour colorBorder){
+        this.drawRectangleWithBorder(pos, size, color, color, colorBorder);
     }
 
-    public static void drawRectangleWithBorder(Point2i pos, Point2i size, Colour colorStart, Colour colorEnd, Colour colorBorder){
+    protected void drawRectangleWithBorder(Point2i pos, Point2i size, Colour colorStart, Colour colorEnd, Colour colorBorder){
         int startX = pos.getX();
         int startY = pos.getY();
         int endX = pos.getX() + size.getX();
         int endY = pos.getY() + size.getY();
         GlStateManager.pushMatrix();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        net.minecraftforge.fml.client.config.GuiUtils.drawGradientRect(0, startX, startY, endX, endY, colorStart.argb(), colorEnd.argb());
+        GuiUtils.drawGradientRect(0, startX, startY, endX, endY, colorStart.argb(), colorEnd.argb());
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        drawHorizontalLine(startX, endX - 1, startY, colorBorder.argb());
-        drawHorizontalLine(startX, endX - 1, endY - 1, colorBorder.argb());
-        drawVerticalLine(startX, startY, endY, colorBorder.argb());
-        drawVerticalLine(endX - 1, startY, endY, colorBorder.argb());
+        this.drawHorizontalLine(startX, endX - 1, startY, colorBorder.argb());
+        this.drawHorizontalLine(startX, endX - 1, endY - 1, colorBorder.argb());
+        this.drawVerticalLine(startX, startY, endY, colorBorder.argb());
+        this.drawVerticalLine(endX - 1, startY, endY, colorBorder.argb());
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.popMatrix();
     }
 
-    public static void drawRectangle(Point2i pos, Point2i size, Colour color){
-        drawRectangle(pos, size, color, color);
+    protected void drawRectangle(Point2i pos, Point2i size, Colour color){
+        this.drawRectangle(pos, size, color, color);
     }
 
-    public static void drawRectangle(Point2i pos, Point2i size, Colour colorStart, Colour colorEnd){
+    protected void drawRectangle(Point2i pos, Point2i size, Colour colorStart, Colour colorEnd){
         int startX = pos.getX();
         int startY = pos.getY();
         int endX = pos.getX() + size.getX();
         int endY = pos.getY() + size.getY();
         GlStateManager.pushMatrix();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        net.minecraftforge.fml.client.config.GuiUtils.drawGradientRect(0, startX, startY, endX, endY, colorStart.argb(), colorEnd.argb());
+        GuiUtils.drawGradientRect(0, startX, startY, endX, endY, colorStart.argb(), colorEnd.argb());
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.popMatrix();
     }
 
-    public static void drawBackground(Point2i pos, Point2i size, int alignment){
-        drawBackground(pos, size, alignment, new ColourRGBA(255, 255, 255, 255));
+    protected void drawBackground(Point2i pos, Point2i size, int alignment){
+        this.drawBackground(pos, size, alignment, new ColourRGBA(255, 255, 255, 255));
     }
 
-    public static void drawBackground(Point2i pos, Point2i size, int alignment, Colour color){
+    protected void drawBackground(Point2i pos, Point2i size, int alignment, Colour color){
         GlStateManager.pushMatrix();
         Point2i posCornerTL = new Point2i(pos.getX(), pos.getY());
         Point2i minUVCornerTL = new Point2i(0, 0);
@@ -265,28 +264,28 @@ public class GuiUtils {
 
         switch(alignment){
             case ALIGNMENT_LEFT:
-                drawBackground(posCornerTL, minUVCornerTL, maxUVCornerTL, color);
-                drawBackground(posCornerBL, minUVCornerBL, maxUVCornerBL, color);
+                this.drawBackground(posCornerTL, minUVCornerTL, maxUVCornerTL, color);
+                this.drawBackground(posCornerBL, minUVCornerBL, maxUVCornerBL, color);
 
                 for(int left = 0; left < size.getY() - 4; left++){
                     Point2i posEdgeLeft = new Point2i(pos.getX(), pos.getY() + 4 + left);
                     Point2i minUVEdgeLeft = new Point2i(0, 4);
                     Point2i maxUVEdgeLeft = new Point2i(4, 1);
-                    drawBackground(posEdgeLeft, minUVEdgeLeft, maxUVEdgeLeft, color);
+                    this.drawBackground(posEdgeLeft, minUVEdgeLeft, maxUVEdgeLeft, color);
                 }
 
                 for(int top = 0; top < size.getX() - 4; top++){
                     Point2i posEdgeTop = new Point2i(pos.getX() + 4 + top, pos.getY());
                     Point2i minUVEdgeTop = new Point2i(4, 0);
                     Point2i maxUVEdgeTop = new Point2i(1, 4);
-                    drawBackground(posEdgeTop, minUVEdgeTop, maxUVEdgeTop, color);
+                    this.drawBackground(posEdgeTop, minUVEdgeTop, maxUVEdgeTop, color);
                 }
 
                 for(int bottom = 0; bottom < size.getX() - 4; bottom++){
                     Point2i posEdgeBottom = new Point2i(pos.getX() + 4 + bottom, pos.getY() + size.getY());
                     Point2i minUVEdgeBottom = new Point2i(4, 20);
                     Point2i maxUVEdgeBottom = new Point2i(1, 24);
-                    drawBackground(posEdgeBottom, minUVEdgeBottom, maxUVEdgeBottom, color);
+                    this.drawBackground(posEdgeBottom, minUVEdgeBottom, maxUVEdgeBottom, color);
                 }
 
                 for(int fillX = 0; fillX < size.getX() - 4; fillX++){
@@ -294,34 +293,34 @@ public class GuiUtils {
                         Point2i posFill = new Point2i(pos.getX() + 4 + fillX, pos.getY() + 4 + fillY);
                         Point2i minUVFill = new Point2i(4, 4);
                         Point2i maxUVFill = new Point2i(1, 1);
-                        drawBackground(posFill, minUVFill, maxUVFill, color);
+                        this.drawBackground(posFill, minUVFill, maxUVFill, color);
                     }
                 }
 
                 break;
             case ALIGNMENT_RIGHT:
-                drawBackground(posCornerTR, minUVCornerTR, maxUVCornerTR, color);
-                drawBackground(posCornerBR, minUVCornerBR, maxUVCornerBR, color);
+                this.drawBackground(posCornerTR, minUVCornerTR, maxUVCornerTR, color);
+                this.drawBackground(posCornerBR, minUVCornerBR, maxUVCornerBR, color);
 
                 for(int right = 0; right < size.getY() - 4; right++){
                     Point2i posEdgeRight = new Point2i(pos.getX() + size.getX(), pos.getY() + 4 + right);
                     Point2i minUVEdgeRight = new Point2i(20, 4);
                     Point2i maxUVEdgeRight = new Point2i(24, 1);
-                    drawBackground(posEdgeRight, minUVEdgeRight, maxUVEdgeRight, color);
+                    this.drawBackground(posEdgeRight, minUVEdgeRight, maxUVEdgeRight, color);
                 }
 
                 for(int top = 0; top < size.getX() - 4; top++){
                     Point2i posEdgeTop = new Point2i(pos.getX() + 4 + top, pos.getY());
                     Point2i minUVEdgeTop = new Point2i(4, 0);
                     Point2i maxUVEdgeTop = new Point2i(1, 4);
-                    drawBackground(posEdgeTop, minUVEdgeTop, maxUVEdgeTop, color);
+                    this.drawBackground(posEdgeTop, minUVEdgeTop, maxUVEdgeTop, color);
                 }
 
                 for(int bottom = 0; bottom < size.getX() - 4; bottom++){
                     Point2i posEdgeBottom = new Point2i(pos.getX() + 4 + bottom, pos.getY() + size.getY());
                     Point2i minUVEdgeBottom = new Point2i(4, 20);
                     Point2i maxUVEdgeBottom = new Point2i(1, 24);
-                    drawBackground(posEdgeBottom, minUVEdgeBottom, maxUVEdgeBottom, color);
+                    this.drawBackground(posEdgeBottom, minUVEdgeBottom, maxUVEdgeBottom, color);
                 }
 
                 for(int fillX = 0; fillX < size.getX() - 4; fillX++){
@@ -329,34 +328,34 @@ public class GuiUtils {
                         Point2i posFill = new Point2i(pos.getX() + 4 + fillX, pos.getY() + 4 + fillY);
                         Point2i minUVFill = new Point2i(4, 4);
                         Point2i maxUVFill = new Point2i(1, 1);
-                        drawBackground(posFill, minUVFill, maxUVFill, color);
+                        this.drawBackground(posFill, minUVFill, maxUVFill, color);
                     }
                 }
 
                 break;
             case ALIGNMENT_TOP:
-                drawBackground(posCornerTL, minUVCornerTL, maxUVCornerTL, color);
-                drawBackground(posCornerTR, minUVCornerTR, maxUVCornerTR, color);
+                this.drawBackground(posCornerTL, minUVCornerTL, maxUVCornerTL, color);
+                this.drawBackground(posCornerTR, minUVCornerTR, maxUVCornerTR, color);
 
                 for(int left = 0; left < size.getY() - 4; left++){
                     Point2i posEdgeLeft = new Point2i(pos.getX(), pos.getY() + 4 + left);
                     Point2i minUVEdgeLeft = new Point2i(0, 4);
                     Point2i maxUVEdgeLeft = new Point2i(4, 1);
-                    drawBackground(posEdgeLeft, minUVEdgeLeft, maxUVEdgeLeft, color);
+                    this.drawBackground(posEdgeLeft, minUVEdgeLeft, maxUVEdgeLeft, color);
                 }
 
                 for(int right = 0; right < size.getY() - 4; right++){
                     Point2i posEdgeRight = new Point2i(pos.getX() + size.getX(), pos.getY() + 4 + right);
                     Point2i minUVEdgeRight = new Point2i(20, 4);
                     Point2i maxUVEdgeRight = new Point2i(24, 1);
-                    drawBackground(posEdgeRight, minUVEdgeRight, maxUVEdgeRight, color);
+                    this.drawBackground(posEdgeRight, minUVEdgeRight, maxUVEdgeRight, color);
                 }
 
                 for(int top = 0; top < size.getX() - 4; top++){
                     Point2i posEdgeTop = new Point2i(pos.getX() + 4 + top, pos.getY());
                     Point2i minUVEdgeTop = new Point2i(4, 0);
                     Point2i maxUVEdgeTop = new Point2i(1, 4);
-                    drawBackground(posEdgeTop, minUVEdgeTop, maxUVEdgeTop, color);
+                    this.drawBackground(posEdgeTop, minUVEdgeTop, maxUVEdgeTop, color);
                 }
 
                 for(int fillX = 0; fillX < size.getX() - 4; fillX++){
@@ -364,34 +363,34 @@ public class GuiUtils {
                         Point2i posFill = new Point2i(pos.getX() + 4 + fillX, pos.getY() + 4 + fillY);
                         Point2i minUVFill = new Point2i(4, 4);
                         Point2i maxUVFill = new Point2i(1, 1);
-                        drawBackground(posFill, minUVFill, maxUVFill, color);
+                        this.drawBackground(posFill, minUVFill, maxUVFill, color);
                     }
                 }
 
                 break;
             case ALIGNMENT_BOTTOM:
-                drawBackground(posCornerBL, minUVCornerBL, maxUVCornerBL, color);
-                drawBackground(posCornerBR, minUVCornerBR, maxUVCornerBR, color);
+                this.drawBackground(posCornerBL, minUVCornerBL, maxUVCornerBL, color);
+                this.drawBackground(posCornerBR, minUVCornerBR, maxUVCornerBR, color);
 
                 for(int left = 0; left < size.getY() - 4; left++){
                     Point2i posEdgeLeft = new Point2i(pos.getX(), pos.getY() + 4 + left);
                     Point2i minUVEdgeLeft = new Point2i(0, 4);
                     Point2i maxUVEdgeLeft = new Point2i(4, 1);
-                    drawBackground(posEdgeLeft, minUVEdgeLeft, maxUVEdgeLeft, color);
+                    this.drawBackground(posEdgeLeft, minUVEdgeLeft, maxUVEdgeLeft, color);
                 }
 
                 for(int right = 0; right < size.getY() - 4; right++){
                     Point2i posEdgeRight = new Point2i(pos.getX() + size.getX(), pos.getY() + 4 + right);
                     Point2i minUVEdgeRight = new Point2i(20, 4);
                     Point2i maxUVEdgeRight = new Point2i(24, 1);
-                    drawBackground(posEdgeRight, minUVEdgeRight, maxUVEdgeRight, color);
+                    this.drawBackground(posEdgeRight, minUVEdgeRight, maxUVEdgeRight, color);
                 }
 
                 for(int bottom = 0; bottom < size.getX() - 4; bottom++){
                     Point2i posEdgeBottom = new Point2i(pos.getX() + 4 + bottom, pos.getY() + size.getY());
                     Point2i minUVEdgeBottom = new Point2i(4, 20);
                     Point2i maxUVEdgeBottom = new Point2i(1, 24);
-                    drawBackground(posEdgeBottom, minUVEdgeBottom, maxUVEdgeBottom, color);
+                    this.drawBackground(posEdgeBottom, minUVEdgeBottom, maxUVEdgeBottom, color);
                 }
 
                 for(int fillX = 0; fillX < size.getX() - 4; fillX++){
@@ -399,43 +398,43 @@ public class GuiUtils {
                         Point2i posFill = new Point2i(pos.getX() + 4 + fillX, pos.getY() + 4 + fillY);
                         Point2i minUVFill = new Point2i(4, 4);
                         Point2i maxUVFill = new Point2i(1, 1);
-                        drawBackground(posFill, minUVFill, maxUVFill, color);
+                        this.drawBackground(posFill, minUVFill, maxUVFill, color);
                     }
                 }
 
                 break;
             case ALIGNMENT_NONE:
-                drawBackground(posCornerTL, minUVCornerTL, maxUVCornerTL, color);
-                drawBackground(posCornerTR, minUVCornerTR, maxUVCornerTR, color);
-                drawBackground(posCornerBL, minUVCornerBL, maxUVCornerBL, color);
-                drawBackground(posCornerBR, minUVCornerBR, maxUVCornerBR, color);
+                this.drawBackground(posCornerTL, minUVCornerTL, maxUVCornerTL, color);
+                this.drawBackground(posCornerTR, minUVCornerTR, maxUVCornerTR, color);
+                this.drawBackground(posCornerBL, minUVCornerBL, maxUVCornerBL, color);
+                this.drawBackground(posCornerBR, minUVCornerBR, maxUVCornerBR, color);
 
                 for(int left = 0; left < size.getY() - 4; left++){
                     Point2i posEdgeLeft = new Point2i(pos.getX(), pos.getY() + 4 + left);
                     Point2i minUVEdgeLeft = new Point2i(0, 4);
                     Point2i maxUVEdgeLeft = new Point2i(4, 1);
-                    drawBackground(posEdgeLeft, minUVEdgeLeft, maxUVEdgeLeft, color);
+                    this.drawBackground(posEdgeLeft, minUVEdgeLeft, maxUVEdgeLeft, color);
                 }
 
                 for(int right = 0; right < size.getY() - 4; right++){
                     Point2i posEdgeRight = new Point2i(pos.getX() + size.getX(), pos.getY() + 4 + right);
                     Point2i minUVEdgeRight = new Point2i(20, 4);
                     Point2i maxUVEdgeRight = new Point2i(24, 1);
-                    drawBackground(posEdgeRight, minUVEdgeRight, maxUVEdgeRight, color);
+                    this.drawBackground(posEdgeRight, minUVEdgeRight, maxUVEdgeRight, color);
                 }
 
                 for(int top = 0; top < size.getX() - 4; top++){
                     Point2i posEdgeTop = new Point2i(pos.getX() + 4 + top, pos.getY());
                     Point2i minUVEdgeTop = new Point2i(4, 0);
                     Point2i maxUVEdgeTop = new Point2i(1, 4);
-                    drawBackground(posEdgeTop, minUVEdgeTop, maxUVEdgeTop, color);
+                    this.drawBackground(posEdgeTop, minUVEdgeTop, maxUVEdgeTop, color);
                 }
 
                 for(int bottom = 0; bottom < size.getX() - 4; bottom++){
                     Point2i posEdgeBottom = new Point2i(pos.getX() + 4 + bottom, pos.getY() + size.getY());
                     Point2i minUVEdgeBottom = new Point2i(4, 20);
                     Point2i maxUVEdgeBottom = new Point2i(1, 24);
-                    drawBackground(posEdgeBottom, minUVEdgeBottom, maxUVEdgeBottom, color);
+                    this.drawBackground(posEdgeBottom, minUVEdgeBottom, maxUVEdgeBottom, color);
                 }
 
                 for(int fillX = 0; fillX < size.getX() - 4; fillX++){
@@ -443,7 +442,7 @@ public class GuiUtils {
                         Point2i posFill = new Point2i(pos.getX() + 4 + fillX, pos.getY() + 4 + fillY);
                         Point2i minUVFill = new Point2i(4, 4);
                         Point2i maxUVFill = new Point2i(1, 1);
-                        drawBackground(posFill, minUVFill, maxUVFill, color);
+                        this.drawBackground(posFill, minUVFill, maxUVFill, color);
                     }
                 }
 
@@ -453,93 +452,10 @@ public class GuiUtils {
         GlStateManager.popMatrix();
     }
 
-    public static void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height){
-        float f = 0.00390625F;
-        float f1 = 0.00390625F;
-        Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer buffer = tessellator.getBuffer();
-        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos((double)(x + 0), (double)(y + height), (double)Z_LEVEL).tex((double)((float)(textureX + 0) * 0.00390625F), (double)((float)(textureY + height) * 0.00390625F)).endVertex();
-        buffer.pos((double)(x + width), (double)(y + height), (double)Z_LEVEL).tex((double)((float)(textureX + width) * 0.00390625F), (double)((float)(textureY + height) * 0.00390625F)).endVertex();
-        buffer.pos((double)(x + width), (double)(y + 0), (double)Z_LEVEL).tex((double)((float)(textureX + width) * 0.00390625F), (double)((float)(textureY + 0) * 0.00390625F)).endVertex();
-        buffer.pos((double)(x + 0), (double)(y + 0), (double)Z_LEVEL).tex((double)((float)(textureX + 0) * 0.00390625F), (double)((float)(textureY + 0) * 0.00390625F)).endVertex();
-        tessellator.draw();
-    }
-
-    public static void drawTexturedModalRect(float xCoord, float yCoord, int minU, int minV, int maxU, int maxV){
-        float f = 0.00390625F;
-        float f1 = 0.00390625F;
-        Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer buffer = tessellator.getBuffer();
-        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos((double)(xCoord + 0.0F), (double)(yCoord + (float)maxV), (double)Z_LEVEL).tex((double)((float)(minU + 0) * 0.00390625F), (double)((float)(minV + maxV) * 0.00390625F)).endVertex();
-        buffer.pos((double)(xCoord + (float)maxU), (double)(yCoord + (float)maxV), (double)Z_LEVEL).tex((double)((float)(minU + maxU) * 0.00390625F), (double)((float)(minV + maxV) * 0.00390625F)).endVertex();
-        buffer.pos((double)(xCoord + (float)maxU), (double)(yCoord + 0.0F), (double)Z_LEVEL).tex((double)((float)(minU + maxU) * 0.00390625F), (double)((float)(minV + 0) * 0.00390625F)).endVertex();
-        buffer.pos((double)(xCoord + 0.0F), (double)(yCoord + 0.0F), (double)Z_LEVEL).tex((double)((float)(minU + 0) * 0.00390625F), (double)((float)(minV + 0) * 0.00390625F)).endVertex();
-        tessellator.draw();
-    }
-
-    public static void drawTexturedModalRect(int xCoord, int yCoord, TextureAtlasSprite textureSprite, int widthIn, int heightIn){
-        Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer buffer = tessellator.getBuffer();
-        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos((double)(xCoord + 0), (double)(yCoord + heightIn), (double)Z_LEVEL).tex((double)textureSprite.getMinU(), (double)textureSprite.getMaxV()).endVertex();
-        buffer.pos((double)(xCoord + widthIn), (double)(yCoord + heightIn), (double)Z_LEVEL).tex((double)textureSprite.getMaxU(), (double)textureSprite.getMaxV()).endVertex();
-        buffer.pos((double)(xCoord + widthIn), (double)(yCoord + 0), (double)Z_LEVEL).tex((double)textureSprite.getMaxU(), (double)textureSprite.getMinV()).endVertex();
-        buffer.pos((double)(xCoord + 0), (double)(yCoord + 0), (double)Z_LEVEL).tex((double)textureSprite.getMinU(), (double)textureSprite.getMinV()).endVertex();
-        tessellator.draw();
-    }
-
-    public static void drawModalRectWithCustomSizedTexture(int x, int y, float u, float v, int width, int height, float textureWidth, float textureHeight){
-        float f = 1.0F / textureWidth;
-        float f1 = 1.0F / textureHeight;
-        Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer buffer = tessellator.getBuffer();
-        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos((double)x, (double)(y + height), 0.0D).tex((double)(u * f), (double)((v + (float)height) * f1)).endVertex();
-        buffer.pos((double)(x + width), (double)(y + height), 0.0D).tex((double)((u + (float)width) * f), (double)((v + (float)height) * f1)).endVertex();
-        buffer.pos((double)(x + width), (double)y, 0.0D).tex((double)((u + (float)width) * f), (double)(v * f1)).endVertex();
-        buffer.pos((double)x, (double)y, 0.0D).tex((double)(u * f), (double)(v * f1)).endVertex();
-        tessellator.draw();
-    }
-
-    public static void drawScaledCustomSizeModalRect(int x, int y, float u, float v, int uWidth, int vHeight, int width, int height, float tileWidth, float tileHeight){
-        float f = 1.0F / tileWidth;
-        float f1 = 1.0F / tileHeight;
-        Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer buffer = tessellator.getBuffer();
-        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos((double)x, (double)(y + height), 0.0D).tex((double)(u * f), (double)((v + (float)vHeight) * f1)).endVertex();
-        buffer.pos((double)(x + width), (double)(y + height), 0.0D).tex((double)((u + (float)uWidth) * f), (double)((v + (float)vHeight) * f1)).endVertex();
-        buffer.pos((double)(x + width), (double)y, 0.0D).tex((double)((u + (float)uWidth) * f), (double)(v * f1)).endVertex();
-        buffer.pos((double)x, (double)y, 0.0D).tex((double)(u * f), (double)(v * f1)).endVertex();
-        tessellator.draw();
-    }
-
-    private static void drawBackground(Point2i pos, Point2i minUV, Point2i maxUV, Colour color){
-        TEXTURE_MANAGER.bindTexture(TEXTURE_BACKGROUND);
+    private void drawBackground(Point2i pos, Point2i minUV, Point2i maxUV, Colour color) {
+        this.mc.getTextureManager().bindTexture(this.textureBackground);
         color.glColour();
-        drawTexturedModalRect(pos.getX(), pos.getY(), minUV.getX(), minUV.getY(), maxUV.getX(), maxUV.getY());
-    }
-
-    private static void drawHorizontalLine(int startX, int endX, int y, int color){
-        if(endX < startX){
-            int i = startX;
-            startX = endX;
-            endX = i;
-        }
-
-        Gui.drawRect(startX, y, endX + 1, y + 1, color);
-    }
-
-    private static void drawVerticalLine(int x, int startY, int endY, int color){
-        if(endY < startY){
-            int i = startY;
-            startY = endY;
-            endY = i;
-        }
-
-        Gui.drawRect(x, startY + 1, x + 1, endY, color);
+        this.drawTexturedModalRect(pos.getX(), pos.getY(), minUV.getX(), minUV.getY(), maxUV.getX(), maxUV.getY());
     }
 
 }
