@@ -37,7 +37,7 @@ import java.util.List;
 public class GuiUtils {
 
     private static TextureManager TEXTURE_MANAGER = Minecraft.getMinecraft().getTextureManager();
-    private static FontRenderer FONT_RENDERER = Minecraft.getMinecraft().fontRenderer;
+    private static FontRenderer FONT_RENDERER = Minecraft.getMinecraft().fontRendererObj;
     private static final ResourceLocation TEXTURE_BACKGROUND = new ResourceLocation(ModPrefs.MODID, "textures/gui/background.png");
     private static final ResourceLocation TEXTURE_ELEMENTS = new ResourceLocation(ModPrefs.MODID, "textures/gui/elements.png");
     private static final float Z_LEVEL = 100F;
