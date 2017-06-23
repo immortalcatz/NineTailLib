@@ -19,9 +19,8 @@ import keri.ninetaillib.mod.util.ModPrefs;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -31,113 +30,26 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemBase extends Item implements IContentRegister, IItemRenderTypeProvider, IIconItem {
+public class ItemFoodBase extends ItemFood implements IContentRegister, IItemRenderTypeProvider, IIconItem {
 
     private String modid;
     private String itemName;
-    private String[] subNames;
     @SideOnly(Side.CLIENT)
-    private TextureAtlasSprite[] texture;
+    private TextureAtlasSprite texture;
 
-    public ItemBase(String itemName) {
+    public ItemFoodBase(String itemName, int amount, float saturation, boolean isWolfFood) {
+        super(amount, saturation, isWolfFood);
         this.itemName = itemName;
-        this.subNames = null;
         this.setCreativeTab(this.getCreativeTab());
     }
 
-    public ItemBase(String itemName, String... subNames){
+    public ItemFoodBase(String itemName, int amount, boolean isWolfFood) {
+        super(amount, isWolfFood);
         this.itemName = itemName;
-        this.subNames = subNames;
         this.setCreativeTab(this.getCreativeTab());
-        this.setHasSubtypes(true);
-    }
-
-    @Override
-    public int getDamage(ItemStack stack) {
-        if(this.subNames != null){
-            return stack.getMetadata();
-        }
-        else{
-            return super.getDamage(stack);
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        if(this.subNames != null){
-            for(int i = 0; i < this.subNames.length; i++){
-                subItems.add(new ItemStack(this, 1, i));
-            }
-        }
-        else{
-            subItems.add(new ItemStack(this, 1, 0));
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public String getUnlocalizedName(ItemStack stack) {
-        if(this.subNames != null){
-            return this.getUnlocalizedName() + "." + this.subNames[stack.getMetadata()];
-        }
-        else{
-            return super.getUnlocalizedName(stack);
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public CreativeTabs getCreativeTab(){
-        return CreativeTabs.MISC;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister register) {
-        if(this.subNames != null){
-            this.texture = new TextureAtlasSprite[this.subNames.length];
-
-            for(int i = 0; i < this.subNames.length; i++){
-                this.texture[i] = register.registerIcon(this.modid + ":items/" + this.itemName + "_" + this.subNames[i]);
-            }
-        }
-        else{
-            this.texture = new TextureAtlasSprite[1];
-            this.texture[0] = register.registerIcon(this.modid + ":items/" + this.itemName);
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getIcon(int meta) {
-        return this.texture[meta];
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getIcon(ItemStack stack) {
-        return null;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
-        if(this instanceof IShiftDescription){
-            if(((IShiftDescription)this).shouldAddDescription(stack, player)){
-                if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)){
-                    ((IShiftDescription)this).addDescription(stack, player, tooltip);
-                }
-                else{
-                    String press = TextFormatting.GRAY + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "press");
-                    String shift = TextFormatting.YELLOW + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "shift");
-                    String info = TextFormatting.GRAY + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "info");
-                    tooltip.add(press + " " + shift + " " + info);
-                }
-            }
-        }
     }
 
     @Override
@@ -176,6 +88,48 @@ public class ItemBase extends Item implements IContentRegister, IItemRenderTypeP
 
     }
 
+    @Nullable
+    @Override
+    public CreativeTabs getCreativeTab() {
+        return CreativeTabs.FOOD;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister register) {
+        this.texture = register.registerIcon(this.modid + ":items/" + this.itemName);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getIcon(int meta) {
+        return this.texture;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getIcon(ItemStack stack) {
+        return null;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+        if(this instanceof IShiftDescription){
+            if(((IShiftDescription)this).shouldAddDescription(stack, player)){
+                if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)){
+                    ((IShiftDescription)this).addDescription(stack, player, tooltip);
+                }
+                else{
+                    String press = TextFormatting.GRAY + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "press");
+                    String shift = TextFormatting.YELLOW + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "shift");
+                    String info = TextFormatting.GRAY + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "info");
+                    tooltip.add(press + " " + shift + " " + info);
+                }
+            }
+        }
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public EnumItemRenderType getRenderType(){
@@ -188,10 +142,6 @@ public class ItemBase extends Item implements IContentRegister, IItemRenderTypeP
 
     public String getItemName(){
         return this.itemName;
-    }
-
-    public String[] getSubNames(){
-        return this.subNames;
     }
 
 }

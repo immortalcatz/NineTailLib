@@ -11,7 +11,6 @@ import codechicken.lib.model.ModelRegistryHelper;
 import codechicken.lib.render.block.BlockRenderingRegistry;
 import com.google.common.collect.Maps;
 import keri.ninetaillib.lib.block.BlockBase;
-import keri.ninetaillib.lib.item.ItemBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
@@ -86,13 +85,13 @@ public class RenderingRegistry {
     }
 
     public static void registerItem(Item item){
-        if(item instanceof ItemBase){
-            ItemBase itemBase = (ItemBase)item;
-            IItemRenderingHandler handler = itemRenderingHandlers.get(itemBase.getRenderType());
+        if(item instanceof IItemRenderTypeProvider){
+            IItemRenderTypeProvider provider = (IItemRenderTypeProvider)item;
+            IItemRenderingHandler handler = itemRenderingHandlers.get(provider.getRenderType());
             ItemRenderingAdapter adapter = new ItemRenderingAdapter(handler);
-            ModelResourceLocation location = new ModelResourceLocation(itemBase.getRegistryName(), "inventory");
-            ModelLoader.setCustomMeshDefinition(itemBase, stack -> location);
-            ModelRegistryHelper.registerItemRenderer(itemBase, adapter);
+            ModelResourceLocation location = new ModelResourceLocation(item.getRegistryName(), "inventory");
+            ModelLoader.setCustomMeshDefinition(item, stack -> location);
+            ModelRegistryHelper.registerItemRenderer(item, adapter);
         }
         else{
             throw new IllegalArgumentException("Item has to be an instance of ItemBase!");
