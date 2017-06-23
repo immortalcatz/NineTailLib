@@ -407,7 +407,7 @@ public class ItemToolHelper {
         @Override
         public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected){
             if(this.updateCallback != null){
-                ((IUpdateCallback)this).update(stack, world, entity, itemSlot, isSelected);
+                this.updateCallback.update(stack, world, entity, itemSlot, isSelected);
             }
         }
 
