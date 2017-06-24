@@ -65,6 +65,11 @@ public class ItemBase extends Item implements IContentRegister, IItemRenderTypeP
     }
 
     @Override
+    public CreativeTabs getCreativeTab(){
+        return CreativeTabs.MISC;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         if(this.subNames != null){
@@ -86,12 +91,6 @@ public class ItemBase extends Item implements IContentRegister, IItemRenderTypeP
         else{
             return super.getUnlocalizedName(stack);
         }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public CreativeTabs getCreativeTab(){
-        return CreativeTabs.MISC;
     }
 
     @Override
