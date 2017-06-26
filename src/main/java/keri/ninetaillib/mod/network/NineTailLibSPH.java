@@ -3,6 +3,7 @@ package keri.ninetaillib.mod.network;
 import codechicken.lib.packet.ICustomPacketHandler;
 import codechicken.lib.packet.PacketCustom;
 import keri.ninetaillib.lib.network.INetworkTile;
+import keri.ninetaillib.lib.network.Packet;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.INetHandlerPlayServer;
 import net.minecraft.tileentity.TileEntity;
@@ -26,7 +27,7 @@ public class NineTailLibSPH implements ICustomPacketHandler.IServerPacketHandler
         TileEntity tile = world.getTileEntity(pos);
 
         if(tile != null && tile instanceof INetworkTile){
-            ((INetworkTile)tile).onUpdatePacket(packet, Side.SERVER);
+            ((INetworkTile)tile).onUpdatePacket(new Packet(packet), Side.SERVER);
         }
     }
 
