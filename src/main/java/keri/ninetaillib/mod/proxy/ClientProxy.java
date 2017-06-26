@@ -6,9 +6,12 @@
 
 package keri.ninetaillib.mod.proxy;
 
+import codechicken.lib.packet.PacketCustom;
 import keri.ninetaillib.lib.render.RenderBlocks;
 import keri.ninetaillib.lib.render.RenderItems;
 import keri.ninetaillib.lib.util.WorldJoinMessage;
+import keri.ninetaillib.mod.NineTailLib;
+import keri.ninetaillib.mod.network.NineTailLibCPH;
 import keri.ninetaillib.mod.playereffect.PlayerEffectHandler;
 import keri.ninetaillib.mod.playereffect.PlayerEffects;
 import keri.ninetaillib.mod.util.ModPrefs;
@@ -36,6 +39,7 @@ public class ClientProxy implements INTLProxy {
 
     @Override
     public void init(FMLInitializationEvent event) {
+        PacketCustom.assignHandler(NineTailLib.INSTANCE, new NineTailLibCPH());
         Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
         RenderPlayer renderer = null;
         renderer = skinMap.get("default");

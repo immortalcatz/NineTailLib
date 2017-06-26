@@ -57,7 +57,7 @@ public class RenderBlocks {
                 IIconBlock iconProvider = (IIconBlock)block;
                 BakingVertexBuffer parent = BakingVertexBuffer.create();
                 parent.begin(GL11.GL_QUADS, RenderUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
-                CCRenderState renderState = RenderingConstants.getRenderState();
+                CCRenderState renderState = CCRenderState.instance();
                 renderState.reset();
                 renderState.bind(parent);
 
@@ -89,7 +89,7 @@ public class RenderBlocks {
         @Override
         public void renderDamage(IBlockAccess world, BlockPos pos, VertexBuffer buffer, TextureAtlasSprite texture) {
             CCModel model = BLOCK_MODEL.copy();
-            CCRenderState renderState = RenderingConstants.getRenderState();
+            CCRenderState renderState = CCRenderState.instance();
             renderState.reset();
             renderState.bind(buffer);
             model.apply(new Translation(Vector3.fromBlockPos(pos)));
@@ -102,7 +102,7 @@ public class RenderBlocks {
             GlStateManager.enableLighting();
             CCModel model = BLOCK_MODEL.copy();
             Block block = Block.getBlockFromItem(stack.getItem());
-            CCRenderState renderState = RenderingConstants.getRenderState();
+            CCRenderState renderState = CCRenderState.instance();
             renderState.reset();
             renderState.bind(buffer);
 

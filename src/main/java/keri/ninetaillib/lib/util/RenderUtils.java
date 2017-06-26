@@ -11,7 +11,6 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.vec.Translation;
 import codechicken.lib.vec.Vector3;
 import codechicken.lib.vec.uv.IconTransformation;
-import keri.ninetaillib.lib.render.RenderingConstants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelRenderer;
@@ -75,7 +74,7 @@ public class RenderUtils {
     }
 
     public static void renderModel(CCModel[] parts, VertexBuffer buffer, BlockPos pos, TextureAtlasSprite texture, int color){
-        CCRenderState rs = RenderingConstants.getRenderState();
+        CCRenderState rs = CCRenderState.instance();
         rs.reset();
         rs.bind(buffer);
 
@@ -91,7 +90,7 @@ public class RenderUtils {
         CCModel m = model.copy();
         int s = 4 * side.getIndex();
         int e = 4 + (4 * side.getIndex());
-        CCRenderState rs = RenderingConstants.getRenderState();
+        CCRenderState rs = CCRenderState.instance();
         rs.reset();
         rs.bind(buffer);
         m.setColour(color);

@@ -92,6 +92,7 @@ public abstract class GuiContainerBase extends GuiContainer {
             RenderUtils.postFluidRender();
         }
 
+        this.mc.getTextureManager().bindTexture(this.textureElements);
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
 
