@@ -162,4 +162,8 @@ public class Packet {
         this.packet.sendPacketToAllAround(pos, dimensions, dimension);
     }
 
+    public PacketCustom getUnwrapped(){
+        return this.packet;
+    }
+
 }
