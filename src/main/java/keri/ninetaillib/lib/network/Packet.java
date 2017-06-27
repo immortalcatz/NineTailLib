@@ -17,6 +17,10 @@ public class Packet {
         this.packet = packet;
     }
 
+    public int getType(){
+        return this.packet.getType();
+    }
+
     public void writeByte(byte value){
         this.packet.writeByte(value);
     }
