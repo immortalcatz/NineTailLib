@@ -114,21 +114,25 @@ public class ItemToolHelper {
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void handleClientPreInit(FMLPreInitializationEvent event) {
             RenderingRegistry.registerItem(this);
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void handleClientInit(FMLInitializationEvent event) {
 
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void handleClientPostInit(FMLPostInitializationEvent event) {
 
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void registerIcons(IIconRegister register) {
             this.texture = register.registerIcon(this.modid + ":items/tool/" + this.itemName);
         }
@@ -193,21 +197,25 @@ public class ItemToolHelper {
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void handleClientPreInit(FMLPreInitializationEvent event) {
             RenderingRegistry.registerItem(this);
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void handleClientInit(FMLInitializationEvent event) {
 
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void handleClientPostInit(FMLPostInitializationEvent event) {
 
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void registerIcons(IIconRegister register) {
             this.texture = register.registerIcon(this.modid + ":items/tool/" + this.itemName);
         }
@@ -272,21 +280,25 @@ public class ItemToolHelper {
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void handleClientPreInit(FMLPreInitializationEvent event) {
             RenderingRegistry.registerItem(this);
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void handleClientInit(FMLInitializationEvent event) {
 
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void handleClientPostInit(FMLPostInitializationEvent event) {
 
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void registerIcons(IIconRegister register) {
             this.texture = register.registerIcon(this.modid + ":items/tool/" + this.itemName);
         }
@@ -351,21 +363,25 @@ public class ItemToolHelper {
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void handleClientPreInit(FMLPreInitializationEvent event) {
             RenderingRegistry.registerItem(this);
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void handleClientInit(FMLInitializationEvent event) {
 
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void handleClientPostInit(FMLPostInitializationEvent event) {
 
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void registerIcons(IIconRegister register) {
             this.texture = register.registerIcon(this.modid + ":items/tool/" + this.itemName);
         }
@@ -430,21 +446,25 @@ public class ItemToolHelper {
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void handleClientPreInit(FMLPreInitializationEvent event) {
             RenderingRegistry.registerItem(this);
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void handleClientInit(FMLInitializationEvent event) {
 
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void handleClientPostInit(FMLPostInitializationEvent event) {
 
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void registerIcons(IIconRegister register) {
             this.texture = register.registerIcon(this.modid + ":items/tool/" + this.itemName);
         }

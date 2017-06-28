@@ -7,12 +7,12 @@
 package keri.ninetaillib.lib.mod;
 
 import com.google.common.collect.Lists;
-import keri.ninetaillib.lib.block.BlockBase;
 import keri.ninetaillib.lib.config.*;
-import keri.ninetaillib.lib.item.ItemBase;
 import keri.ninetaillib.lib.logger.IModLogger;
 import keri.ninetaillib.lib.logger.ModLogger;
 import keri.ninetaillib.lib.logger.SimpleModLogger;
+import keri.ninetaillib.lib.texture.IIconBlock;
+import keri.ninetaillib.lib.texture.IIconItem;
 import keri.ninetaillib.lib.texture.IconRegister;
 import keri.ninetaillib.lib.util.ReflectionUtils;
 import net.minecraftforge.common.MinecraftForge;
@@ -73,11 +73,11 @@ public class ModHandler {
         for(IContentRegister object : this.content){
             object.handleClientPreInit(event);
 
-            if(object instanceof BlockBase){
-                iconRegister.registerBlock((BlockBase)object);
+            if(object instanceof IIconBlock){
+                iconRegister.registerBlock((IIconBlock)object);
             }
-            else if(object instanceof ItemBase){
-                iconRegister.registerItem((ItemBase)object);
+            else if(object instanceof IIconItem){
+                iconRegister.registerItem((IIconItem)object);
             }
         }
     }
