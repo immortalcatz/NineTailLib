@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
+@Deprecated
 public abstract class ContainerBase extends Container {
 
     protected void bindPlayerInventory(InventoryPlayer inventoryPlayer, int x, int y) {

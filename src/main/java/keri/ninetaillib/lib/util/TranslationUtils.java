@@ -8,6 +8,7 @@ package keri.ninetaillib.lib.util;
 
 import net.minecraft.client.resources.I18n;
 
+@Deprecated
 public class TranslationUtils {
 
     public static String translate(String modid, String prefix, String key){

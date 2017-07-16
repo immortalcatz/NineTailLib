@@ -11,6 +11,7 @@ import codechicken.lib.colour.ColourRGBA;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+@Deprecated
 public enum EnumDyeColor {
 
     BLACK(0, "black", new ColourRGBA(20, 20, 20, 255)),

@@ -161,7 +161,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getIcon(int meta, int side) {
+    public TextureAtlasSprite getIcon(int meta, EnumFacing side) {
         if(this.getRenderType(this.getDefaultState()) == RenderBlocks.FULL_BLOCK){
             return this.texture[meta];
         }
@@ -171,7 +171,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, int side) {
+    public TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, EnumFacing side) {
         return null;
     }
 
@@ -180,11 +180,11 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     public TextureAtlasSprite getTexture(EnumFacing side, IBlockState state, BlockRenderLayer layer, IBlockAccess world, BlockPos pos) {
         TextureAtlasSprite texture = null;
 
-        if(this.getIcon(world, pos, 0) != null){
-            texture = this.getIcon(world, pos, 0);
+        if(this.getIcon(world, pos, EnumFacing.NORTH) != null){
+            texture = this.getIcon(world, pos, EnumFacing.NORTH);
         }
         else{
-            texture = this.getIcon(BlockAccessUtils.getBlockMetadata(world, pos), 0);
+            texture = this.getIcon(BlockAccessUtils.getBlockMetadata(world, pos), EnumFacing.NORTH);
         }
 
         return texture;
@@ -212,7 +212,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     @SideOnly(Side.CLIENT)
-    public int getColorMultiplier(int meta, int side) {
+    public int getColorMultiplier(int meta, EnumFacing side) {
         return 0xFFFFFFFF;
     }
 

@@ -4,7 +4,7 @@
  * the explicit permission from the developer of this software!
  */
 
-package keri.ninetaillib.lib.texture;
+package keri.ninetaillib.lib.render.connected;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
@@ -13,18 +13,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public interface IIconBlock {
+public interface ICTMBlock {
 
     @SideOnly(Side.CLIENT)
-    void registerIcons(IIconRegister register);
+    boolean canTextureConnect(IBlockAccess world, BlockPos pos, EnumFacing side);
 
     @SideOnly(Side.CLIENT)
-    TextureAtlasSprite getIcon(int meta, EnumFacing side);
-
-    @SideOnly(Side.CLIENT)
-    TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, EnumFacing side);
-
-    @SideOnly(Side.CLIENT)
-    int getColorMultiplier(int meta, EnumFacing side);
+    TextureAtlasSprite[] getConnectedTexture(IBlockAccess world, BlockPos pos, EnumFacing side);
 
 }

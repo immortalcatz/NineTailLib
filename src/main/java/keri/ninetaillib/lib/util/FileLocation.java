@@ -6,6 +6,7 @@
 
 package keri.ninetaillib.lib.util;
 
+@Deprecated
 public class FileLocation {
 
     private String modid;
