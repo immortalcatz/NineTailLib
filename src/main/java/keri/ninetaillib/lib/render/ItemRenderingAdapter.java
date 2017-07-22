@@ -46,7 +46,7 @@ public class ItemRenderingAdapter implements IItemRenderer, IPerspectiveAwareMod
         GlStateManager.pushMatrix();
         VertexBuffer buffer = Tessellator.getInstance().getBuffer();
         buffer.begin(GL11.GL_QUADS, RenderUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
-        this.handler.renderItem(stack, buffer);
+        this.handler.renderItem(stack, buffer, transformType);
         Tessellator.getInstance().draw();
         GlStateManager.popMatrix();
     }

@@ -19,10 +19,12 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ItemLayerModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.model.TRSRTransformation;
@@ -50,7 +52,7 @@ public class RenderItems {
     public static class RenderDefaultItem implements IItemRenderingHandler {
 
         @Override
-        public void renderItem(ItemStack stack, VertexBuffer buffer) {
+        public void renderItem(ItemStack stack, VertexBuffer buffer, ItemCameraTransforms.TransformType transformType) {
             RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
             Function<ResourceLocation, TextureAtlasSprite> textureGetter = ModelLoader.defaultTextureGetter();
             Tessellator.getInstance().draw();
@@ -68,6 +70,7 @@ public class RenderItems {
 
                 ItemLayerModel model = new ItemLayerModel(ImmutableList.copyOf(Lists.newArrayList(new ResourceLocation(texture.getIconName()))));
                 IBakedModel bakedModel = model.bake(TRSRTransformation.identity(), DefaultVertexFormats.ITEM, textureGetter);
+                bakedModel = ForgeHooksClient.handleCameraTransforms(bakedModel, transformType, false);
                 GlStateManager.translate(0.5D, 0.5D, 0.5D);
                 renderItem.renderItem(stack, bakedModel);
             }
@@ -86,7 +89,7 @@ public class RenderItems {
     public static class RenderDefaultTool implements IItemRenderingHandler {
 
         @Override
-        public void renderItem(ItemStack stack, VertexBuffer buffer) {
+        public void renderItem(ItemStack stack, VertexBuffer buffer, ItemCameraTransforms.TransformType transformType) {
             RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
             Function<ResourceLocation, TextureAtlasSprite> textureGetter = ModelLoader.defaultTextureGetter();
             Tessellator.getInstance().draw();
@@ -104,6 +107,7 @@ public class RenderItems {
 
                 ItemLayerModel model = new ItemLayerModel(ImmutableList.copyOf(Lists.newArrayList(new ResourceLocation(texture.getIconName()))));
                 IBakedModel bakedModel = model.bake(TRSRTransformation.identity(), DefaultVertexFormats.ITEM, textureGetter);
+                bakedModel = ForgeHooksClient.handleCameraTransforms(bakedModel, transformType, false);
                 GlStateManager.translate(0.5D, 0.5D, 0.5D);
                 renderItem.renderItem(stack, bakedModel);
             }
@@ -127,7 +131,7 @@ public class RenderItems {
     public static class RenderDefaultBow implements IItemRenderingHandler {
 
         @Override
-        public void renderItem(ItemStack stack, VertexBuffer buffer) {
+        public void renderItem(ItemStack stack, VertexBuffer buffer, ItemCameraTransforms.TransformType transformType) {
             RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
             Function<ResourceLocation, TextureAtlasSprite> textureGetter = ModelLoader.defaultTextureGetter();
             Tessellator.getInstance().draw();
@@ -145,6 +149,7 @@ public class RenderItems {
 
                 ItemLayerModel model = new ItemLayerModel(ImmutableList.copyOf(Lists.newArrayList(new ResourceLocation(texture.getIconName()))));
                 IBakedModel bakedModel = model.bake(TRSRTransformation.identity(), DefaultVertexFormats.ITEM, textureGetter);
+                bakedModel = ForgeHooksClient.handleCameraTransforms(bakedModel, transformType, false);
                 GlStateManager.translate(0.5D, 0.5D, 0.5D);
                 renderItem.renderItem(stack, bakedModel);
             }

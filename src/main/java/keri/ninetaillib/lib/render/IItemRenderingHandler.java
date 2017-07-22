@@ -9,6 +9,7 @@ package keri.ninetaillib.lib.render;
 import codechicken.lib.render.CCModelState;
 import codechicken.lib.util.TransformUtils;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -16,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface IItemRenderingHandler {
 
-    void renderItem(ItemStack stack, VertexBuffer buffer);
+    void renderItem(ItemStack stack, VertexBuffer buffer, ItemCameraTransforms.TransformType transformType);
 
     default boolean useDefaultItemLighting(){ return false; };
 
