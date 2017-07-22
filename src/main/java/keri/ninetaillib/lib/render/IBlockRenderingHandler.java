@@ -6,6 +6,7 @@
 
 package keri.ninetaillib.lib.render;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
@@ -19,9 +20,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface IBlockRenderingHandler {
 
-    boolean renderWorld(IBlockAccess world, BlockPos pos, VertexBuffer buffer, BlockRenderLayer layer);
+    boolean renderWorld(IBlockAccess world, BlockPos pos, IBlockState blockState, VertexBuffer buffer, BlockRenderLayer layer);
 
-    void renderDamage(IBlockAccess world, BlockPos pos, VertexBuffer buffer, TextureAtlasSprite texture);
+    void renderDamage(IBlockAccess world, BlockPos pos, IBlockState blockState, VertexBuffer buffer, TextureAtlasSprite texture);
 
     void renderInventory(ItemStack stack, VertexBuffer buffer);
 
