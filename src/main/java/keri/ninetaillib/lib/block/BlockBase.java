@@ -11,6 +11,8 @@ import codechicken.lib.texture.IWorldBlockTextureProvider;
 import codechicken.lib.texture.TextureUtils;
 import keri.ninetaillib.lib.item.ItemBlockBase;
 import keri.ninetaillib.lib.mod.IContentRegister;
+import keri.ninetaillib.lib.property.PropertyDataHolder;
+import keri.ninetaillib.lib.property.UnlistedPropertySpecial;
 import keri.ninetaillib.lib.render.RenderBlocks;
 import keri.ninetaillib.lib.render.RenderingRegistry;
 import keri.ninetaillib.lib.texture.IIconBlock;
@@ -41,6 +43,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -53,6 +58,7 @@ import javax.annotation.Nullable;
 public class BlockBase<T extends TileEntity> extends Block implements ITileEntityProvider, IContentRegister, IIconBlock, IWorldBlockTextureProvider {
 
     public static final PropertyInteger META_DATA = PropertyInteger.create("meta", 0, 15);
+    public static final UnlistedPropertySpecial DATA_HOLDER_PROPERTY = new UnlistedPropertySpecial();
     private String modid;
     private String blockName;
     private String[] subNames = null;
@@ -95,7 +101,19 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{META_DATA});
+        return new ExtendedBlockState(this, new IProperty[]{META_DATA}, new IUnlistedProperty[]{DATA_HOLDER_PROPERTY});
+    }
+
+    @Override
+    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        if(state != null && state instanceof IExtendedBlockState){
+            IExtendedBlockState extendedState = (IExtendedBlockState)state;
+            PropertyDataHolder dataHolder = extendedState.getValue(DATA_HOLDER_PROPERTY);
+            this.handlePropertyData(dataHolder, world, pos);
+            return extendedState.withProperty(DATA_HOLDER_PROPERTY, dataHolder);
+        }
+
+        return state;
     }
 
     @Override
@@ -317,5 +335,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     }
 
     public void registerTileEntities(){}
+
+    public void handlePropertyData(PropertyDataHolder dataHolder, IBlockAccess world, BlockPos pos){}
 
 }
