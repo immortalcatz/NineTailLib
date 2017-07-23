@@ -8,12 +8,13 @@ package keri.ninetaillib.lib.util;
 
 import codechicken.lib.asm.ASMBlock;
 import codechicken.lib.asm.ASMReader;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.Map;
 
 public class ASMUtils {
 
-    public static Map<String, ASMBlock> readBlocks(FileLocation location){
+    public static Map<String, ASMBlock> readBlocks(ResourceLocation location){
         String path = "/assets/" + location.getResourceDomain() + "/" + location.getResourcePath() + ".asm";
         return ASMReader.loadResource(path);
     }

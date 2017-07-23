@@ -13,7 +13,7 @@ import codechicken.lib.vec.Rectangle4i;
 import com.google.common.collect.Lists;
 import keri.ninetaillib.lib.math.IPositionProvider;
 import keri.ninetaillib.lib.math.Point2i;
-import keri.ninetaillib.lib.util.TranslationUtils;
+import keri.ninetaillib.lib.util.Translations;
 import keri.ninetaillib.mod.util.ModPrefs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -36,7 +36,6 @@ public abstract class GuiContainerBase extends GuiContainer {
 
     private final ResourceLocation textureBackground = new ResourceLocation(ModPrefs.MODID, "textures/gui/background.png");
     private final ResourceLocation textureElements = new ResourceLocation(ModPrefs.MODID, "textures/gui/elements.png");
-    private final String tooltipEmpty = TranslationUtils.translate(ModPrefs.MODID, "tooltip", "empty");
     public static final int ALIGNMENT_LEFT = 0;
     public static final int ALIGNMENT_RIGHT = 1;
     public static final int ALIGNMENT_TOP = 2;
@@ -115,7 +114,7 @@ public abstract class GuiContainerBase extends GuiContainer {
                 GlStateManager.color(1F, 1F, 1F, 1F);
                 List<String> text = Lists.newArrayList();
                 text.add((fluidTank.getFluidAmount() > 0 ? Integer.toString(fluidTank.getFluidAmount()) : "0") + " mB");
-                text.add(TextFormatting.YELLOW + (fluidTank.getFluidAmount() > 0 ? fluidTank.getFluid().getLocalizedName() : this.tooltipEmpty));
+                text.add(TextFormatting.YELLOW + (fluidTank.getFluidAmount() > 0 ? fluidTank.getFluid().getLocalizedName() : Translations.TOOLTIP_EMPTY));
                 int screenWidth = Minecraft.getMinecraft().displayWidth;
                 int screenHeight = Minecraft.getMinecraft().displayHeight;
                 GuiUtils.drawHoveringText(text, mousePosition.getPosition().getX(), mousePosition.getPosition().getY(), screenWidth, screenHeight, 200, this.fontRendererObj);

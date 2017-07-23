@@ -14,8 +14,7 @@ import keri.ninetaillib.lib.render.RenderingRegistry;
 import keri.ninetaillib.lib.texture.IIconItem;
 import keri.ninetaillib.lib.texture.IIconRegister;
 import keri.ninetaillib.lib.util.IShiftDescription;
-import keri.ninetaillib.lib.util.TranslationUtils;
-import keri.ninetaillib.mod.util.ModPrefs;
+import keri.ninetaillib.lib.util.Translations;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -121,9 +120,9 @@ public class ItemFoodBase extends ItemFood implements IContentRegister, IItemRen
                     ((IShiftDescription)this).addDescription(stack, player, tooltip);
                 }
                 else{
-                    String press = TextFormatting.GRAY + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "press");
-                    String shift = TextFormatting.YELLOW + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "shift");
-                    String info = TextFormatting.GRAY + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "info");
+                    String press = TextFormatting.GRAY + Translations.TOOLTIP_PRESS;
+                    String shift = TextFormatting.YELLOW + Translations.TOOLTIP_SHIFT;
+                    String info = TextFormatting.GRAY + Translations.TOOLTIP_INFO;
                     tooltip.add(press + " " + shift + " " + info);
                 }
             }

@@ -9,8 +9,7 @@ package keri.ninetaillib.lib.item;
 import keri.ninetaillib.lib.block.BlockBase;
 import keri.ninetaillib.lib.util.ILocalization;
 import keri.ninetaillib.lib.util.IShiftDescription;
-import keri.ninetaillib.lib.util.TranslationUtils;
-import keri.ninetaillib.mod.util.ModPrefs;
+import keri.ninetaillib.lib.util.Translations;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -81,9 +80,9 @@ public class ItemBlockBase extends ItemBlock {
                     ((IShiftDescription)this.block).addDescription(stack, player, tooltip);
                 }
                 else{
-                    String press = TextFormatting.GRAY + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "press");
-                    String shift = TextFormatting.YELLOW + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "shift");
-                    String info = TextFormatting.GRAY + TranslationUtils.translate(ModPrefs.MODID, "tooltip", "info");
+                    String press = TextFormatting.GRAY + Translations.TOOLTIP_PRESS;
+                    String shift = TextFormatting.YELLOW + Translations.TOOLTIP_SHIFT;
+                    String info = TextFormatting.GRAY + Translations.TOOLTIP_INFO;
                     tooltip.add(press + " " + shift + " " + info);
                 }
             }
