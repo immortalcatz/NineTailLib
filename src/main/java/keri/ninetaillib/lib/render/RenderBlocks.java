@@ -39,7 +39,7 @@ public class RenderBlocks {
 
     public static EnumBlockRenderType FULL_BLOCK;
 
-    static{
+    static {
         FULL_BLOCK = RenderingRegistry.getNextAvailableType();
         RenderingRegistry.registerRenderingHandler(new RenderFullBlock());
     }
@@ -50,13 +50,13 @@ public class RenderBlocks {
         private static CCModel BLOCK_MODEL = CCModel.quadModel(24).generateBlock(0, new Cuboid6(0D, 0D, 0D, 1D, 1D, 1D)).computeNormals();
 
         @Override
-        public boolean renderWorld(IBlockAccess world, BlockPos pos, VertexBuffer buffer, BlockRenderLayer layer){
+        public boolean renderWorld(IBlockAccess world, BlockPos pos, IBlockState blockState, VertexBuffer buffer, BlockRenderLayer layer) {
             CCModel model = BLOCK_MODEL.copy();
             IBlockState state = world.getBlockState(pos).getActualState(world, pos);
             Block block = state.getBlock();
 
-            if(block instanceof ICTMBlock){
-                ICTMBlock iconProvider = (ICTMBlock)block;
+            if (block instanceof ICTMBlock) {
+                ICTMBlock iconProvider = (ICTMBlock) block;
                 BakingVertexBuffer parent = BakingVertexBuffer.create();
                 parent.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
                 CCRenderState renderState = CCRenderState.instance();
@@ -68,10 +68,10 @@ public class RenderBlocks {
                 renderContext.setCurrentBlockState(state);
                 renderContext.setChangeBounds(false);
 
-                for(EnumFacing side : EnumFacing.VALUES){
+                for (EnumFacing side : EnumFacing.VALUES) {
                     TextureAtlasSprite[] texture = iconProvider.getConnectedTexture(world, pos, side);
 
-                    if(iconProvider.canTextureConnect(world, pos, side) && state.shouldSideBeRendered(world, pos, side)){
+                    if (iconProvider.canTextureConnect(world, pos, side) && state.shouldSideBeRendered(world, pos, side)) {
                         renderContext.renderFace(pos, texture, side);
                     }
                 }
@@ -79,30 +79,28 @@ public class RenderBlocks {
                 renderContext.getModel().render(renderState);
                 parent.finishDrawing();
                 return RenderUtils.renderQuads(buffer, world, pos, parent.bake());
-            }
-            else{
-                if(block instanceof IIconBlock){
-                    IIconBlock iconProvider = (IIconBlock)block;
+            } else {
+                if (block instanceof IIconBlock) {
+                    IIconBlock iconProvider = (IIconBlock) block;
                     BakingVertexBuffer parent = BakingVertexBuffer.create();
                     parent.begin(GL11.GL_QUADS, RenderUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
                     CCRenderState renderState = CCRenderState.instance();
                     renderState.reset();
                     renderState.bind(parent);
 
-                    for(EnumFacing side : EnumFacing.VALUES){
+                    for (EnumFacing side : EnumFacing.VALUES) {
                         TextureAtlasSprite texture = null;
                         int colorMultiplier = iconProvider.getColorMultiplier(BlockAccessUtils.getBlockMetadata(world, pos), side);
 
-                        if(iconProvider.getIcon(world, pos, side) != null){
+                        if (iconProvider.getIcon(world, pos, side) != null) {
                             texture = iconProvider.getIcon(world, pos, side);
-                        }
-                        else {
+                        } else {
                             texture = iconProvider.getIcon(BlockAccessUtils.getBlockMetadata(world, pos), side);
                         }
 
                         model.setColour(colorMultiplier);
 
-                        if(state.shouldSideBeRendered(world, pos, side)){
+                        if (state.shouldSideBeRendered(world, pos, side)) {
                             model.render(renderState, 4 * side.getIndex(), 4 + (4 * side.getIndex()), new IconTransformation(texture));
                         }
                     }
@@ -116,7 +114,7 @@ public class RenderBlocks {
         }
 
         @Override
-        public void renderDamage(IBlockAccess world, BlockPos pos, VertexBuffer buffer, TextureAtlasSprite texture) {
+        public void renderDamage(IBlockAccess world, BlockPos pos, IBlockState state, VertexBuffer buffer, TextureAtlasSprite texture) {
             CCModel model = BLOCK_MODEL.copy();
             CCRenderState renderState = CCRenderState.instance();
             renderState.reset();
@@ -135,10 +133,10 @@ public class RenderBlocks {
             renderState.reset();
             renderState.bind(buffer);
 
-            if(block instanceof IIconBlock){
-                IIconBlock iconProvider = (IIconBlock)block;
+            if (block instanceof IIconBlock) {
+                IIconBlock iconProvider = (IIconBlock) block;
 
-                for(EnumFacing side : EnumFacing.VALUES){
+                for (EnumFacing side : EnumFacing.VALUES) {
                     TextureAtlasSprite texture = iconProvider.getIcon(stack.getMetadata(), side);
                     int colorMultiplier = iconProvider.getColorMultiplier(stack.getMetadata(), side);
                     model.setColour(colorMultiplier);

@@ -43,19 +43,19 @@ public class BlockRenderingAdapter implements ICCBlockRenderer, IItemRenderer, I
 
     private IBlockRenderingHandler handler;
 
-    public BlockRenderingAdapter(IBlockRenderingHandler handler){
+    public BlockRenderingAdapter(IBlockRenderingHandler handler) {
         this.handler = handler;
     }
 
     @Override
     public boolean renderBlock(IBlockAccess world, BlockPos pos, IBlockState state, VertexBuffer buffer) {
         BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
-        return this.handler.renderWorld(world, pos, buffer, layer);
+        return this.handler.renderWorld(world, pos, state, buffer, layer);
     }
 
     @Override
     public void handleRenderBlockDamage(IBlockAccess world, BlockPos pos, IBlockState state, TextureAtlasSprite sprite, VertexBuffer buffer) {
-        this.handler.renderDamage(world, pos, buffer, sprite);
+        this.handler.renderDamage(world, pos, state, buffer, sprite);
     }
 
     @Override
