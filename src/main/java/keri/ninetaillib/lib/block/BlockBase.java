@@ -106,11 +106,10 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        if(state != null && state instanceof IExtendedBlockState){
-            IExtendedBlockState extendedState = (IExtendedBlockState)state;
-            PropertyDataHolder dataHolder = extendedState.getValue(DATA_HOLDER_PROPERTY);
+        if(state != null){
+            PropertyDataHolder dataHolder = new PropertyDataHolder();
             this.handlePropertyData(dataHolder, world, pos);
-            return extendedState.withProperty(DATA_HOLDER_PROPERTY, dataHolder);
+            return ((IExtendedBlockState)state).withProperty(DATA_HOLDER_PROPERTY, dataHolder);
         }
 
         return state;
