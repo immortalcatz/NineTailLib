@@ -20,9 +20,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface IBlockRenderingHandler {
 
-    boolean renderWorld(IBlockAccess world, BlockPos pos, IBlockState blockState, VertexBuffer buffer, BlockRenderLayer layer);
+    boolean renderWorld(IBlockAccess world, BlockPos pos, IBlockState state, VertexBuffer buffer, BlockRenderLayer layer);
 
-    void renderDamage(IBlockAccess world, BlockPos pos, IBlockState blockState, VertexBuffer buffer, TextureAtlasSprite texture);
+    void renderDamage(IBlockAccess world, BlockPos pos, IBlockState state, VertexBuffer buffer, TextureAtlasSprite texture);
 
     void renderInventory(ItemStack stack, VertexBuffer buffer);
 
