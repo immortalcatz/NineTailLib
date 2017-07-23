@@ -7,29 +7,28 @@
 package keri.ninetaillib.lib.util;
 
 import codechicken.lib.colour.Colour;
-import codechicken.lib.colour.ColourRGBA;
+import codechicken.lib.colour.EnumColour;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-@Deprecated
 public enum EnumDyeColor {
 
-    BLACK(0, "black", new ColourRGBA(20, 20, 20, 255)),
-    RED(1, "red", new ColourRGBA(255, 10, 10, 255)),
-    GREEN(2, "green", new ColourRGBA(10, 200, 10, 255)),
-    BROWN(3, "brown", new ColourRGBA(200, 120, 0, 255)),
-    BLUE(4, "blue", new ColourRGBA(0, 0, 180, 255)),
-    PURPLE(5, "purple", new ColourRGBA(100, 0, 200, 255)),
-    CYAN(6, "cyan", new ColourRGBA(20, 130, 130, 255)),
-    LIGHT_GRAY(7, "light_gray", new ColourRGBA(150, 150, 150, 255)),
-    GRAY(8, "gray", new ColourRGBA(100, 100, 100, 255)),
-    PINK(9, "pink", new ColourRGBA(255, 120, 120, 255)),
-    LIME(10, "lime", new ColourRGBA(90, 255, 10, 255)),
-    YELLOW(11, "yellow", new ColourRGBA(230, 230, 10, 255)),
-    LIGHT_BLUE(12, "light_blue", new ColourRGBA(120, 120, 255, 255)),
-    MAGENTA(13, "magenta", new ColourRGBA(220, 10, 90, 255)),
-    ORANGE(14, "orange", new ColourRGBA(240, 130, 10, 255)),
-    WHITE(15, "white", new ColourRGBA(240, 240, 240, 255));
+    BLACK(0, "black", EnumColour.BLACK),
+    RED(1, "red", EnumColour.RED),
+    GREEN(2, "green", EnumColour.GREEN),
+    BROWN(3, "brown", EnumColour.BROWN),
+    BLUE(4, "blue", EnumColour.BLUE),
+    PURPLE(5, "purple", EnumColour.PURPLE),
+    CYAN(6, "cyan", EnumColour.CYAN),
+    LIGHT_GRAY(7, "light_gray", EnumColour.LIGHT_GRAY),
+    GRAY(8, "gray", EnumColour.GRAY),
+    PINK(9, "pink", EnumColour.PINK),
+    LIME(10, "lime", EnumColour.LIME),
+    YELLOW(11, "yellow", EnumColour.YELLOW),
+    LIGHT_BLUE(12, "light_blue", EnumColour.LIGHT_BLUE),
+    MAGENTA(13, "magenta", EnumColour.MAGENTA),
+    ORANGE(14, "orange", EnumColour.ORANGE),
+    WHITE(15, "white", EnumColour.WHITE);
 
     public static final EnumDyeColor[] VALUES = new EnumDyeColor[]{
             BLACK,
@@ -51,12 +50,12 @@ public enum EnumDyeColor {
     };
     private int index;
     private String name;
-    private Colour color;
+    private EnumColour parentColor;
 
-    EnumDyeColor(int index, String name, Colour color){
+    EnumDyeColor(int index, String name, EnumColour parentColor){
         this.index = index;
         this.name = name;
-        this.color = color;
+        this.parentColor = parentColor;
     }
 
     public int getIndex(){
@@ -68,7 +67,27 @@ public enum EnumDyeColor {
     }
 
     public Colour getColor(){
-        return this.color;
+        return this.parentColor.getColour();
+    }
+
+    public int rgba(){
+        return this.parentColor.rgba();
+    }
+
+    public int argb(){
+        return this.parentColor.argb();
+    }
+
+    public int rgb(){
+        return this.parentColor.rgb();
+    }
+
+    public String getDyeName(){
+        return this.parentColor.getOreDictionaryName();
+    }
+
+    public String getOreDictionaryName(){
+        return this.parentColor.getOreDictionaryName().substring(3);
     }
 
     public ItemStack getItemStack(){
