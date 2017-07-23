@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2017 KitsuneAlex. All rights reserved!
- * Do not distribute or redistribute in any way except you got
- * the explicit permission from the developer of this software!
+ * Do not distribute or redistribute without the explicit permission
+ * of the developer!
  */
 
 package keri.ninetaillib.lib.render;
@@ -50,9 +50,8 @@ public class RenderBlocks {
         private static CCModel BLOCK_MODEL = CCModel.quadModel(24).generateBlock(0, new Cuboid6(0D, 0D, 0D, 1D, 1D, 1D)).computeNormals();
 
         @Override
-        public boolean renderWorld(IBlockAccess world, BlockPos pos, IBlockState blockState, VertexBuffer buffer, BlockRenderLayer layer) {
+        public boolean renderWorld(IBlockAccess world, BlockPos pos, IBlockState state, VertexBuffer buffer, BlockRenderLayer layer) {
             CCModel model = BLOCK_MODEL.copy();
-            IBlockState state = world.getBlockState(pos).getActualState(world, pos);
             Block block = state.getBlock();
 
             if (block instanceof ICTMBlock) {
@@ -71,7 +70,7 @@ public class RenderBlocks {
                 for (EnumFacing side : EnumFacing.VALUES) {
                     TextureAtlasSprite[] texture = iconProvider.getConnectedTexture(world, pos, side);
 
-                    if (iconProvider.canTextureConnect(world, pos, side) && state.shouldSideBeRendered(world, pos, side)) {
+                    if (iconProvider.canTextureConnect(world, pos, side)) {
                         renderContext.renderFace(pos, texture, side);
                     }
                 }
@@ -79,7 +78,8 @@ public class RenderBlocks {
                 renderContext.getModel().render(renderState);
                 parent.finishDrawing();
                 return RenderUtils.renderQuads(buffer, world, pos, parent.bake());
-            } else {
+            }
+            else {
                 if (block instanceof IIconBlock) {
                     IIconBlock iconProvider = (IIconBlock) block;
                     BakingVertexBuffer parent = BakingVertexBuffer.create();
@@ -94,7 +94,8 @@ public class RenderBlocks {
 
                         if (iconProvider.getIcon(world, pos, side) != null) {
                             texture = iconProvider.getIcon(world, pos, side);
-                        } else {
+                        }
+                        else {
                             texture = iconProvider.getIcon(BlockAccessUtils.getBlockMetadata(world, pos), side);
                         }
 

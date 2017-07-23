@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2017 KitsuneAlex. All rights reserved!
+ * Do not distribute or redistribute without the explicit permission
+ * of the developer!
+ */
+
 buildscript {
     repositories {
         jcenter()
@@ -22,7 +28,7 @@ repositories {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
-version = "1.11.2-1.6.141"
+version = "1.11.2-1.6.142"
 group = "keri.ninetaillib"
 archivesBaseName = "NineTailLib"
 

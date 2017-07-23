@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2017 KitsuneAlex. All rights reserved!
+ * Do not distribute or redistribute without the explicit permission
+ * of the developer!
+ */
+
 /**
  * This class was created by <Vazkii>. It's distributed as
  * part of the Botania Mod. Get the Source Code in github:

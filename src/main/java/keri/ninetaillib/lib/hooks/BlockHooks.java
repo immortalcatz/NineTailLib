@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2017 KitsuneAlex. All rights reserved!
- * Do not distribute or redistribute in any way except you got
- * the explicit permission from the developer of this software!
+ * Do not distribute or redistribute without the explicit permission
+ * of the developer!
  */
 
 package keri.ninetaillib.lib.hooks;
@@ -31,12 +31,7 @@ public class BlockHooks {
     //Replacement   blockFence_r_canConnectTo
     public static boolean canFenceConnectTo(IBlockAccess world, BlockPos pos){
         IBlockState state = world.getBlockState(pos);
-
-        for(IBlockState allowedState : FENCE_CONNECTIONS){
-            return canFenceConnectTo(state) || state == allowedState;
-        }
-
-        return false;
+        return canFenceConnectTo(state) || FENCE_CONNECTIONS.contains(state);
     }
 
     @SuppressWarnings("deprecation")
@@ -51,12 +46,7 @@ public class BlockHooks {
     //Replacement   blockWall_r_canConnectTo
     public static boolean canWallConnectTo(IBlockAccess world, BlockPos pos){
         IBlockState state = world.getBlockState(pos);
-
-        for(IBlockState allowedState : WALL_CONNECTIONS){
-            return canWallConnectTo(state) || state == allowedState;
-        }
-
-        return false;
+        return canWallConnectTo(state) || WALL_CONNECTIONS.contains(state);
     }
 
     @SuppressWarnings("deprecation")
@@ -71,12 +61,7 @@ public class BlockHooks {
     //Replacement   blockPane_r_canPaneConnectToBlock
     public static boolean canPaneConnectToBlock(Block block){
         IBlockState state = block.getDefaultState();
-
-        for(Block allowedBlock : PANE_CONNECTIONS){
-            return canPaneConnectToBlock(state) || block == allowedBlock;
-        }
-
-        return false;
+        return canPaneConnectToBlock(state) || PANE_CONNECTIONS.contains(block);
     }
 
     private static boolean canPaneConnectToBlock(IBlockState state){
