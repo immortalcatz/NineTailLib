@@ -10,11 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class PropertyDataHolder {
 
-    private NBTTagCompound tag;
-
-    public PropertyDataHolder(){
-        this.tag = new NBTTagCompound();
-    }
+    private NBTTagCompound tag = new NBTTagCompound();
 
     public <T> T readData(IDataReader<T> reader){
         return reader.readData(this.tag);

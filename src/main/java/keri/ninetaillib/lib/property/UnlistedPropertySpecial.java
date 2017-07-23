@@ -17,7 +17,7 @@ public class UnlistedPropertySpecial implements IUnlistedProperty<PropertyDataHo
 
     @Override
     public boolean isValid(PropertyDataHolder value) {
-        return value != null;
+        return true;
     }
 
     @Override

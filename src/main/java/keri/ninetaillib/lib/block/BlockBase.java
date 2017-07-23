@@ -11,8 +11,8 @@ import codechicken.lib.texture.IWorldBlockTextureProvider;
 import codechicken.lib.texture.TextureUtils;
 import keri.ninetaillib.lib.item.ItemBlockBase;
 import keri.ninetaillib.lib.mod.IContentRegister;
+import keri.ninetaillib.lib.property.CommonProperties;
 import keri.ninetaillib.lib.property.PropertyDataHolder;
-import keri.ninetaillib.lib.property.UnlistedPropertySpecial;
 import keri.ninetaillib.lib.render.RenderBlocks;
 import keri.ninetaillib.lib.render.RenderingRegistry;
 import keri.ninetaillib.lib.texture.IIconBlock;
@@ -24,7 +24,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
@@ -57,8 +56,6 @@ import javax.annotation.Nullable;
 
 public class BlockBase<T extends TileEntity> extends Block implements ITileEntityProvider, IContentRegister, IIconBlock, IWorldBlockTextureProvider {
 
-    public static final PropertyInteger META_DATA = PropertyInteger.create("meta", 0, 15);
-    public static final UnlistedPropertySpecial DATA_HOLDER_PROPERTY = new UnlistedPropertySpecial();
     private String modid;
     private String blockName;
     private String[] subNames = null;
@@ -70,7 +67,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
         this.blockName = blockName;
         this.setCreativeTab(this.getCreativeTab());
         this.setSoundType(this.getSoundType(material));
-        this.setDefaultState(this.blockState.getBaseState().withProperty(META_DATA, 0));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(CommonProperties.META_DATA, 0));
     }
 
     public BlockBase(String blockName, Material material) {
@@ -78,7 +75,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
         this.blockName = blockName;
         this.setCreativeTab(this.getCreativeTab());
         this.setSoundType(this.getSoundType(material));
-        this.setDefaultState(this.blockState.getBaseState().withProperty(META_DATA, 0));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(CommonProperties.META_DATA, 0));
     }
 
     public BlockBase(String blockName, Material material, MapColor mapColor, String... subNames) {
@@ -87,7 +84,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
         this.subNames = subNames;
         this.setCreativeTab(this.getCreativeTab());
         this.setSoundType(this.getSoundType(material));
-        this.setDefaultState(this.blockState.getBaseState().withProperty(META_DATA, 0));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(CommonProperties.META_DATA, 0));
     }
 
     public BlockBase(String blockName, Material material, String... subNames){
@@ -96,34 +93,30 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
         this.subNames = subNames;
         this.setCreativeTab(this.getCreativeTab());
         this.setSoundType(this.getSoundType(material));
-        this.setDefaultState(this.blockState.getBaseState().withProperty(META_DATA, 0));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(CommonProperties.META_DATA, 0));
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new ExtendedBlockState(this, new IProperty[]{META_DATA}, new IUnlistedProperty[]{DATA_HOLDER_PROPERTY});
+        return new ExtendedBlockState(this, new IProperty[]{CommonProperties.META_DATA}, new IUnlistedProperty[]{CommonProperties.DATA_HOLDER_PROPERTY});
     }
 
     @Override
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        if(state != null){
-            PropertyDataHolder dataHolder = new PropertyDataHolder();
-            this.handlePropertyData(dataHolder, world, pos);
-            return ((IExtendedBlockState)state).withProperty(DATA_HOLDER_PROPERTY, dataHolder);
-        }
-
-        return state;
+        PropertyDataHolder dataHolder = new PropertyDataHolder();
+        dataHolder = this.initializePropertyData(dataHolder, world, pos);
+        return ((IExtendedBlockState)state).withProperty(CommonProperties.DATA_HOLDER_PROPERTY, dataHolder);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(META_DATA);
+        return state.getValue(CommonProperties.META_DATA);
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(META_DATA, meta);
+        return this.getDefaultState().withProperty(CommonProperties.META_DATA, meta);
     }
 
     @Nullable
@@ -335,6 +328,8 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     public void registerTileEntities(){}
 
-    public void handlePropertyData(PropertyDataHolder dataHolder, IBlockAccess world, BlockPos pos){}
+    public PropertyDataHolder initializePropertyData(PropertyDataHolder dataHolder, IBlockAccess world, BlockPos pos){
+        return dataHolder;
+    }
 
 }

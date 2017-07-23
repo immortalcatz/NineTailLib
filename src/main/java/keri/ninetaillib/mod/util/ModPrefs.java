@@ -10,7 +10,7 @@ public class ModPrefs {
 
     public static final String MODID = "ninetaillib";
     public static final String NAME = "NineTailLib";
-    public static final String VERSION = "1.6.143";
+    public static final String VERSION = "1.6.144";
     public static final String VERSION_CORE = "0.0.5";
     public static final String DEPS = "";
     public static final String ACC_MC = "1.11.2";
