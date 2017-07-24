@@ -21,6 +21,7 @@ import keri.ninetaillib.lib.util.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -126,7 +127,9 @@ public class RenderBlocks {
 
         @Override
         public void renderInventory(ItemStack stack, VertexBuffer buffer) {
+            Tessellator.getInstance().draw();
             GlStateManager.pushMatrix();
+            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
             GlStateManager.enableLighting();
             CCModel model = BLOCK_MODEL.copy();
             Block block = Block.getBlockFromItem(stack.getItem());
@@ -146,7 +149,9 @@ public class RenderBlocks {
             }
 
             GlStateManager.disableLighting();
+            Tessellator.getInstance().draw();
             GlStateManager.popMatrix();
+            buffer.begin(GL11.GL_QUADS, RenderUtils.getFormatWithLightMap(DefaultVertexFormats.ITEM));
         }
 
         @Override
