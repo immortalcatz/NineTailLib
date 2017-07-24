@@ -11,6 +11,5 @@ import net.minecraft.block.properties.PropertyInteger;
 public class CommonProperties {
 
     public static final PropertyInteger META_DATA = PropertyInteger.create("meta", 0, 15);
-    public static final UnlistedPropertySpecial DATA_HOLDER_PROPERTY = new UnlistedPropertySpecial();
 
 }

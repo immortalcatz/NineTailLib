@@ -12,7 +12,6 @@ import codechicken.lib.texture.TextureUtils;
 import keri.ninetaillib.lib.item.ItemBlockBase;
 import keri.ninetaillib.lib.mod.IContentRegister;
 import keri.ninetaillib.lib.property.CommonProperties;
-import keri.ninetaillib.lib.property.PropertyDataHolder;
 import keri.ninetaillib.lib.render.RenderBlocks;
 import keri.ninetaillib.lib.render.RenderingRegistry;
 import keri.ninetaillib.lib.texture.IIconBlock;
@@ -42,9 +41,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -98,14 +94,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new ExtendedBlockState(this, new IProperty[]{CommonProperties.META_DATA}, new IUnlistedProperty[]{CommonProperties.DATA_HOLDER_PROPERTY});
-    }
-
-    @Override
-    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        PropertyDataHolder dataHolder = new PropertyDataHolder();
-        dataHolder = this.initializePropertyData(dataHolder, world, pos);
-        return ((IExtendedBlockState)state).withProperty(CommonProperties.DATA_HOLDER_PROPERTY, dataHolder);
+        return new BlockStateContainer(this, new IProperty[]{CommonProperties.META_DATA});
     }
 
     @Override
@@ -327,9 +316,5 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     }
 
     public void registerTileEntities(){}
-
-    public PropertyDataHolder initializePropertyData(PropertyDataHolder dataHolder, IBlockAccess world, BlockPos pos){
-        return dataHolder;
-    }
 
 }

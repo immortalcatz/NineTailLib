@@ -129,6 +129,20 @@ public class RenderUtils {
         }
     }
 
+    public static boolean renderQuads(VertexBuffer buffer, IBlockAccess world, BlockPos pos, IBlockState state, List<BakedQuad> quads){
+        boolean useAo = Minecraft.isAmbientOcclusionEnabled();
+        BakedModelAdapter model = new BakedModelAdapter(quads);
+        BlockModelRenderer bmr = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer();
+        long random = MathHelper.getPositionRandom(new Vec3i(pos.getX(), pos.getY(), pos.getZ()));
+
+        if(useAo){
+            return bmr.renderModelSmooth(world, model, state, pos, buffer, true, random);
+        }
+        else{
+            return bmr.renderModelFlat(world, model, state, pos, buffer, true, random);
+        }
+    }
+
     private static class BakedModelAdapter implements IBakedModel {
 
         private List<BakedQuad> quads;

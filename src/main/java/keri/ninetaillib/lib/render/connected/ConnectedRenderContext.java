@@ -27,6 +27,8 @@ public class ConnectedRenderContext {
     private static final double[] V = new double[]{1D, 1D, -1D, -1D};
     private IBlockAccess world;
     private IBlockState currentBlockState;
+    private IBlockState matchState;
+    private boolean getMatchStateFromWorld = true;
     private boolean changeBounds = false;
     private List<Vertex5> vertices = Lists.newArrayList();
 
@@ -40,6 +42,11 @@ public class ConnectedRenderContext {
 
     public void setCurrentBlockState(IBlockState state){
         this.currentBlockState = state;
+    }
+
+    public void setMatchState(IBlockState state){
+        this.getMatchStateFromWorld = false;
+        this.matchState = state;
     }
 
     public CCModel getModel(){
@@ -185,9 +192,7 @@ public class ConnectedRenderContext {
     }
 
     public void renderFaceYNeg(BlockPos pos, TextureAtlasSprite[] texture){
-        IBlockState state = this.world.getBlockState(pos);
-
-        if(state.shouldSideBeRendered(this.world, pos, EnumFacing.getFront(0))){
+        if(this.currentBlockState.shouldSideBeRendered(this.world, pos, EnumFacing.getFront(0))){
             this.renderSide(
                     new Vec3d(pos.getX(), pos.getY(), pos.getZ()),
                     new Vec3d(0.5D, 0D, 0.5D),
@@ -201,9 +206,7 @@ public class ConnectedRenderContext {
     }
 
     public void renderFaceYPos(BlockPos pos, TextureAtlasSprite[] texture){
-        IBlockState state = this.world.getBlockState(pos);
-
-        if(state.shouldSideBeRendered(this.world, pos, EnumFacing.getFront(1))){
+        if(this.currentBlockState.shouldSideBeRendered(this.world, pos, EnumFacing.getFront(1))){
             this.renderSide(
                     new Vec3d(pos.getX(), pos.getY(), pos.getZ()),
                     new Vec3d(0.5D, 1D, 0.5D),
@@ -217,9 +220,7 @@ public class ConnectedRenderContext {
     }
 
     public void renderFaceZNeg(BlockPos pos, TextureAtlasSprite[] texture){
-        IBlockState state = this.world.getBlockState(pos);
-
-        if(state.shouldSideBeRendered(this.world, pos, EnumFacing.getFront(2))){
+        if(this.currentBlockState.shouldSideBeRendered(this.world, pos, EnumFacing.getFront(2))){
             this.renderSide(
                     new Vec3d(pos.getX(), pos.getY(), pos.getZ()),
                     new Vec3d(0.5D, 0.5D, 0D),
@@ -233,9 +234,7 @@ public class ConnectedRenderContext {
     }
 
     public void renderFaceZPos(BlockPos pos, TextureAtlasSprite[] texture){
-        IBlockState state = this.world.getBlockState(pos);
-
-        if(state.shouldSideBeRendered(this.world, pos, EnumFacing.getFront(3))){
+        if(this.currentBlockState.shouldSideBeRendered(this.world, pos, EnumFacing.getFront(3))){
             this.renderSide(
                     new Vec3d(pos.getX(), pos.getY(), pos.getZ()),
                     new Vec3d(0.5D, 0.5D, 1D),
@@ -249,9 +248,7 @@ public class ConnectedRenderContext {
     }
 
     public void renderFaceXNeg(BlockPos pos, TextureAtlasSprite[] texture){
-        IBlockState state = this.world.getBlockState(pos);
-
-        if(state.shouldSideBeRendered(this.world, pos, EnumFacing.getFront(4))){
+        if(this.currentBlockState.shouldSideBeRendered(this.world, pos, EnumFacing.getFront(4))){
             this.renderSide(
                     new Vec3d(pos.getX(), pos.getY(), pos.getZ()),
                     new Vec3d(0D, 0.5D, 0.5D),
@@ -265,9 +262,7 @@ public class ConnectedRenderContext {
     }
 
     public void renderFaceXPos(BlockPos pos, TextureAtlasSprite[] texture){
-        IBlockState state = this.world.getBlockState(pos);
-
-        if(state.shouldSideBeRendered(this.world, pos, EnumFacing.getFront(5))){
+        if(this.currentBlockState.shouldSideBeRendered(this.world, pos, EnumFacing.getFront(5))){
             this.renderSide(
                     new Vec3d(pos.getX(), pos.getY(), pos.getZ()),
                     new Vec3d(1D, 0.5D, 0.5D),
@@ -308,8 +303,11 @@ public class ConnectedRenderContext {
     }
 
     private boolean matchBlock(Vec3d pos){
-        IBlockState state = this.world.getBlockState(new BlockPos(pos));
-        return state == this.currentBlockState;
+        if(this.getMatchStateFromWorld){
+            this.matchState = this.world.getBlockState(new BlockPos((int)pos.xCoord, (int)pos.yCoord, (int)pos.zCoord));
+        }
+
+        return this.matchState == this.currentBlockState;
     }
 
 }
