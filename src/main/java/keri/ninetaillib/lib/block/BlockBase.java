@@ -160,7 +160,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getIcon(int meta, EnumFacing side) {
+    public TextureAtlasSprite getIcon(int meta, int side) {
         if(this.getRenderType(this.getDefaultState()) == RenderBlocks.FULL_BLOCK){
             return this.texture[meta];
         }
@@ -170,7 +170,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, int side) {
         return null;
     }
 
@@ -179,11 +179,11 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     public TextureAtlasSprite getTexture(EnumFacing side, IBlockState state, BlockRenderLayer layer, IBlockAccess world, BlockPos pos) {
         TextureAtlasSprite texture = null;
 
-        if(this.getIcon(world, pos, EnumFacing.NORTH) != null){
-            texture = this.getIcon(world, pos, EnumFacing.NORTH);
+        if(this.getIcon(world, pos, 0) != null){
+            texture = this.getIcon(world, pos, 0);
         }
         else{
-            texture = this.getIcon(BlockAccessUtils.getBlockMetadata(world, pos), EnumFacing.NORTH);
+            texture = this.getIcon(BlockAccessUtils.getBlockMetadata(world, pos), 0);
         }
 
         return texture;
@@ -211,7 +211,13 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     @SideOnly(Side.CLIENT)
-    public int getColorMultiplier(int meta, EnumFacing side) {
+    public int getColorMultiplier(IBlockAccess world, BlockPos pos, int side) {
+        return 0xFFFFFFFF;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int getColorMultiplier(int meta, int side) {
         return 0xFFFFFFFF;
     }
 
@@ -316,5 +322,15 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     }
 
     public void registerTileEntities(){}
+
+    protected void registerTile(Class<? extends TileEntity> clazz){
+        String internalName = "tile." + this.modid + "." + this.blockName;
+        GameRegistry.registerTileEntity(clazz, internalName);
+    }
+
+    protected void registerTile(Class<? extends TileEntity> clazz, String name){
+        String internalName = "tile." + this.modid + "." + name;
+        GameRegistry.registerTileEntity(clazz, internalName);
+    }
 
 }

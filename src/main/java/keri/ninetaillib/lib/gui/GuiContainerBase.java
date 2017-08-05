@@ -34,8 +34,8 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public abstract class GuiContainerBase extends GuiContainer {
 
-    private final ResourceLocation textureBackground = new ResourceLocation(ModPrefs.MODID, "textures/gui/background.png");
-    private final ResourceLocation textureElements = new ResourceLocation(ModPrefs.MODID, "textures/gui/elements.png");
+    private static final ResourceLocation TEXTURE_BG = new ResourceLocation(ModPrefs.MODID, "textures/gui/background.png");
+    private static final ResourceLocation TEXTURE_ELEMENTS = new ResourceLocation(ModPrefs.MODID, "textures/gui/elements.png");
     public static final int ALIGNMENT_LEFT = 0;
     public static final int ALIGNMENT_RIGHT = 1;
     public static final int ALIGNMENT_TOP = 2;
@@ -67,7 +67,7 @@ public abstract class GuiContainerBase extends GuiContainer {
     protected void drawFluidGauge(Point2i pos, int backgroundType, FluidTank fluidTank, IPositionProvider mousePosition){
         final int width = 20;
         final int height = 68;
-        this.mc.getTextureManager().bindTexture(this.textureElements);
+        this.mc.getTextureManager().bindTexture(TEXTURE_ELEMENTS);
         GlStateManager.pushMatrix();
         GlStateManager.color(1F, 1F, 1F, 1F);
 
@@ -91,7 +91,7 @@ public abstract class GuiContainerBase extends GuiContainer {
             RenderUtils.postFluidRender();
         }
 
-        this.mc.getTextureManager().bindTexture(this.textureElements);
+        this.mc.getTextureManager().bindTexture(TEXTURE_ELEMENTS);
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
 
@@ -132,7 +132,7 @@ public abstract class GuiContainerBase extends GuiContainer {
         final int height = 50;
         int powerOffset = (power * (height + 1)) / capacity;
         Colour color = null;
-        this.mc.getTextureManager().bindTexture(this.textureElements);
+        this.mc.getTextureManager().bindTexture(TEXTURE_ELEMENTS);
 
         switch(backgroundType){
             case BACKGROUND_LIGHT:
@@ -453,7 +453,7 @@ public abstract class GuiContainerBase extends GuiContainer {
     }
 
     private void drawBackground(Point2i pos, Point2i minUV, Point2i maxUV, Colour color) {
-        this.mc.getTextureManager().bindTexture(this.textureBackground);
+        this.mc.getTextureManager().bindTexture(TEXTURE_BG);
         color.glColour();
         this.drawTexturedModalRect(pos.getX(), pos.getY(), minUV.getX(), minUV.getY(), maxUV.getX(), maxUV.getY());
     }

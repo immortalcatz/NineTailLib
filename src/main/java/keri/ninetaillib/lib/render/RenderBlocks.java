@@ -78,7 +78,7 @@ public class RenderBlocks {
 
                 renderContext.getModel().render(renderState);
                 parent.finishDrawing();
-                return RenderUtils.renderQuads(buffer, world, pos, parent.bake());
+                return this.renderQuads(buffer, world, pos, parent.bake());
             }
             else {
                 if (block instanceof IIconBlock) {
@@ -91,13 +91,13 @@ public class RenderBlocks {
 
                     for (EnumFacing side : EnumFacing.VALUES) {
                         TextureAtlasSprite texture = null;
-                        int colorMultiplier = iconProvider.getColorMultiplier(BlockAccessUtils.getBlockMetadata(world, pos), side);
+                        int colorMultiplier = iconProvider.getColorMultiplier(world, pos, side.getIndex());
 
-                        if (iconProvider.getIcon(world, pos, side) != null) {
-                            texture = iconProvider.getIcon(world, pos, side);
+                        if (iconProvider.getIcon(world, pos, side.getIndex()) != null) {
+                            texture = iconProvider.getIcon(world, pos, side.getIndex());
                         }
                         else {
-                            texture = iconProvider.getIcon(BlockAccessUtils.getBlockMetadata(world, pos), side);
+                            texture = iconProvider.getIcon(BlockAccessUtils.getBlockMetadata(world, pos), side.getIndex());
                         }
 
                         model.setColour(colorMultiplier);
@@ -108,7 +108,7 @@ public class RenderBlocks {
                     }
 
                     parent.finishDrawing();
-                    return RenderUtils.renderQuads(buffer, world, pos, parent.bake());
+                    return this.renderQuads(buffer, world, pos, parent.bake());
                 }
             }
 
@@ -141,8 +141,8 @@ public class RenderBlocks {
                 IIconBlock iconProvider = (IIconBlock) block;
 
                 for (EnumFacing side : EnumFacing.VALUES) {
-                    TextureAtlasSprite texture = iconProvider.getIcon(stack.getMetadata(), side);
-                    int colorMultiplier = iconProvider.getColorMultiplier(stack.getMetadata(), side);
+                    TextureAtlasSprite texture = iconProvider.getIcon(stack.getMetadata(), side.getIndex());
+                    int colorMultiplier = iconProvider.getColorMultiplier(stack.getMetadata(), side.getIndex());
                     model.setColour(colorMultiplier);
                     model.render(renderState, 4 * side.getIndex(), 4 + (4 * side.getIndex()), new IconTransformation(texture));
                 }
