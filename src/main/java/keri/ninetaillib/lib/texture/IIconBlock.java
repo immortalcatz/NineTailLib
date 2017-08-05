@@ -7,7 +7,6 @@
 package keri.ninetaillib.lib.texture;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,12 +18,15 @@ public interface IIconBlock {
     void registerIcons(IIconRegister register);
 
     @SideOnly(Side.CLIENT)
-    TextureAtlasSprite getIcon(int meta, EnumFacing side);
+    TextureAtlasSprite getIcon(int meta, int side);
 
     @SideOnly(Side.CLIENT)
-    TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, EnumFacing side);
+    TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, int side);
 
     @SideOnly(Side.CLIENT)
-    int getColorMultiplier(int meta, EnumFacing side);
+    int getColorMultiplier(int meta, int side);
+
+    @SideOnly(Side.CLIENT)
+    int getColorMultiplier(IBlockAccess world, BlockPos pos, int side);
 
 }

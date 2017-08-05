@@ -94,7 +94,7 @@ public class RenderingRegistry {
             ModelRegistryHelper.registerItemRenderer(item, adapter);
         }
         else{
-            throw new IllegalArgumentException("Item has to be an instance of ItemBase!");
+            throw new IllegalArgumentException("Item has to be an instance of ItemBaseScala!");
         }
     }
 
